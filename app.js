@@ -12,6 +12,64 @@ const timelineData = [
   { date: "2025 →", title: "Warrants, filings, the long tail", price: 25.0, label: "FILINGS / LONG TAIL", id: "event-tail" }
 ];
 
+const eventMedia = [
+  [
+    { kind: "MEME", title: "A thesis gets a face", source: "X / Ryan Cohen", url: "https://x.com/ryancohen", art: "meme", mark: "RC" },
+    { kind: "DOC", title: "Ownership trail", source: "SEC / GameStop filings", url: "https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude", art: "doc", mark: "13D" },
+    { kind: "VIDEO", title: "The entry, in context", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=Ryan+Cohen+GameStop+2020", art: "video", mark: "▶" }
+  ],
+  [
+    { kind: "DOC", title: "Open letter / full text", source: "GameStop investor relations", url: "https://investor.gamestop.com/", art: "doc", mark: "READ" },
+    { kind: "MEME", title: "When the thesis goes public", source: "Community archive", url: "https://www.reddit.com/r/wallstreetbets/", art: "meme", mark: "THESIS" },
+    { kind: "VIDEO", title: "Strategy in the feed", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=Ryan+Cohen+GameStop+letter+2020", art: "video", mark: "▶" }
+  ],
+  [
+    { kind: "MEME", title: "I like the stock", source: "X / Roaring Kitty", url: "https://x.com/TheRoaringKitty", art: "meme", mark: "LIKE" },
+    { kind: "GIF", title: "Screenshot culture", source: "Giphy / GameStop search", url: "https://giphy.com/search/gamestop", art: "gif", mark: "GIF" },
+    { kind: "VIDEO", title: "DFV / original videos", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=Roaring+Kitty+GameStop+DFV", art: "video", mark: "▶" }
+  ],
+  [
+    { kind: "GIF", title: "The line goes vertical", source: "Giphy / squeeze search", url: "https://giphy.com/search/gamestop-squeeze", art: "gif", mark: "↑" },
+    { kind: "VIDEO", title: "The week in tape", source: "YouTube / market archive", url: "https://www.youtube.com/results?search_query=GameStop+January+2021+squeeze", art: "video", mark: "▶" },
+    { kind: "DOC", title: "Market structure notes", source: "SEC / GameStop spotlight", url: "https://www.sec.gov/spotlight/gamestop-short-squeeze.shtml", art: "doc", mark: "SEC" }
+  ],
+  [
+    { kind: "MEME", title: "Where is the buy button?", source: "Robinhood / help center", url: "https://robinhood.com/us/en/support/articles/why-cant-i-buy-a-stock/", art: "meme", mark: "BUY?" },
+    { kind: "VIDEO", title: "The moment becomes a hearing", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=Robinhood+GameStop+buy+button+January+2021", art: "video", mark: "▶" },
+    { kind: "DOC", title: "Access / testimony", source: "SEC / testimony", url: "https://www.sec.gov/news/testimony/gensler-testimony-financial-services-2021-02-18", art: "doc", mark: "8-K" }
+  ],
+  [
+    { kind: "VIDEO", title: "Congressional hearing", source: "House Financial Services", url: "https://financialservices.house.gov/calendar/eventsingle.aspx?EventID=4071076", art: "video", mark: "▶" },
+    { kind: "MEME", title: "I am not a cat", source: "Hearing / public record", url: "https://www.youtube.com/results?search_query=Keith+Gill+I+am+not+a+cat+hearing", art: "meme", mark: "CAT" },
+    { kind: "DOC", title: "The official record", source: "House committee archive", url: "https://financialservices.house.gov/", art: "doc", mark: "PDF" }
+  ],
+  [
+    { kind: "DOC", title: "Due diligence index", source: "Superstonk / wiki", url: "https://www.reddit.com/r/Superstonk/wiki/index/", art: "doc", mark: "DD" },
+    { kind: "MEME", title: "Community as archive", source: "Superstonk / live feed", url: "https://www.reddit.com/r/Superstonk/", art: "meme", mark: "DD" },
+    { kind: "VIDEO", title: "Explain the mechanics", source: "YouTube / research search", url: "https://www.youtube.com/results?search_query=Superstonk+due+diligence+GameStop", art: "video", mark: "▶" }
+  ],
+  [
+    { kind: "DOC", title: "Split dividend release", source: "GameStop investor relations", url: "https://investor.gamestop.com/", art: "doc", mark: "4:1" },
+    { kind: "MEME", title: "A new denominator", source: "Giphy / stock split search", url: "https://giphy.com/search/stock-split", art: "meme", mark: "SPLIT" },
+    { kind: "DOC", title: "Read the filing trail", source: "SEC EDGAR", url: "https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude", art: "doc", mark: "EDGAR" }
+  ],
+  [
+    { kind: "DOC", title: "Quarterly results", source: "GameStop investor relations", url: "https://investor.gamestop.com/financial-information/quarterly-results", art: "doc", mark: "10-Q" },
+    { kind: "VIDEO", title: "Earnings, explained", source: "YouTube / earnings search", url: "https://www.youtube.com/results?search_query=GameStop+earnings+March+2023", art: "video", mark: "▶" },
+    { kind: "MEME", title: "Numbers over narrative", source: "Community / research", url: "https://www.gmedd.com/", art: "meme", mark: "$" }
+  ],
+  [
+    { kind: "MEME", title: "The avatar is back", source: "X / Roaring Kitty", url: "https://x.com/TheRoaringKitty", art: "meme", mark: "👀" },
+    { kind: "GIF", title: "The feed wakes up", source: "Giphy / Roaring Kitty search", url: "https://giphy.com/search/roaring-kitty", art: "gif", mark: "GIF" },
+    { kind: "VIDEO", title: "Return / reaction loop", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=Roaring+Kitty+return+May+2024", art: "video", mark: "▶" }
+  ],
+  [
+    { kind: "DOC", title: "Warrants + filings", source: "SEC EDGAR / current trail", url: "https://investor.gamestop.com/financial-information/sec-filings", art: "doc", mark: "8-K" },
+    { kind: "DOC", title: "Earnings / long tail", source: "GameStop quarterly results", url: "https://investor.gamestop.com/financial-information/quarterly-results", art: "doc", mark: "10-K" },
+    { kind: "VIDEO", title: "Keep the archive open", source: "YouTube / source search", url: "https://www.youtube.com/results?search_query=GameStop+latest+earnings+filings", art: "video", mark: "▶" }
+  ]
+];
+
 const chartColors = {
   background: "#090b09",
   acid: "#d8f13e",
@@ -118,6 +176,25 @@ function buildChart(svg) {
   });
   svg.append(marks);
 
+  const technicalOverlay = svgElement("g", { class: "technical-overlay", "aria-hidden": "true" });
+  const triangleOneStart = xFor(1) - 12;
+  const triangleOneEnd = xFor(3) + 18;
+  const triangleTwoStart = xFor(4) - 18;
+  const triangleTwoEnd = xFor(6) + 14;
+  technicalOverlay.append(
+    svgElement("path", { class: "ta-channel", d: `M${triangleOneStart},${yFor(27)} L${triangleOneEnd},${yFor(78)}` }),
+    svgElement("path", { class: "ta-channel support", d: `M${triangleOneStart},${yFor(10)} L${triangleOneEnd},${yFor(78)}` }),
+    svgElement("text", { class: "ta-label", x: triangleOneStart + 10, y: yFor(29) - 8 }, "TRIANGLE / COMMUNITY"),
+    svgElement("path", { class: "ta-channel", d: `M${triangleTwoStart},${yFor(151)} L${triangleTwoEnd},${yFor(89)}` }),
+    svgElement("path", { class: "ta-channel support", d: `M${triangleTwoStart},${yFor(42)} L${triangleTwoEnd},${yFor(89)}` }),
+    svgElement("text", { class: "ta-label", x: triangleTwoStart + 16, y: yFor(146) + 22 }, "WEDGE / RE-TEST"),
+    svgElement("line", { class: "ta-resistance", x1: xFor(0), x2: xFor(5), y1: yFor(100), y2: yFor(100) }),
+    svgElement("text", { class: "ta-label red", x: xFor(0) + 12, y: yFor(100) - 8 }, "RESISTANCE"),
+    svgElement("line", { class: "ta-channel support", x1: xFor(5), x2: xFor(10), y1: yFor(22), y2: yFor(22) }),
+    svgElement("text", { class: "ta-label blue", x: xFor(7), y: yFor(22) + 17 }, "SUPPORT ZONE")
+  );
+  svg.append(technicalOverlay);
+
   svg.querySelectorAll(".chart-point-hit, .chart-point").forEach((target) => {
     const activate = () => {
       const index = Number(target.closest("[data-index]")?.dataset.index ?? target.dataset.index);
@@ -135,6 +212,157 @@ function buildChart(svg) {
 
 function formatPrice(price) {
   return `$${price.toFixed(2)}`;
+}
+
+function renderEventMedia(index) {
+  const grid = document.querySelector("#media-dock-grid");
+  const item = timelineData[index];
+  if (!grid || !item) return;
+
+  const media = eventMedia[index] || [];
+  grid.innerHTML = media.map((asset) => `
+    <a class="media-tile" href="${asset.url}" target="_blank" rel="noreferrer">
+      <span class="media-art media-art-${asset.art}" aria-hidden="true"><span class="media-art-label">${asset.mark}<small>${asset.kind}</small></span></span>
+      <span class="media-tile-copy"><span class="media-tile-type">${asset.kind} / DIRECT</span><strong>${asset.title}</strong><small>${asset.source} ↗</small></span>
+    </a>
+  `).join("");
+
+  const title = document.querySelector("#media-event-title");
+  const date = document.querySelector("#media-event-date");
+  const number = document.querySelector("#media-event-number");
+  if (title) title.textContent = item.title;
+  if (date) date.textContent = item.date;
+  if (number) number.textContent = `${String(index + 1).padStart(2, "0")} / ${timelineData.length}`;
+}
+
+function terminalElements() {
+  return {
+    viewport: document.querySelector("#terminal-viewport"),
+    track: document.querySelector("#terminal-track"),
+    range: document.querySelector("#terminal-range")
+  };
+}
+
+function scrollTerminalToIndex(index, behavior = "smooth") {
+  const { viewport } = terminalElements();
+  const point = document.querySelector(`#hero-chart .chart-point[data-index="${index}"]`);
+  if (!viewport || !point) return;
+  const viewportRect = viewport.getBoundingClientRect();
+  const pointRect = point.getBoundingClientRect();
+  const pointOffset = pointRect.left - viewportRect.left + viewport.scrollLeft;
+  const target = Math.max(0, Math.min(viewport.scrollWidth - viewport.clientWidth, pointOffset - viewport.clientWidth * 0.76));
+  viewport.scrollTo({ left: target, behavior });
+}
+
+function updateTerminalFromScroll() {
+  const { viewport } = terminalElements();
+  if (!viewport) return;
+  const points = [...document.querySelectorAll("#hero-chart .chart-point")];
+  if (!points.length) return;
+  const viewportRect = viewport.getBoundingClientRect();
+  const targetX = viewportRect.left + viewportRect.width * 0.88;
+  const visiblePoints = points.filter((point) => {
+    const rect = point.getBoundingClientRect();
+    return rect.right > viewportRect.left + 8 && rect.left < viewportRect.right - 8;
+  });
+  const candidates = visiblePoints.length ? visiblePoints : points;
+  const closest = candidates.reduce((best, point) => {
+    const bestDistance = Math.abs(best.getBoundingClientRect().left - targetX);
+    const distance = Math.abs(point.getBoundingClientRect().left - targetX);
+    return distance < bestDistance ? point : best;
+  });
+  const index = Number(closest.dataset.index);
+  if (!Number.isNaN(index) && index !== activeIndex) setActiveEvent(index);
+}
+
+function bindChartTerminal() {
+  const { viewport, range } = terminalElements();
+  if (!viewport) return;
+
+  let ticking = false;
+  viewport.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateTerminalFromScroll();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  viewport.addEventListener("wheel", (event) => {
+    if (viewport.scrollWidth <= viewport.clientWidth) return;
+    const direction = event.deltaX || event.deltaY;
+    const nextScroll = viewport.scrollLeft - direction;
+    const canMove = nextScroll >= 0 && nextScroll <= viewport.scrollWidth - viewport.clientWidth;
+    if (canMove) {
+      event.preventDefault();
+      viewport.scrollLeft = nextScroll;
+    }
+  }, { passive: false });
+
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+  viewport.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    dragStartX = event.clientX;
+    dragStartScroll = viewport.scrollLeft;
+    viewport.classList.add("is-dragging");
+    viewport.setPointerCapture?.(event.pointerId);
+  });
+  viewport.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll - (event.clientX - dragStartX);
+  });
+  const stopDragging = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove("is-dragging");
+    if (event?.pointerId !== undefined) viewport.releasePointerCapture?.(event.pointerId);
+  };
+  viewport.addEventListener("pointerup", stopDragging);
+  viewport.addEventListener("pointercancel", stopDragging);
+  viewport.addEventListener("pointerleave", (event) => {
+    if (event.buttons === 0) stopDragging(event);
+  });
+
+  range?.addEventListener("input", () => {
+    const index = Number(range.value);
+    setActiveEvent(index);
+    scrollTerminalToIndex(index);
+  });
+
+  document.querySelectorAll("[data-terminal-step]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const step = Number(button.dataset.terminalStep);
+      const nextIndex = Math.max(0, Math.min(timelineData.length - 1, activeIndex + step));
+      setActiveEvent(nextIndex);
+      scrollTerminalToIndex(nextIndex);
+    });
+  });
+
+  document.querySelectorAll("[data-terminal-jump]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.terminalJump);
+      if (Number.isNaN(index)) return;
+      setActiveEvent(index);
+      window.setTimeout(() => scrollTerminalToIndex(index), 30);
+    });
+  });
+
+  const analysisToggle = document.querySelector("#ta-toggle");
+  analysisToggle?.addEventListener("click", () => {
+    const enabled = document.body.classList.toggle("ta-active");
+    analysisToggle.setAttribute("aria-pressed", String(enabled));
+    analysisToggle.querySelector("b").textContent = enabled ? "ON" : "OFF";
+    document.querySelector("#analysis-panel")?.setAttribute("aria-hidden", String(!enabled));
+  });
+
+  window.requestAnimationFrame(() => {
+    viewport.scrollLeft = viewport.scrollWidth;
+    updateTerminalFromScroll();
+  });
 }
 
 function setActiveEvent(index, shouldScroll = false) {
@@ -169,6 +397,12 @@ function setActiveEvent(index, shouldScroll = false) {
   if (activeDate) activeDate.textContent = item.date;
   if (activePrice) activePrice.textContent = formatPrice(item.price);
   if (activeNumber) activeNumber.textContent = String(index + 1).padStart(2, "0");
+
+  const terminalPosition = document.querySelector("#terminal-position");
+  const terminalRange = document.querySelector("#terminal-range");
+  if (terminalPosition) terminalPosition.textContent = `${String(index + 1).padStart(2, "0")} / ${timelineData.length}`;
+  if (terminalRange && document.activeElement !== terminalRange) terminalRange.value = String(index);
+  renderEventMedia(index);
 
   if (shouldScroll) {
     const eventCard = document.getElementById(item.id);
@@ -350,7 +584,8 @@ function bindScrollProgress() {
 
 function initialise() {
   document.querySelectorAll(".market-chart").forEach(buildChart);
-  setActiveEvent(0);
+  setActiveEvent(timelineData.length - 1);
+  bindChartTerminal();
   bindTimeline();
   bindMobileNav();
   bindMemePlayer();

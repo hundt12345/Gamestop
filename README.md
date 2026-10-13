@@ -1,6 +1,6 @@
 # GameStop / Event Tape
 
-Ein visueller Prototyp für eine scrollbare, quellenverlinkte Chronik der GameStop-Ereignisse ab 2020. Der Chart ist die Leitachse; beim Scrollen wird der aktive Punkt synchron mit der Story-Karte und dem Sticky-Chart aktualisiert.
+Ein visueller Prototyp für eine quellenverlinkte Chronik der GameStop-Ereignisse ab 2020. Der Hauptscreen ist ein horizontaler, Webull-inspirierter Chart: der neueste Punkt liegt rechts, per Drag/Shift-Scroll geht es nach links in die Vergangenheit. Ereignisse, Medien und Quellen hängen direkt am aktiven Chartpunkt.
 
 ## Lokal starten
 
@@ -22,8 +22,10 @@ Der Server bindet auf `0.0.0.0` und verwendet automatisch `process.env.PORT`, da
 
 ## Im Entwurf enthalten
 
-- sticky, interaktiver Chart mit elf Story-Ankern von 2020 bis 2025 →
-- Scroll-Synchronisation, Punkt-Navigation und Sprünge zu 2020 / Jan 2021 / 2022 / 2024
+- horizontaler, draggable Chart mit elf Story-Ankern von 2020 bis 2025 →; neuester Punkt startet rechts
+- Mousewheel/Shift-Scroll, Range-Scrubber, ältere/neuere Navigation und Sprünge zu 2020 / Jan 2021 / 2022 / 2024
+- Event Drop direkt unter dem Chart: pro aktivem Punkt Meme-, GIF-, Video- und Dokument-Links
+- Technical-Analysis-Button mit ein-/ausblendbaren Community-Annotations für Triangles, Wedge, Support und Resistance
 - Timeline-Karten zu RC, WSB, DFV / Roaring Kitty, Robinhood, der Anhörung, Superstonk, Split Dividend, Earnings und dem späteren Filing-/Warrant-Long-Tail
 - Text-basierter Meme-Tape-Player mit Play/Pause, Progress und bewusst ausgeschaltetem Audio
 - filterbarer Source Room mit GameStop IR, SEC EDGAR, Superstonk DD, GMEDD, Roaring Kitty und der House-Hearing-Seite
