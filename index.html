@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090b09" />
+    <meta name="description" content="The GameStop Event Tape — eine scrollbare, verlinkte Chronik der Ereignisse ab 2020." />
+    <title>GameStop / Event Tape</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-fill"></span></div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="GameStop Event Tape, Startseite">
+          <span class="brand-mark">GS</span>
+          <span class="brand-name">EVENT TAPE <small>/ 01</small></span>
+        </a>
+        <nav class="primary-nav" aria-label="Hauptnavigation">
+          <a href="#timeline">Timeline <span>01</span></a>
+          <a href="#meme-tape">Meme tape <span>02</span></a>
+          <a href="#source-room">Source room <span>03</span></a>
+        </nav>
+        <div class="header-state">
+          <span class="state-dot"></span>
+          <span>ARCHIVE / LIVE</span>
+        </div>
+        <button class="menu-toggle" type="button" aria-label="Navigation öffnen" aria-expanded="false">
+          <span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-nav" aria-hidden="true">
+        <a href="#timeline">Timeline <span>01</span></a>
+        <a href="#meme-tape">Meme tape <span>02</span></a>
+        <a href="#source-room">Source room <span>03</span></a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero section-shell" aria-labelledby="hero-title">
+        <div class="hero-grid noise-surface">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-index">00</span> A public record / price, posts, pressure</p>
+            <h1 id="hero-title">The GameStop<br /><em>event tape.</em></h1>
+            <p class="hero-intro">Ein interaktiver Blick auf die Jahre, in denen aus einem angeschlagenen Händler ein globales Internet-Ereignis wurde — mit Chart als Leitfaden und Quellen direkt am Punkt.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#timeline">Start at 2020 <span aria-hidden="true">↘</span></a>
+              <a class="text-link" href="#method">How to read <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="hero-numbers" aria-label="Archivdaten">
+              <div><strong>05</strong><span>years in frame</span></div>
+              <div><strong>11</strong><span>anchor moments</span></div>
+              <div><strong>∞</strong><span>open tabs</span></div>
+            </div>
+          </div>
+
+          <div class="hero-chart-wrap">
+            <div class="chart-topline">
+              <span class="chart-label">MARKET CONTEXT / GME</span>
+              <span class="chart-live"><span class="state-dot"></span> 2020 — 2025</span>
+            </div>
+            <div class="hero-chart-heading">
+              <div>
+                <p class="chart-overline">selected closing moments</p>
+                <h2>One line.<br /><span>many readings.</span></h2>
+              </div>
+              <div class="hero-chart-readout">
+                <span id="hero-readout-date">SEP 2020</span>
+                <strong id="hero-readout-price">$7.00</strong>
+                <small id="hero-readout-title">The activist entry</small>
+              </div>
+            </div>
+            <div class="hero-chart-canvas">
+              <svg id="hero-chart" class="market-chart" viewBox="0 0 1000 470" role="img" aria-label="Illustrative chart of selected GameStop market moments from 2020 to 2025"></svg>
+            </div>
+            <div class="chart-footline">
+              <span><i class="legend-line"></i> selected market moments</span>
+              <span>SCROLL TO SCRUB <b>↓</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-bottomline">
+          <p><span class="tiny-arrow">↘</span> The price is the spine. The record is the story.</p>
+          <p class="scroll-hint">Scroll to enter the tape <span>↓</span></p>
+        </div>
+      </section>
+
+      <section class="method-strip section-shell" id="method" aria-label="Methodik">
+        <div class="strip-label">READING THE TAPE</div>
+        <p>Keine Anlageberatung. Die Linie ist eine visuelle Orientierung mit ausgewählten Momenten, keine vollständige Kurs-Historie. Jede Karte führt zu Primärquellen, Archiven oder Original-Posts.</p>
+        <a href="#source-room">Sources first <span aria-hidden="true">↗</span></a>
+      </section>
+
+      <section class="timeline-section section-shell" id="timeline" aria-labelledby="timeline-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-index">01</span> The long view</p>
+            <h2 id="timeline-title">Every spike leaves<br /><em>a paper trail.</em></h2>
+          </div>
+          <div class="section-heading-copy">
+            <p>Bewege dich durch die Ereignisse. Der Chart bleibt stehen, die Geschichte kommt auf dich zu.</p>
+            <div class="timeline-jump" aria-label="Zeitsprünge">
+              <button type="button" data-jump-index="0">2020</button>
+              <button type="button" data-jump-index="3">JAN 21</button>
+              <button type="button" data-jump-index="6">2022</button>
+              <button type="button" data-jump-index="9">2024</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-layout">
+          <aside class="chart-rail" aria-label="Interaktiver Zeitachsen-Chart">
+            <div class="sticky-chart">
+              <div class="sticky-chart-header">
+                <div>
+                  <span class="chart-label">LIVE POINTER</span>
+                  <h3 id="active-event-title">The activist entry</h3>
+                </div>
+                <span class="active-event-count"><b id="active-event-number">01</b> / 11</span>
+              </div>
+              <div class="sticky-readout">
+                <span id="active-event-date">SEP 2020</span>
+                <strong id="active-event-price">$7.00</strong>
+                <span>illustrative close / USD</span>
+              </div>
+              <div class="sticky-chart-canvas">
+                <svg id="story-chart" class="market-chart" viewBox="0 0 1000 470" role="img" aria-label="Interaktiver Zeitachsen-Chart"></svg>
+              </div>
+              <div class="chart-caption"><span>click a point</span><span>or keep scrolling <b>↓</b></span></div>
+              <div class="chart-index" aria-label="Chartpunkte">
+                <button class="chart-index-dot is-active" type="button" data-index="0" aria-label="September 2020, The activist entry"><span>01</span></button>
+                <button class="chart-index-dot" type="button" data-index="1" aria-label="November 2020, A letter not a whisper"><span>02</span></button>
+                <button class="chart-index-dot" type="button" data-index="2" aria-label="January 2021, DFV keeps showing the receipts"><span>03</span></button>
+                <button class="chart-index-dot" type="button" data-index="3" aria-label="January 2021, The squeeze goes vertical"><span>04</span></button>
+                <button class="chart-index-dot" type="button" data-index="4" aria-label="January 2021, The buy button goes dark"><span>05</span></button>
+                <button class="chart-index-dot" type="button" data-index="5" aria-label="February 2021, The hearing enters the record"><span>06</span></button>
+                <button class="chart-index-dot" type="button" data-index="6" aria-label="June 2021, Superstonk builds an archive"><span>07</span></button>
+                <button class="chart-index-dot" type="button" data-index="7" aria-label="July 2022, A split dividend a new denominator"><span>08</span></button>
+                <button class="chart-index-dot" type="button" data-index="8" aria-label="March 2023, Profit changes the texture"><span>09</span></button>
+                <button class="chart-index-dot" type="button" data-index="9" aria-label="May 2024, The return of Roaring Kitty"><span>10</span></button>
+                <button class="chart-index-dot" type="button" data-index="10" aria-label="2025 onward, The long tail"><span>11</span></button>
+              </div>
+            </div>
+          </aside>
+
+          <div class="event-feed">
+            <p class="feed-intro"><span>11 moments</span> / from activist stake to an open-ended archive</p>
+
+            <article class="event-card js-event-card is-active" id="event-rc" data-index="0">
+              <div class="event-rail"><span>01</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2020-09">SEP 2020</time><span>OWNERSHIP / SIGNAL</span></div>
+                <h3>The activist entry.</h3>
+                <p>Ryan Cohen builds a stake in GameStop. The retailer is still being priced like a problem; a different reading of the business starts to circulate.</p>
+                <div class="event-footer"><span class="event-tag">RC enters the frame</span><div class="event-links"><a href="https://www.sec.gov/edgar/browse/?CIK=1326380&amp;owner=exclude" target="_blank" rel="noreferrer">SEC filings <span>↗</span></a><a href="https://investor.gamestop.com/" target="_blank" rel="noreferrer">IR archive <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-letter" data-index="1">
+              <div class="event-rail"><span>02</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2020-11">NOV 2020</time><span>STRATEGY / LETTER</span></div>
+                <h3>A letter, not a whisper.</h3>
+                <p>Cohen's open letter to the board turns a position into a thesis: customer obsession, a stronger digital layer and a business that has to move faster.</p>
+                <div class="event-footer"><span class="event-tag">read the thesis</span><div class="event-links"><a href="https://investor.gamestop.com/" target="_blank" rel="noreferrer">GameStop IR <span>↗</span></a><a href="https://www.sec.gov/edgar/browse/?CIK=1326380&amp;owner=exclude" target="_blank" rel="noreferrer">filing trail <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-dfv" data-index="2">
+              <div class="event-rail"><span>03</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2021-01">JAN 2021</time><span>WSB / CONVICTION</span></div>
+                <h3>DFV keeps showing the receipts.</h3>
+                <p>Keith Gill, posting as DeepFuckingValue and Roaring Kitty, has been documenting the trade for months. WallStreetBets turns the screenshots into a shared language.</p>
+                <div class="event-footer"><span class="event-tag">posts become evidence</span><div class="event-links"><a href="https://x.com/TheRoaringKitty" target="_blank" rel="noreferrer">Roaring Kitty <span>↗</span></a><a href="https://www.reddit.com/r/wallstreetbets/" target="_blank" rel="noreferrer">r / wallstreetbets <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-squeeze" data-index="3">
+              <div class="event-rail"><span>04</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2021-01-27">27 JAN 2021</time><span>MARKET / BREAKOUT</span></div>
+                <h3>The squeeze goes vertical.</h3>
+                <p>Short interest, options flow, momentum and a meme-native crowd collide. The line stops behaving like a normal company chart.</p>
+                <div class="event-footer"><span class="event-tag">the peak enters the feed</span><div class="event-links"><a href="https://www.tradingview.com/symbols/NYSE-GME/" target="_blank" rel="noreferrer">price history <span>↗</span></a><a href="https://www.sec.gov/spotlight/gamestop-short-squeeze.shtml" target="_blank" rel="noreferrer">SEC spotlight <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-robinhood" data-index="4">
+              <div class="event-rail"><span>05</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2021-01-28">28 JAN 2021</time><span>PLATFORM / FRICTION</span></div>
+                <h3>The buy button goes dark.</h3>
+                <p>Brokerage restrictions arrive at the moment of maximum attention. “Why can't I buy?” becomes a product question, a market-structure question and a cultural flashpoint.</p>
+                <div class="event-footer"><span class="event-tag">access is part of the story</span><div class="event-links"><a href="https://robinhood.com/us/en/support/articles/why-cant-i-buy-a-stock/" target="_blank" rel="noreferrer">Robinhood help <span>↗</span></a><a href="https://www.sec.gov/news/testimony/gensler-testimony-financial-services-2021-02-18" target="_blank" rel="noreferrer">SEC testimony <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-hearing" data-index="5">
+              <div class="event-rail"><span>06</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2021-02">FEB 2021</time><span>HEARING / RECORD</span></div>
+                <h3>The hearing enters the record.</h3>
+                <p>Congress hears from Keith Gill, Robinhood, Citadel and Melvin Capital. The livestream turns a trading episode into a primary-source archive.</p>
+                <div class="event-footer"><span class="event-tag">watch the room</span><div class="event-links"><a href="https://financialservices.house.gov/calendar/eventsingle.aspx?EventID=4071076" target="_blank" rel="noreferrer">House hearing <span>↗</span></a><a href="https://www.youtube.com/results?search_query=GameStop+hearing+February+2021" target="_blank" rel="noreferrer">video search <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-superstonk" data-index="6">
+              <div class="event-rail"><span>07</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2021-06">JUN 2021</time><span>COMMUNITY / DD</span></div>
+                <h3>Superstonk builds an archive.</h3>
+                <p>After the first wave, the community begins to catalogue market mechanics, filings and counter-arguments. The vocabulary shifts from hype to due diligence.</p>
+                <div class="event-footer"><span class="event-tag">read before you react</span><div class="event-links"><a href="https://www.reddit.com/r/Superstonk/wiki/index/" target="_blank" rel="noreferrer">DD index <span>↗</span></a><a href="https://www.gmedd.com/" target="_blank" rel="noreferrer">GMEDD <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-split" data-index="7">
+              <div class="event-rail"><span>08</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2022-07">JUL 2022</time><span>CAPITAL / STRUCTURE</span></div>
+                <h3>A split dividend, a new denominator.</h3>
+                <p>The four-for-one split changes the unit everyone is looking at. A corporate action becomes another chapter in the community's forensic reading of filings.</p>
+                <div class="event-footer"><span class="event-tag">read the release</span><div class="event-links"><a href="https://investor.gamestop.com/" target="_blank" rel="noreferrer">GameStop IR <span>↗</span></a><a href="https://www.sec.gov/edgar/browse/?CIK=1326380&amp;owner=exclude" target="_blank" rel="noreferrer">SEC EDGAR <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-profit" data-index="8">
+              <div class="event-rail"><span>09</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2023-03">MAR 2023</time><span>EARNINGS / BUSINESS</span></div>
+                <h3>Profit changes the texture.</h3>
+                <p>Quarterly reports pull the focus back to the business: cash, inventory, operating costs and the question of what a transformed retailer can become.</p>
+                <div class="event-footer"><span class="event-tag">numbers over narrative</span><div class="event-links"><a href="https://investor.gamestop.com/financial-information/quarterly-results" target="_blank" rel="noreferrer">quarterly results <span>↗</span></a><a href="https://www.sec.gov/edgar/browse/?CIK=1326380&amp;owner=exclude" target="_blank" rel="noreferrer">10-Q / 10-K <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-return" data-index="9">
+              <div class="event-rail"><span>10</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2024-05">MAY — JUN 2024</time><span>RETURN / VOLATILITY</span></div>
+                <h3>The return of Roaring Kitty.</h3>
+                <p>A single post after a long silence is enough to restart the internet's oldest conversation. The company responds with filings, offerings and a market that moves in public.</p>
+                <div class="event-footer"><span class="event-tag">the avatar is back</span><div class="event-links"><a href="https://x.com/TheRoaringKitty" target="_blank" rel="noreferrer">original account <span>↗</span></a><a href="https://investor.gamestop.com/" target="_blank" rel="noreferrer">company filings <span>↗</span></a></div></div>
+              </div>
+            </article>
+
+            <article class="event-card js-event-card" id="event-tail" data-index="10">
+              <div class="event-rail"><span>11</span><i></i></div>
+              <div class="event-content">
+                <div class="event-meta"><time datetime="2025">2025 →</time><span>FILINGS / LONG TAIL</span></div>
+                <h3>Warrants, filings, the long tail.</h3>
+                <p>After the spectacle comes the slow feed: warrants, capital allocation, earnings and business reports. Keep the links live; let the primary documents do the talking.</p>
+                <div class="event-footer"><span class="event-tag">archive still updating</span><div class="event-links"><a href="https://investor.gamestop.com/financial-information/sec-filings" target="_blank" rel="noreferrer">SEC filings <span>↗</span></a><a href="https://investor.gamestop.com/financial-information/quarterly-results" target="_blank" rel="noreferrer">earnings <span>↗</span></a></div></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="meme-section section-shell" id="meme-tape" aria-labelledby="meme-title">
+        <div class="meme-copy">
+          <p class="eyebrow"><span class="eyebrow-index">02</span> Culture / compressed</p>
+          <h2 id="meme-title">The meme tape<br /><em>is not decoration.</em></h2>
+          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Dieser kleine Player loopt Textkarten — bewusst ohne Autoplay-Audio — und verlinkt zurück zu den Quellen.</p>
+          <div class="meme-note"><span class="state-dot"></span><span>illustrated loop / sound off</span></div>
+        </div>
+        <div class="meme-player" aria-label="Meme tape player">
+          <div class="player-topline"><span>MEME TAPE / 02</span><span id="meme-counter">01 — 03</span></div>
+          <div class="player-stage" id="meme-stage">
+            <div class="player-scanlines" aria-hidden="true"></div>
+            <div class="meme-card" id="meme-card">
+              <div class="meme-card-meta"><span id="meme-label">WSB / 2021</span><span id="meme-mark">●</span></div>
+              <p id="meme-quote">I LIKE THE STOCK.</p>
+              <div class="meme-card-bottom"><span id="meme-caption">conviction, condensed.</span><span>PLAY / TEXT</span></div>
+            </div>
+          </div>
+          <div class="player-controls">
+            <button class="play-button" id="meme-play" type="button" aria-label="Meme tape abspielen" aria-pressed="false"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span><span id="meme-play-label">PLAY TAPE</span></button>
+            <div class="meme-progress" aria-hidden="true"><span id="meme-progress-fill"></span></div>
+            <div class="meme-selectors" aria-label="Meme auswählen">
+              <button class="meme-selector is-active" type="button" data-meme-index="0">01</button>
+              <button class="meme-selector" type="button" data-meme-index="1">02</button>
+              <button class="meme-selector" type="button" data-meme-index="2">03</button>
+            </div>
+          </div>
+          <div class="player-footer"><span>NO AUDIO / NO FINANCIAL ADVICE</span><a href="https://x.com/TheRoaringKitty" target="_blank" rel="noreferrer">open source posts ↗</a></div>
+        </div>
+      </section>
+
+      <section class="source-section section-shell" id="source-room" aria-labelledby="source-title">
+        <div class="source-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-index">03</span> The source room</p>
+            <h2 id="source-title">Open tabs,<br /><em>not hot takes.</em></h2>
+          </div>
+          <p>Der Entwurf setzt auf eine Quellen-Ebene, die weiterleben kann: offizielle Dokumente für Fakten, Community-Archive für Kontext, Original-Posts für den Ton der Zeit.</p>
+        </div>
+        <div class="source-filters" role="group" aria-label="Quellen filtern">
+          <button class="source-filter is-active" type="button" data-filter="all">All sources</button>
+          <button class="source-filter" type="button" data-filter="primary">Primary</button>
+          <button class="source-filter" type="button" data-filter="community">Community</button>
+          <button class="source-filter" type="button" data-filter="culture">Culture</button>
+        </div>
+        <div class="source-grid">
+          <a class="source-card" data-source-type="primary" href="https://investor.gamestop.com/" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>PRIMARY / IR</span><span>↗</span></span>
+            <strong>GameStop investor relations</strong>
+            <span>Releases, presentations, earnings and the company-side timeline.</span>
+            <small>investor.gamestop.com</small>
+          </a>
+          <a class="source-card" data-source-type="primary" href="https://www.sec.gov/edgar/browse/?CIK=1326380&amp;owner=exclude" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>PRIMARY / SEC</span><span>↗</span></span>
+            <strong>EDGAR filing trail</strong>
+            <span>10-Ks, 10-Qs, 8-Ks and ownership disclosures in the public record.</span>
+            <small>sec.gov / CIK 1326380</small>
+          </a>
+          <a class="source-card" data-source-type="community" href="https://www.reddit.com/r/Superstonk/wiki/index/" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>COMMUNITY / DD</span><span>↗</span></span>
+            <strong>Superstonk DD index</strong>
+            <span>Ein Einstieg in die Due Diligence, Begriffe und Gegenargumente.</span>
+            <small>reddit.com / r / Superstonk</small>
+          </a>
+          <a class="source-card" data-source-type="community" href="https://www.gmedd.com/" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>COMMUNITY / RESEARCH</span><span>↗</span></span>
+            <strong>GMEDD research</strong>
+            <span>Long-form research und Business-Kontext jenseits des Momentums.</span>
+            <small>gmedd.com</small>
+          </a>
+          <a class="source-card" data-source-type="culture" href="https://x.com/TheRoaringKitty" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>CULTURE / ORIGINAL</span><span>↗</span></span>
+            <strong>Roaring Kitty / X</strong>
+            <span>Der Originalkanal hinter einem der bekanntesten Re-entries.</span>
+            <small>x.com / TheRoaringKitty</small>
+          </a>
+          <a class="source-card" data-source-type="culture" href="https://financialservices.house.gov/calendar/eventsingle.aspx?EventID=4071076" target="_blank" rel="noreferrer">
+            <span class="source-card-top"><span>CULTURE / HEARING</span><span>↗</span></span>
+            <strong>House hearing archive</strong>
+            <span>Die Anhörung vom Februar 2021 als Video und institutioneller Kontext.</span>
+            <small>financialservices.house.gov</small>
+          </a>
+        </div>
+        <div class="source-cta"><span>Want to add a source?</span><a href="mailto:archive@example.com?subject=GameStop%20Event%20Tape%20source">send a link <span>↗</span></a></div>
+      </section>
+
+      <section class="closing-section section-shell" aria-label="Abschluss">
+        <div class="closing-mark">GME<span>↗</span></div>
+        <p>THE RECORD<br /><em>IS STILL OPEN.</em></p>
+        <a class="button button-primary" href="#top">Back to top <span aria-hidden="true">↑</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer section-shell">
+      <div><span class="footer-logo">GS / EVENT TAPE</span><span>draft 01 / source-linked prototype</span></div>
+      <div><span>built for the long view</span><a href="#method">methodology ↗</a></div>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
