@@ -8,6 +8,7 @@
     <title>GameStop / Event Tape</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="terminal.css" />
+    <link rel="stylesheet" href="fullscreen.css" />
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
@@ -68,11 +69,13 @@
             <div class="terminal-controls">
               <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Zum älteren Ereignis">← older</button>
               <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Zum neueren Ereignis">newer →</button>
+              <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
               <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
             </div>
           </div>
           <div class="terminal-subbar">
             <span><i class="terminal-live-dot"></i> CHART / GME / 2020 — 2025</span>
+            <span id="chart-mode-label">LINE VIEW</span>
             <span>DRAG / SHIFT + SCROLL <b>←</b></span>
             <span id="terminal-position">11 / 11</span>
           </div>
@@ -83,6 +86,10 @@
               <div class="terminal-current-line" aria-hidden="true"></div>
               <div class="terminal-edge-label terminal-edge-left">2020<br /><span>ORIGIN</span></div>
               <div class="terminal-edge-label terminal-edge-right">2025 →<br /><span>NOW / OPEN</span></div>
+              <div class="chart-media-dock" id="chart-media-dock" aria-live="polite">
+                <div class="media-dock-header"><div><span class="chart-label">EVENT DROP / IN-CHART MEDIA</span><h3 id="media-event-title">The long tail: warrants, filings, earnings</h3></div><div class="media-dock-date"><span id="media-event-date">2025 →</span><b id="media-event-number">11 / 11</b></div></div>
+                <div class="media-dock-grid" id="media-dock-grid"></div>
+              </div>
             </div>
           </div>
 
@@ -98,10 +105,6 @@
             <div class="analysis-tags"><span>triangle / illustrative</span><span>support + resistance</span><span>volume / source-led</span><a href="https://www.reddit.com/r/Superstonk/wiki/index/" target="_blank" rel="noreferrer">open Superstonk DD ↗</a></div>
           </div>
 
-          <div class="chart-media-dock" id="chart-media-dock" aria-live="polite">
-            <div class="media-dock-header"><div><span class="chart-label">EVENT DROP / DIRECT MEDIA</span><h3 id="media-event-title">The long tail: warrants, filings, earnings</h3></div><div class="media-dock-date"><span id="media-event-date">2025 →</span><b id="media-event-number">11 / 11</b></div></div>
-            <div class="media-dock-grid" id="media-dock-grid"></div>
-          </div>
         </div>
 
         <div class="hero-bottomline">

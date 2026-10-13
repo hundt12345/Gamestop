@@ -22,9 +22,10 @@ Der Server bindet auf `0.0.0.0` und verwendet automatisch `process.env.PORT`, da
 
 ## Im Entwurf enthalten
 
-- horizontaler, draggable Chart mit elf Story-Ankern von 2020 bis 2025 →; neuester Punkt startet rechts
-- Mousewheel/Shift-Scroll, Range-Scrubber, ältere/neuere Navigation und Sprünge zu 2020 / Jan 2021 / 2022 / 2024
-- Event Drop direkt unter dem Chart: pro aktivem Punkt Meme-, GIF-, Video- und Dokument-Links
+- Full-screen chart surface mit elf Story-Ankern von 2020 bis 2025 →; neuester Punkt startet rechts
+- horizontaler Drag, Mousewheel/Shift-Scroll, Range-Scrubber, ältere/neuere Navigation und Sprünge zu 2020 / Jan 2021 / 2022 / 2024
+- umschaltbare Darstellung zwischen LINE und CANDLES
+- Event Drop direkt im Chart, am aktiven Punkt: pro Ereignis Meme-, GIF-, Video- und Dokument-Links
 - Technical-Analysis-Button mit ein-/ausblendbaren Community-Annotations für Triangles, Wedge, Support und Resistance
 - Timeline-Karten zu RC, WSB, DFV / Roaring Kitty, Robinhood, der Anhörung, Superstonk, Split Dividend, Earnings und dem späteren Filing-/Warrant-Long-Tail
 - Text-basierter Meme-Tape-Player mit Play/Pause, Progress und bewusst ausgeschaltetem Audio

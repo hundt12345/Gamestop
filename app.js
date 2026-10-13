@@ -137,13 +137,31 @@ function buildChart(svg) {
   const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
   const areaPath = `${linePath} L${points[points.length - 1].x.toFixed(2)},${yBottom} L${points[0].x.toFixed(2)},${yBottom} Z`;
 
-  const area = svgElement("path", { class: "chart-area", d: areaPath });
+  const area = svgElement("path", { class: "chart-area line-mode", d: areaPath });
   area.style.fill = `url(#${gradientId})`;
   svg.append(
     area,
-    svgElement("path", { class: "chart-line-underlay", d: linePath }),
-    svgElement("path", { class: "chart-line", d: linePath })
+    svgElement("path", { class: "chart-line-underlay line-mode", d: linePath }),
+    svgElement("path", { class: "chart-line line-mode", d: linePath })
   );
+
+  const candleGroup = svgElement("g", { class: "candle-mode" });
+  points.forEach((point, index) => {
+    const previousClose = index === 0 ? point.price * 0.88 : points[index - 1].price;
+    const open = Math.max(4, previousClose * (point.price >= previousClose ? 0.91 : 1.09));
+    const high = Math.max(open, point.price) * 1.16;
+    const low = Math.max(4, Math.min(open, point.price) * 0.82);
+    const candleWidth = Math.max(8, plotWidth / timelineData.length * 0.42);
+    const bodyTop = Math.min(yFor(open), yFor(point.price));
+    const bodyHeight = Math.max(4, Math.abs(yFor(point.price) - yFor(open)));
+    const candle = svgElement("g", { class: point.price >= open ? "candle up" : "candle down", "data-index": index });
+    candle.append(
+      svgElement("line", { class: "candle-wick", x1: point.x, x2: point.x, y1: yFor(high), y2: yFor(low) }),
+      svgElement("rect", { class: "candle-body", x: point.x - candleWidth / 2, y: bodyTop, width: candleWidth, height: bodyHeight, rx: 1 })
+    );
+    candleGroup.append(candle);
+  });
+  svg.append(candleGroup);
 
   const guides = svgElement("g", { "aria-hidden": "true" });
   points.forEach((point) => {
@@ -233,6 +251,20 @@ function renderEventMedia(index) {
   if (title) title.textContent = item.title;
   if (date) date.textContent = item.date;
   if (number) number.textContent = `${String(index + 1).padStart(2, "0")} / ${timelineData.length}`;
+  positionMediaDock(index);
+}
+
+function positionMediaDock(index) {
+  const dock = document.querySelector("#chart-media-dock");
+  const track = document.querySelector("#terminal-track");
+  const point = document.querySelector(`#hero-chart .chart-point[data-index="${index}"]`);
+  if (!dock || !track || !point) return;
+  const trackRect = track.getBoundingClientRect();
+  const pointRect = point.getBoundingClientRect();
+  const desiredLeft = pointRect.left - trackRect.left + pointRect.width / 2 - dock.offsetWidth / 2;
+  const maxLeft = Math.max(18, track.clientWidth - dock.offsetWidth - 18);
+  const left = Math.max(18, Math.min(maxLeft, desiredLeft));
+  dock.style.left = `${left}px`;
 }
 
 function terminalElements() {
@@ -273,6 +305,7 @@ function updateTerminalFromScroll() {
   });
   const index = Number(closest.dataset.index);
   if (!Number.isNaN(index) && index !== activeIndex) setActiveEvent(index);
+  positionMediaDock(activeIndex);
 }
 
 function bindChartTerminal() {
@@ -359,9 +392,22 @@ function bindChartTerminal() {
     document.querySelector("#analysis-panel")?.setAttribute("aria-hidden", String(!enabled));
   });
 
+  const modeToggle = document.querySelector("#chart-mode-toggle");
+  modeToggle?.addEventListener("click", () => {
+    const candles = document.body.classList.toggle("candles-active");
+    modeToggle.setAttribute("aria-pressed", String(candles));
+    modeToggle.querySelector(".mode-signal").classList.toggle("is-candles", candles);
+    modeToggle.querySelector(".mode-word").textContent = candles ? "CANDLES" : "LINE";
+    modeToggle.querySelector("b").textContent = candles ? "↔ LINE" : "↔ CANDLES";
+    const modeLabel = document.querySelector("#chart-mode-label");
+    if (modeLabel) modeLabel.textContent = candles ? "CANDLE VIEW" : "LINE VIEW";
+  });
+
+  window.addEventListener("resize", () => positionMediaDock(activeIndex));
   window.requestAnimationFrame(() => {
     viewport.scrollLeft = viewport.scrollWidth;
     updateTerminalFromScroll();
+    positionMediaDock(activeIndex);
   });
 }
 
