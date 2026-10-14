@@ -105,6 +105,9 @@
             <span class="subbar-hint">DRAG · ⌃WHEEL ZOOM · CLICK = PRICE</span>
             <span class="subbar-position" id="terminal-position">11 / 11</span>
             <span class="subbar-source" id="chart-data-note">EOD / SPLIT-ADJUSTED</span>
+            <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="GIFs und Videos von Giphy und YouTube laden — aus schaltet die Einbettungen ab, der Player bleibt textlich">
+              <span class="media-toggle-signal" aria-hidden="true">◉</span> MEDIA <b id="media-toggle-state">ON</b>
+            </button>
           </div>
 
           <div class="terminal-chart-area">
@@ -119,61 +122,101 @@
               <span class="playhead-tag" id="playhead-tag">—</span>
             </div>
             <svg id="chart-yaxis" class="chart-yaxis" aria-hidden="true"></svg>
-            <div class="chart-inspect" id="chart-inspect" aria-live="polite" hidden>
-              <div class="inspect-head">
-                <time id="inspect-date">—</time>
-                <span class="inspect-cursor" id="inspect-cursor">—</span>
-                <button type="button" class="inspect-close" id="inspect-close" aria-label="Kurs-Anzeige schließen (Esc)">×</button>
-              </div>
-              <div class="inspect-ohlc">
-                <span>O <b id="inspect-open">—</b></span>
-                <span>H <b id="inspect-high">—</b></span>
-                <span>L <b id="inspect-low">—</b></span>
-                <span>C <b id="inspect-close-price">—</b></span>
-              </div>
-              <div class="inspect-foot">
-                <span class="inspect-delta" id="inspect-delta">—</span>
-                <span class="inspect-volume" id="inspect-volume">—</span>
-                <span class="inspect-hint">ESC = CLOSE</span>
-              </div>
-            </div>
           </div>
 
-          <div class="event-callout" id="event-callout" aria-live="polite">
-            <span class="callout-pointer" aria-hidden="true"></span>
-            <div class="callout-head">
-              <span class="callout-index" id="callout-index">11 / 11</span>
-              <time id="callout-date">13 OKT 2026</time>
-              <button type="button" class="callout-close" id="callout-close" aria-label="Ereignis-Karte schließen">×</button>
+          <!-- DOCK: alle Einblendungen leben hier unten, damit die Kursfläche
+               sichtbar bleibt. Der Rail verbindet jede Karte mit ihrem Bar. -->
+          <div class="terminal-dock" id="terminal-dock">
+            <div class="dock-rail" aria-hidden="true">
+              <span class="dock-tick dock-tick-event" id="dock-tick-event" hidden></span>
+              <span class="dock-tick dock-tick-meme" id="dock-tick-meme" hidden></span>
             </div>
-            <h3 class="callout-title" id="callout-title">Warrants, filings, the long tail</h3>
-            <div class="callout-readout">
-              <strong id="callout-price">$27.22</strong>
-              <span class="callout-delta is-up" id="callout-delta">+0.0%</span>
-              <span class="callout-volume" id="callout-volume">12.6M SHARES</span>
-            </div>
-            <div class="callout-links" id="callout-links"></div>
-            <button type="button" class="callout-open" data-callout-open="event-tail">full entry · archive still updating</button>
-          </div>
-
-          <div class="chart-meme-player" id="chart-meme-player" role="region" aria-label="Meme-Player im Chart" hidden>
-            <span class="meme-pointer" aria-hidden="true"></span>
-            <div class="chart-meme-head">
-              <span class="chart-meme-kicker" id="chart-meme-label">MEME / 01</span>
-              <time id="chart-meme-date">—</time>
-              <strong id="chart-meme-price">—</strong>
-              <button type="button" class="chart-meme-close" id="chart-meme-close" aria-label="Meme im Chart schließen">×</button>
-            </div>
-            <div class="chart-meme-stage">
-              <p class="chart-meme-quote" id="chart-meme-quote">I LIKE THE STOCK.</p>
-              <p class="chart-meme-caption" id="chart-meme-caption">conviction, condensed.</p>
-            </div>
-            <div class="chart-meme-controls">
-              <button class="chart-meme-play" id="chart-meme-play" type="button" aria-pressed="true" aria-label="Meme im Chart abspielen oder pausieren">
-                <span class="play-icon" aria-hidden="true">▶</span><span class="pause-icon" aria-hidden="true">Ⅱ</span><span id="chart-meme-play-label">PAUSE</span>
+            <div class="dock-head">
+              <span class="dock-title">DOCK / THREE SLOTS · chart stays clear</span>
+              <span class="dock-note" id="dock-note">Ereignis · Meme · Cursor</span>
+              <button type="button" class="dock-toggle" id="dock-toggle" aria-expanded="true" aria-controls="terminal-dock" title="Dock einklappen — der Chart wächst über die volle Höhe">
+                <span class="dock-toggle-signal" aria-hidden="true">▾</span><span id="dock-toggle-label">HIDE DOCK</span>
               </button>
-              <div class="chart-meme-progress" aria-hidden="true"><span id="chart-meme-progress-fill"></span></div>
-              <span class="chart-meme-count" id="chart-meme-count">01 / 02</span>
+            </div>
+            <div class="dock-slots">
+
+              <section class="dock-slot dock-slot-event" aria-label="Ereignis-Karte">
+                <p class="dock-slot-label"><span>01</span> EVENT / AKTIVES EREIGNIS</p>
+                <div class="event-callout" id="event-callout" aria-live="polite">
+                  <div class="callout-head">
+                    <span class="callout-index" id="callout-index">11 / 11</span>
+                    <time id="callout-date">13 OKT 2026</time>
+                    <button type="button" class="callout-close" id="callout-close" aria-label="Ereignis-Karte schließen">×</button>
+                  </div>
+                  <h3 class="callout-title" id="callout-title">Warrants, filings, the long tail</h3>
+                  <div class="callout-readout">
+                    <strong id="callout-price">$27.22</strong>
+                    <span class="callout-delta is-up" id="callout-delta">+0.0%</span>
+                    <span class="callout-volume" id="callout-volume">12.6M SHARES</span>
+                  </div>
+                  <div class="callout-links" id="callout-links"></div>
+                  <button type="button" class="callout-open" data-callout-open="event-tail">full entry · archive still updating</button>
+                </div>
+              </section>
+
+              <section class="dock-slot dock-slot-meme" aria-label="Meme-Player">
+                <p class="dock-slot-label"><span>02</span> MEME / MEDIA</p>
+                <div class="chart-meme-player" id="chart-meme-player" role="region" aria-label="Meme-Player im Chart" hidden>
+                  <div class="chart-meme-head">
+                    <span class="chart-meme-kicker" id="chart-meme-label">MEME / 01</span>
+                    <time id="chart-meme-date">—</time>
+                    <strong id="chart-meme-price">—</strong>
+                    <button type="button" class="chart-meme-close" id="chart-meme-close" aria-label="Meme im Chart schließen">×</button>
+                  </div>
+                  <div class="chart-meme-stage">
+                    <div class="meme-media" id="chart-meme-media" data-state="empty">
+                      <img class="meme-media-gif" id="chart-meme-gif" alt="" decoding="async" hidden />
+                      <iframe class="meme-media-frame" id="chart-meme-video" title="Meme-Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
+                      <button type="button" class="meme-media-play" id="chart-meme-video-play" hidden>
+                        <span class="play-icon" aria-hidden="true">▶</span><span id="chart-meme-video-label">PLAY VIDEO</span>
+                      </button>
+                      <p class="meme-media-broken" id="chart-meme-media-broken" hidden>Media nicht geladen — <a id="chart-meme-media-link" href="#" target="_blank" rel="noreferrer">Original öffnen ↗</a></p>
+                    </div>
+                    <div class="chart-meme-text">
+                      <p class="chart-meme-quote" id="chart-meme-quote">I LIKE THE STOCK.</p>
+                      <p class="chart-meme-caption" id="chart-meme-caption">conviction, condensed.</p>
+                    </div>
+                  </div>
+                  <div class="chart-meme-controls">
+                    <button class="chart-meme-play" id="chart-meme-play" type="button" aria-pressed="true" aria-label="Meme im Chart abspielen oder pausieren">
+                      <span class="play-icon" aria-hidden="true">▶</span><span class="pause-icon" aria-hidden="true">Ⅱ</span><span id="chart-meme-play-label">PAUSE</span>
+                    </button>
+                    <div class="chart-meme-progress" aria-hidden="true"><span id="chart-meme-progress-fill"></span></div>
+                    <span class="chart-meme-count" id="chart-meme-count">01 / 02</span>
+                  </div>
+                  <p class="meme-credit" id="chart-meme-credit">GIF · GIPHY ↗</p>
+                </div>
+                <p class="dock-hint" id="chart-meme-hint">Klick auf einen <b>MEME</b>-Marker im Chart oder eine Nummer im Meme-Tape — Bild und Video erscheinen hier, nie über dem Kurs.</p>
+              </section>
+
+              <section class="dock-slot dock-slot-inspect" aria-label="Kursor-Anzeige">
+                <p class="dock-slot-label"><span>03</span> CURSOR / OHLC</p>
+                <div class="chart-inspect" id="chart-inspect" aria-live="polite" hidden>
+                  <div class="inspect-head">
+                    <time id="inspect-date">—</time>
+                    <span class="inspect-cursor" id="inspect-cursor">—</span>
+                    <button type="button" class="inspect-close" id="inspect-close" aria-label="Kurs-Anzeige schließen (Esc)">×</button>
+                  </div>
+                  <div class="inspect-ohlc">
+                    <span>O <b id="inspect-open">—</b></span>
+                    <span>H <b id="inspect-high">—</b></span>
+                    <span>L <b id="inspect-low">—</b></span>
+                    <span>C <b id="inspect-close-price">—</b></span>
+                  </div>
+                  <div class="inspect-foot">
+                    <span class="inspect-delta" id="inspect-delta">—</span>
+                    <span class="inspect-volume" id="inspect-volume">—</span>
+                    <span class="inspect-hint">ESC = CLOSE</span>
+                  </div>
+                </div>
+                <p class="dock-hint" id="inspect-hint">Klick irgendwo in den Chart — Datum, Open/High/Low/Close, Volumen und Tagesänderung landen hier. <b>Esc</b> schließt.</p>
+              </section>
+
             </div>
           </div>
 
@@ -376,19 +419,28 @@
         <div class="meme-copy">
           <p class="eyebrow"><span class="eyebrow-index">02</span> Culture / compressed</p>
           <h2 id="meme-title">The meme tape<br /><em>is not decoration.</em></h2>
-          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Die Memes hängen jetzt direkt am Chart: Klick im Chart auf einen <b>MEME</b>-Marker (oder hier auf eine Nummer) spielt die Karte am Kurs dieses Tages ab — bewusst ohne Autoplay-Audio.</p>
-          <div class="meme-note"><span class="state-dot"></span><span>plays in-chart / sound off</span></div>
+          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Die Memes hängen jetzt direkt am Chart: Klick im Chart auf einen <b>MEME</b>-Marker (oder hier auf eine Nummer) spielt die Karte am Kurs dieses Tages ab — mit echtem GIF oder Video, ohne Autoplay-Audio. Die Einblendung landet im <b>Dock unter dem Chart</b>, damit die Kursfläche nie verdeckt wird.</p>
+          <div class="meme-note"><span class="state-dot"></span><span>real GIF + video / plays in the dock / sound off</span></div>
         </div>
         <div class="meme-player" aria-label="Meme tape player">
           <div class="player-topline"><span>MEME TAPE / 02</span><span id="meme-counter">01 — 03</span></div>
           <div class="player-stage" id="meme-stage">
             <div class="player-scanlines" aria-hidden="true"></div>
+            <div class="player-media" id="meme-media" data-state="empty">
+              <img class="meme-media-gif" id="meme-gif" alt="" decoding="async" hidden />
+              <iframe class="meme-media-frame" id="meme-video" title="Meme-Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
+              <button type="button" class="meme-media-play" id="meme-video-play" hidden>
+                <span class="play-icon" aria-hidden="true">▶</span><span id="meme-video-label">PLAY VIDEO</span>
+              </button>
+              <p class="meme-media-broken" id="meme-media-broken" hidden>Media nicht geladen — <a id="meme-media-link" href="#" target="_blank" rel="noreferrer">Original öffnen ↗</a></p>
+            </div>
             <div class="meme-card" id="meme-card">
               <div class="meme-card-meta"><span id="meme-label">WSB / 2021</span><span id="meme-mark">●</span></div>
               <p id="meme-quote">I LIKE THE STOCK.</p>
-              <div class="meme-card-bottom"><span id="meme-caption">conviction, condensed.</span><span>PLAY / TEXT</span></div>
+              <div class="meme-card-bottom"><span id="meme-caption">conviction, condensed.</span><span id="meme-card-kind">PLAY / TEXT</span></div>
             </div>
           </div>
+          <p class="meme-credit" id="meme-credit">GIF · GIPHY ↗</p>
           <div class="player-controls">
             <button class="play-button" id="meme-play" type="button" aria-label="Meme tape abspielen" aria-pressed="false"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span><span id="meme-play-label">PLAY TAPE</span></button>
             <div class="meme-progress" aria-hidden="true"><span id="meme-progress-fill"></span></div>
@@ -398,7 +450,23 @@
               <button class="meme-selector" type="button" data-meme-index="2">03</button>
             </div>
           </div>
-          <div class="player-footer"><span>NO AUDIO / NO FINANCIAL ADVICE</span><a href="https://x.com/TheRoaringKitty" target="_blank" rel="noreferrer">open source posts ↗</a></div>
+          <div class="player-footer"><span>NO AUDIO / NO FINANCIAL ADVICE</span><a id="meme-source-link" href="https://giphy.com/explore/gamestop" target="_blank" rel="noreferrer">open source post ↗</a></div>
+        </div>
+
+        <div class="meme-wall" id="meme-wall" aria-label="Meme-Wand — alle verankerten Memes mit echtem Bildmaterial">
+          <div class="wall-head">
+            <p class="eyebrow"><span class="eyebrow-index">02b</span> The wall</p>
+            <p>Jedes Kästchen hängt an einem echten Handelstag. GIFs laufen direkt von Giphy, Videos über den YouTube-Player — geklickt wird nie über den Chart, sondern hier unten. <b>MEDIA OFF</b> im Chart lädt überhaupt nichts.</p>
+          </div>
+          <div class="wall-grid" id="wall-grid"></div>
+        </div>
+
+        <div class="clip-rail" id="clip-rail" aria-label="Video-Einbettungen">
+          <div class="wall-head">
+            <p class="eyebrow"><span class="eyebrow-index">02c</span> The clips</p>
+            <p>Vier Originalaufnahmen, die im Meme-Tape nur zitiert werden: die Anhörung im Kongress, Roaring Kittys Livestream 2024 und die beiden Kanäle davor. Posterbild laden, Player startet erst auf Klick.</p>
+          </div>
+          <div class="clip-grid" id="clip-grid"></div>
         </div>
       </section>
 

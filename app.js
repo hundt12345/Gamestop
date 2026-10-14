@@ -224,65 +224,298 @@ storyEvents[storyEvents.length - 1].iso = marketMeta.end;
 /* ----------------------------------------------------------- meme tape --- */
 
 // Die Memes hängen direkt an echten Handelstagen: jede Karte wird im Chart an
-// ihrem Bar verankert und lässt sich dort abspielen.
+// ihrem Bar verankert und lässt sich dort abspielen. Statt reiner Textkarten
+// trägt inzwischen jeder Moment echtes Bildmaterial — GIFs laufen direkt von
+// Giphy, Videos über den YouTube-nocookie-Player. Jedes Medium bleibt mit
+// seinem Quellpost verlinkt: die Einbettung ersetzt den Beleg nicht.
+
+const gif = (id, slug, credit, title) => ({
+  kind: 'gif',
+  src: `https://media.giphy.com/media/${id}/giphy.gif`,
+  page: `https://giphy.com/gifs/${slug}`,
+  credit,
+  title
+});
+
+const video = (id, credit, title) => ({
+  kind: 'video',
+  embed: `https://www.youtube-nocookie.com/embed/${id}`,
+  poster: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+  page: `https://www.youtube.com/watch?v=${id}`,
+  credit,
+  title
+});
+
 const memeMoments = [
   {
-    id: 'meme-thesis', iso: '2020-09-01', label: 'WSB / SEP 2020',
+    id: 'meme-thesis', iso: '2020-09-01', label: 'RC / ENTRY',
     frames: [
       { quote: 'CHWY 2.0?', caption: 'the thesis gets a mascot.' },
-      { quote: 'RC ENTERS THE FRAME', caption: 'a stake becomes a story.' }
+      { quote: 'RC ENTERS THE FRAME', caption: 'a stake becomes a story.' },
+      { quote: 'A RETAILER, RE-PRICED', caption: 'the reading changes before the chart does.' }
+    ],
+    media: [
+      gif('MFsqcBSoOKPbjtmvWz', 'money-make-it-rain-MFsqcBSoOKPbjtmvWz', 'GIPHY', 'make it rain / stonks'),
+      gif('bz5mxPNeI2CCJGZUFk', 'HeroGalaxyNFT-herogalaxy-hero-galaxy-memestocks-bz5mxPNeI2CCJGZUFk', 'GIPHY', 'GME / meme stocks')
+    ]
+  },
+  {
+    id: 'meme-letter', iso: '2020-11-16', label: 'RC / LETTER',
+    frames: [
+      { quote: 'A LETTER, NOT A WHISPER', caption: 'a position becomes a thesis.' },
+      { quote: 'CUSTOMER OBSESSION', caption: 'the letter reads like a product brief.' },
+      { quote: 'NO EASY MODE', caption: 'the board is told to move faster.' }
+    ],
+    media: [
+      gif('bzWW5589KIccDHEeM7', 'stonks-gamespot-gamestonks-bzWW5589KIccDHEeM7', 'GIPHY', 'stonks / stock market'),
+      gif('S6NIfCsZz2ZnayHGOm', 'thecouponcause-faq-coupon-cause-gamestop-S6NIfCsZz2ZnayHGOm', 'GIPHY', 'FAQ GameStop')
+    ]
+  },
+  {
+    id: 'meme-board', iso: '2021-01-11', label: 'BOARD SEAT',
+    frames: [
+      { quote: 'HE JOINS THE BOARD', caption: 'the catalyst is a person.' },
+      { quote: 'THE TAPE RE-OPENS', caption: 'gap up, and it does not close.' },
+      { quote: 'THE NAME ARRIVES FIRST', caption: 'the chart follows the story.' }
+    ],
+    media: [
+      gif('64PMiABYkj5BpcaUYC', 'sonypictures-sony-pictures-dumb-money-64PMiABYkj5BpcaUYC', 'GIPHY / Sony Pictures', 'fist pump'),
+      gif('kO8QTqSMRsGMTyADqQ', 'stonks-popcat-onlymaxi-kO8QTqSMRsGMTyADqQ', 'GIPHY', 'stonks popcat')
     ]
   },
   {
     id: 'meme-like', iso: '2021-01-15', label: 'DFV / WSB',
     frames: [
       { quote: 'I LIKE THE STOCK.', caption: 'conviction, condensed.' },
-      { quote: 'DIAMOND HANDS 💎🙌', caption: 'slang becomes a strategy.' }
+      { quote: 'DIAMOND HANDS 💎🙌', caption: 'slang becomes a strategy.' },
+      { quote: 'THE RECEIPTS ARE PUBLIC', caption: 'each post is a data point.' }
+    ],
+    media: [
+      gif('O6sIGaWMoYXTphXfPE', 'satishgaire-wsb-gme-gamestonks-O6sIGaWMoYXTphXfPE', 'GIPHY', 'GME / wallstreetbets'),
+      gif('l3giLj8coa2HVnzgeF', 'wallstreet-wallstreetbets-kid-bets-l3giLj8coa2HVnzgeF', 'GIPHY', 'the kid bets')
     ]
   },
   {
-    id: 'meme-moon', iso: '2021-01-27', label: 'WSB / SQUEEZE',
+    id: 'meme-yolo', iso: '2021-01-22', label: 'SECOND LEG',
+    frames: [
+      { quote: 'YOLO, BUT DOCUMENTED.', caption: 'risk, logged in public.' },
+      { quote: 'IT\'S NOT FINANCIAL ADVICE', caption: 'the disclaimer outlives the thread.' },
+      { quote: '43 → 65 → 76', caption: 'the second leg leaves without pausing.' }
+    ],
+    media: [
+      gif('i33719vyOjNYI', 'the-wolf-of-wall-street-i33719vyOjNYI', 'GIPHY', 'wolf of wall street'),
+      gif('IgiVDEpoMTk0PEVbuW', 'meme-market-stonks-IgiVDEpoMTk0PEVbuW', 'GIPHY', 'market / stonks')
+    ]
+  },
+  {
+    id: 'meme-moon', iso: '2021-01-25', label: 'TO THE MOON',
     frames: [
       { quote: 'TO THE MOON 🚀', caption: 'the line stops behaving.' },
-      { quote: 'THIS IS THE WAY.', caption: 'the feed becomes a rally.' }
+      { quote: 'THIS IS THE WAY.', caption: 'the feed becomes a rally.' },
+      { quote: 'HOLD THE LINE', caption: 'and the line holds anyway.' }
+    ],
+    media: [
+      gif('DnMMGxEvniha7CvASq', 'GetPartiful-to-the-moon-gme-stock-DnMMGxEvniha7CvASq', 'GIPHY / Partiful', 'to the moon / GME'),
+      gif('IXWqceoF995QxrBnL0', 'bitcoin-cryptocurrency-diamond-hands-IXWqceoF995QxrBnL0', 'GIPHY', 'hold the line / diamond hands')
     ]
   },
   {
-    id: 'meme-button', iso: '2021-01-28', label: 'ROBINHOOD / 2021',
+    id: 'meme-diamond', iso: '2021-01-26', label: 'DIAMOND HANDS',
+    frames: [
+      { quote: 'DIAMOND HANDS', caption: 'no paper, no panic.' },
+      { quote: 'I AM NOT SELLING', caption: 'the position is the personality.' },
+      { quote: 'HANDS > PAPER', caption: 'the only exit is no exit.' }
+    ],
+    media: [
+      gif('1569RvwRjejO2IcueA', 'hold-gme-diamond-hands-1569RvwRjejO2IcueA', 'GIPHY', 'GME diamond hands'),
+      gif('fRloIBhOoPoUouMHt9', 'gme-hold-the-line-fRloIBhOoPoUouMHt9', 'GIPHY', 'hold the line')
+    ]
+  },
+  {
+    id: 'meme-squeeze', iso: '2021-01-27', label: 'SQUEEZE',
+    frames: [
+      { quote: 'MELVIN COVERS.', caption: 'the short goes back in at any price.' },
+      { quote: 'GAMMA > GAMMA > GAMMA', caption: 'options supercharge the move.' },
+      { quote: 'THE LINE GOES VERTICAL', caption: 'and halts on the way.' }
+    ],
+    media: [
+      gif('5z25mOQ0J9FQfz4Fza', 'iTrendz-jim-cramer-itrendz-family-5z25mOQ0J9FQfz4Fza', 'GIPHY / iTrendz', 'Jim Cramer reaction'),
+      gif('E4QIM9nyWe8ced5ciy', 'cat-elgatitolover-elgatitoloves-E4QIM9nyWe8ced5ciy', 'GIPHY', 'wake up cat')
+    ]
+  },
+  {
+    id: 'meme-button', iso: '2021-01-28', label: 'BUY BUTTON',
     frames: [
       { quote: 'WHERE IS THE BUY BUTTON?', caption: 'access becomes the question.' },
-      { quote: 'TO THE MOON? TO THE EXIT.', caption: 'friction, live on tape.' }
+      { quote: 'TO THE MOON? TO THE EXIT.', caption: 'friction, live on tape.' },
+      { quote: 'RECURING FUNDS ONLY 💵', caption: 'app stores enter the chart.' }
+    ],
+    media: [
+      gif('ifxoZGl43nZUSp001k', 'hoojafun-buy-button-hooja-smash-ifxoZGl43nZUSp001k', 'GIPHY / Hooja', 'buy button smash'),
+      gif('upmnPRawQ2m7tFtayy', 'sonypictures-sony-pictures-dumb-money-upmnPRawQ2m7tFtayy', 'GIPHY / Sony Pictures', 'cheers / Dumb Money')
     ]
   },
   {
-    id: 'meme-cat', iso: '2021-02-18', label: 'HEARING / 2021',
+    id: 'meme-bagholder', iso: '2021-01-29', label: 'TOP OF TAPE',
+    frames: [
+      { quote: 'FROM $17 TO $483', caption: 'roughly +2,700% in a month.' },
+      { quote: 'TRADING HALTS ×9', caption: 'the market pauses; the feed does not.' },
+      { quote: 'MEME, THEN MERGER', caption: 'the company becomes a plot point.' }
+    ],
+    media: [
+      gif('U36ddMtv8IuyXr4NZd', 'regalmovies-gamestop-dumbmoney-dumb-money-U36ddMtv8IuyXr4NZd', 'GIPHY / Regal', 'GameStop stock'),
+      gif('mCPjDTLBr5B2zrnNEB', 'barstoolsports-ddtg-davey-day-trader-daveydaytrader-mCPjDTLBr5B2zrnNEB', 'GIPHY / Barstool', 'davey day trader')
+    ]
+  },
+  {
+    id: 'meme-cat', iso: '2021-02-18', label: 'HEARING',
     frames: [
       { quote: 'I AM NOT A CAT.', caption: 'a meme becomes testimony.' },
-      { quote: 'ARE YOU A CAT, MR. GILL?', caption: 'congress reads the feed.' }
+      { quote: 'ARE YOU A CAT, MR. GILL?', caption: 'congress reads the feed.' },
+      { quote: '5½ HOURS ON THE RECORD', caption: 'and the answers stay short.' }
+    ],
+    media: [
+      gif('uwvSr7KNCJG0BPPJR0', 'news-i-am-not-a-cat-keith-gill-uwvSr7KNCJG0BPPJR0', 'GIPHY News', 'I am not a cat'),
+      video('RfEuNHVPc_k', 'House Financial Services', 'Game Stopped? Who Wins and Loses — Full Hearing'),
+      video('D7N4S_FKMq4', 'CNBC', 'GameStop hearing live — 18.02.2021')
     ]
   },
   {
-    id: 'meme-hodl', iso: '2021-06-09', label: 'SUPERSTONK / 2021',
+    id: 'meme-dumbmoney', iso: '2021-02-22', label: 'DUMB MONEY',
     frames: [
-      { quote: 'HODL THE LINE.', caption: 'an internet learns to archive.' },
-      { quote: 'DYOR.', caption: 'hype becomes due diligence.' }
+      { quote: 'PAUL DANO AS RC', caption: 'the story gets a face on film.' },
+      { quote: 'CHEERS EVERYONE!', caption: 'the streamer arrives in the film — and in life.' },
+      { quote: 'ARCHIVE THE THREAD', caption: 'history is reassembled in real time.' }
+    ],
+    media: [
+      gif('nZJK1KMwvq8rgNLOYx', 'sonypictures-sony-pictures-dumb-money-nZJK1KMwvq8rgNLOYx', 'GIPHY / Sony Pictures', 'Paul Dano at the stock board'),
+      video('qqOZ5mo7vOw', 'The Roaring Kitty', 'Cheers Everyone! — 16.04.2021')
     ]
   },
   {
-    id: 'meme-split', iso: '2022-07-22', label: 'SPLIT / 2022',
+    id: 'meme-hodl', iso: '2021-03-15', label: 'HOLD',
+    frames: [
+      { quote: 'HOLD THE LINE.', caption: 'an internet learns to archive.' },
+      { quote: 'SCREENSHOT EVERYTHING', caption: 'the thread becomes the source.' },
+      { quote: 'DYOR.', caption: 'hype becomes due diligence.' }
+    ],
+    media: [
+      gif('5W95WjMxcA7GutDkfp', 'sonypictures-sony-pictures-dumb-money-5W95WjMxcA7GutDkfp', 'GIPHY / Sony Pictures', 'hold the line'),
+      gif('5RNNQvq3fhYlOYDIQ2', 'cat-crypto-typing-5RNNQvq3fhYlOYDIQ2', 'GIPHY', 'the cat types')
+    ]
+  },
+  {
+    id: 'meme-amc', iso: '2021-07-20', label: 'AMC / GME',
+    frames: [
+      { quote: 'WE LIKE THE STOCK, TOO.', caption: 'the phrase travels.' },
+      { quote: 'THE SQUEEZE TRAVELS', caption: 'one name becomes a genre.' },
+      { quote: 'MEME, LLC.', caption: 'the category outlives the trade.' }
+    ],
+    media: [
+      gif('DMhDOItd4UPUO0RXpm', 'hodl-diamond-hands-we-like-the-stock-DMhDOItd4UPUO0RXpm', 'GIPHY', 'hold the line / AMC'),
+      gif('YnkMcHgNIMW4Yfmjxr', 'stonks-stonk-YnkMcHgNIMW4Yfmjxr', 'GIPHY', 'stonks')
+    ]
+  },
+  {
+    id: 'meme-dd', iso: '2021-06-09', label: 'SUPERSTONK',
+    frames: [
+      { quote: 'SUPERSTONK.', caption: 'due diligence becomes a movement.' },
+      { quote: 'READ BEFORE YOU REACT', caption: 'the archive is the strategy.' },
+      { quote: 'THE STICKER IS A CTA', caption: 'flair carries the ticker.' }
+    ],
+    media: [
+      gif('ntNdFG8QkRTZxFaHME', 'news-keith-gill-house-gamestop-hearing-ntNdFG8QkRTZxFaHME', 'GIPHY News', 'Roaring Kitty at the hearing'),
+      gif('pHsMjEh1aDvJSrihob', 'news-stonk-keith-gill-investing-in-stonks-and-options-is-incredibly-reisky-pHsMjEh1aDvJSrihob', 'GIPHY News', 'stonks / options are risky')
+    ]
+  },
+  {
+    id: 'meme-amcmeme', iso: '2022-03-17', label: 'AMC STAKE',
+    frames: [
+      { quote: 'A 10-Q MENTIONS AMC', caption: 'a footnote becomes a headline.' },
+      { quote: 'READ THE FOOTNOTE', caption: 'the tape punishes skimming.' },
+      { quote: 'OPEN THE FILING', caption: 'primary sources still win.' }
+    ],
+    media: [
+      gif('xOXkvayFj8rpjoHPI9', 'sonypictures-sony-pictures-dumb-money-xOXkvayFj8rpjoHPI9', 'GIPHY / Sony Pictures', 'cheers / read the room'),
+      gif('1guRIREY9aVoblYv5gA', 'sbnation-buffett-1guRIREY9aVoblYv5gA', 'GIPHY / SB Nation', 'buffett reaction')
+    ]
+  },
+  {
+    id: 'meme-split', iso: '2022-07-22', label: 'SPLIT / 4:1',
     frames: [
       { quote: '1 ➜ 4', caption: 'the denominator changes.' },
-      { quote: 'STILL LIKE THE STOCK.', caption: 'same thesis, new share count.' }
+      { quote: 'STILL LIKE THE STOCK.', caption: 'same thesis, new share count.' },
+      { quote: 'AS TRADED ↔ ADJUSTED', caption: 'the chart finally offers both views.' }
+    ],
+    media: [
+      gif('O6sIGaWMoYXTphXfPE', 'satishgaire-wsb-gme-gamestonks-O6sIGaWMoYXTphXfPE', 'GIPHY', 'GME / wallstreetbets'),
+      gif('MFsqcBSoOKPbjtmvWz', 'money-make-it-rain-MFsqcBSoOKPbjtmvWz', 'GIPHY', 'make it rain')
     ]
   },
   {
-    id: 'meme-return', iso: '2024-05-13', label: 'ROARING KITTY / 2024',
+    id: 'meme-profit', iso: '2023-03-22', label: 'FIRST PROFIT',
+    frames: [
+      { quote: 'FIRST PROFIT IN A DECADE', caption: 'numbers over narrative.' },
+      { quote: 'THE SHOP FLOOR SAVED IT', caption: 'cost cuts, not memes.' },
+      { quote: 'THE CHART FINALLY READS', caption: 'an operating story, not a joke.' }
+    ],
+    media: [
+      gif('MFsqcBSoOKPbjtmvWz', 'money-make-it-rain-MFsqcBSoOKPbjtmvWz', 'GIPHY', 'make it rain'),
+      gif('A8anAF2RR2GhvbNteo', 'hotheadcandles-elf-hot-head-candles-dilution-A8anAF2RR2GhvbNteo', 'GIPHY / Hot Head Candles', 'dilution elf')
+    ]
+  },
+  {
+    id: 'meme-return', iso: '2024-05-13', label: 'THE CAT RETURNS',
     frames: [
       { quote: '👀', caption: 'one post ends the silence.' },
-      { quote: 'THE CAT IS BACK.', caption: 'the tape reacts in minutes.' }
+      { quote: 'THE CAT IS BACK.', caption: 'the tape reacts in minutes.' },
+      { quote: 'THREE YEARS LATER', caption: 'the account was never deleted.' }
+    ],
+    media: [
+      gif('E4QIM9nyWe8ced5ciy', 'cat-elgatitolover-elgatitoloves-E4QIM9nyWe8ced5ciy', 'GIPHY', 'wake up cat'),
+      gif('5RNNQvq3fhYlOYDIQ2', 'cat-crypto-typing-5RNNQvq3fhYlOYDIQ2', 'GIPHY', 'the cat types')
+    ]
+  },
+  {
+    id: 'meme-livestream', iso: '2024-06-07', label: 'LIVESTREAM',
+    frames: [
+      { quote: '400,000 WATCHING.', caption: 'the first stream in three years.' },
+      { quote: '$320M, CONFIRMED', caption: 'the screenshot is the receipt.' },
+      { quote: 'THE TAPE HALTS AGAIN', caption: 'volatility as a stream format.' }
+    ],
+    media: [
+      video('U1prSyyIco0', 'The Roaring Kitty', 'Roaring Kitty Live Stream — 07.06.2024'),
+      gif('ntNdFG8QkRTZxFaHME', 'news-keith-gill-house-gamestop-hearing-ntNdFG8QkRTZxFaHME', 'GIPHY News', 'Roaring Kitty')
     ]
   }
 ];
+
+/* --------------------------------------------------------- media helpers --- */
+
+// Einbettungen sind optional: mit ausgeschaltetem MEDIA-Bereich bleibt der
+// Player rein textlich und lädt nichts von fremden Servern.
+let mediaEnabled = true;
+
+function isGifMedia(media) {
+  return media?.kind === 'gif' && typeof media.src === 'string';
+}
+
+function isVideoMedia(media) {
+  return media?.kind === 'video' && typeof media.embed === 'string';
+}
+
+function primaryMedia(moment, kind) {
+  if (!moment || !Array.isArray(moment.media)) return null;
+  return moment.media.find((entry) => entry?.kind === kind) ?? null;
+}
+
+// Ladefehler dürfen keine leere Fläche hinterlassen — dann bleibt der Text
+// stehen und der Quelllink ist direkt klickbar.
+function mediaFallback(target) {
+  if (!target) return;
+  target.hidden = false;
+  target.classList.add('is-broken');
+}
 
 /* ------------------------------------------------------------ aggregation - */
 
@@ -757,8 +990,8 @@ function drawSeries(svg, options) {
       const bar = bars[meme.barIndex];
       if (!bar) return;
       const mx = x(meme.barIndex);
-      const chipWidth = 46;
-      const chipHeight = 19;
+      const chipWidth = 54;
+      const chipHeight = 22;
       let row = 0;
       while (row < rowEnds.length && rowEnds[row] + 14 > mx - chipWidth / 2) row += 1;
       rowEnds[row] = mx + chipWidth / 2;
@@ -781,7 +1014,7 @@ function drawSeries(svg, options) {
         svgElement('text', {
           class: 'chart-meme-chip-text',
           x: mx,
-          y: chipY + 13.5,
+          y: chipY + 15.5,
           'text-anchor': 'middle'
         }, `M${meme.index + 1} ▶`)
       );
@@ -1072,7 +1305,6 @@ function calloutElements() {
   const callout = document.querySelector('#event-callout');
   return {
     callout,
-    pointer: callout?.querySelector('.callout-pointer'),
     index: callout?.querySelector('#callout-index'),
     date: callout?.querySelector('#callout-date'),
     title: callout?.querySelector('#callout-title'),
@@ -1119,46 +1351,13 @@ function renderCallout(index) {
 }
 
 function paintCallout() {
-  const { callout, pointer } = calloutElements();
-  const { terminal, viewport } = terminalElements();
-  if (!callout || !terminal || !viewport) return;
-  positionChartMeme();
+  const { callout } = calloutElements();
+  if (!callout) return;
 
   const marker = document.querySelector(`#chart-canvas .chart-point[data-index="${chartState.activeIndex}"]`);
   const visible = marker && !chartState.calloutHidden;
   callout.classList.toggle('is-hidden', !visible);
-  if (!visible) return;
-
-  const markerRect = marker.getBoundingClientRect();
-  const terminalRect = terminal.getBoundingClientRect();
-  const viewportRect = viewport.getBoundingClientRect();
-  const calloutRect = callout.getBoundingClientRect();
-  const width = calloutRect.width || callout.offsetWidth || 340;
-  const height = calloutRect.height || callout.offsetHeight || 168;
-
-  const markerCenterX = markerRect.left - terminalRect.left + markerRect.width / 2;
-  const left = clamp(
-    markerCenterX - width / 2,
-    12,
-    Math.max(12, terminal.clientWidth - width - 12)
-  );
-
-  const minTop = viewportRect.top - terminalRect.top + 8;
-  const maxTop = viewportRect.bottom - terminalRect.top - height - 8;
-  let top = markerRect.top - terminalRect.top - height - 14;
-  let placement = 'above';
-  if (top < minTop) {
-    top = markerRect.bottom - terminalRect.top + 14;
-    placement = 'below';
-  }
-  top = clamp(top, minTop, Math.max(minTop, maxTop));
-
-  callout.style.left = `${Math.round(left)}px`;
-  callout.style.top = `${Math.round(top)}px`;
-  callout.dataset.placement = placement;
-  if (pointer) {
-    pointer.style.left = `${Math.round(clamp(markerCenterX - left, 18, width - 18))}px`;
-  }
+  positionDockTies();
 }
 
 function applyActive(index, { pop = false } = {}) {
@@ -1203,6 +1402,7 @@ function applyActive(index, { pop = false } = {}) {
   if (range && document.activeElement !== range) range.value = String(index);
 
   renderCallout(index);
+  paintCallout();
   if (changed && pop) {
     const { callout } = calloutElements();
     callout?.classList.remove('is-popping');
@@ -1272,6 +1472,8 @@ function setResolution(resolution) {
   inspectState.price = null;
   const { panel } = inspectElements();
   if (panel) panel.hidden = true;
+  const inspectHint = document.querySelector('#inspect-hint');
+  if (inspectHint) inspectHint.hidden = false;
   if (memePlayerState.index !== null) {
     const openIndex = memePlayerState.index;
     memePlayerState.index = null;
@@ -1370,22 +1572,30 @@ function clearInspect() {
   paintTerminal();
   const { panel } = inspectElements();
   if (panel) panel.hidden = true;
+  const hint = document.querySelector('#inspect-hint');
+  if (hint) hint.hidden = false;
 }
 
 function updateInspectChip() {
   const { panel, date, cursor, open, high, low, close, delta, volume } = inspectElements();
-  if (!panel || inspectState.barIndex === null) {
+  const hint = document.querySelector('#inspect-hint');
+  const hide = () => {
     if (panel) panel.hidden = true;
+    if (hint) hint.hidden = false;
+  };
+  if (!panel || inspectState.barIndex === null) {
+    hide();
     return;
   }
   const series = seriesFor(chartState.resolution);
   const barIndex = clamp(inspectState.barIndex, 0, series.length - 1);
   const bar = series[barIndex];
   if (!bar) {
-    panel.hidden = true;
+    hide();
     return;
   }
   panel.hidden = false;
+  if (hint) hint.hidden = true;
   if (date) date.textContent = formatDay(bar.date);
   if (cursor) cursor.textContent = `CURSOR ${formatPrice(inspectState.price)}`;
   if (open) open.textContent = formatPrice(bar.open);
@@ -1407,18 +1617,88 @@ function chartMemeElements() {
   const player = document.querySelector('#chart-meme-player');
   return {
     player,
-    pointer: player?.querySelector('.meme-pointer'),
+    hint: document.querySelector('#chart-meme-hint'),
+    media: player?.querySelector('#chart-meme-media'),
+    gif: player?.querySelector('#chart-meme-gif'),
+    video: player?.querySelector('#chart-meme-video'),
+    videoPlay: player?.querySelector('#chart-meme-video-play'),
+    videoLabel: player?.querySelector('#chart-meme-video-label'),
+    broken: player?.querySelector('#chart-meme-media-broken'),
+    brokenLink: player?.querySelector('#chart-meme-media-link'),
     label: player?.querySelector('#chart-meme-label'),
     date: player?.querySelector('#chart-meme-date'),
     price: player?.querySelector('#chart-meme-price'),
     quote: player?.querySelector('#chart-meme-quote'),
     caption: player?.querySelector('#chart-meme-caption'),
+    credit: player?.querySelector('#chart-meme-credit'),
     play: player?.querySelector('#chart-meme-play'),
     playLabel: player?.querySelector('#chart-meme-play-label'),
     fill: player?.querySelector('#chart-meme-progress-fill'),
     count: player?.querySelector('#chart-meme-count'),
     close: player?.querySelector('#chart-meme-close')
   };
+}
+
+// Bild und Video eines Moments in den Player setzen. Das Video-Element wird
+// bewusst erst beim Klick aufgebaut, damit keine Player im Hintergrund laufen.
+function renderChartMemeMedia() {
+  const { media, gif, video, videoPlay, videoLabel, broken, brokenLink, credit } = chartMemeElements();
+  if (!media) return;
+  const moment = memeMoments[memePlayerState.index];
+  const gifSource = mediaEnabled ? primaryMedia(moment, 'gif') : null;
+  const videoSource = mediaEnabled ? primaryMedia(moment, 'video') : null;
+  const fallbackSource = gifSource ?? videoSource;
+
+  media.dataset.state = mediaEnabled && (gifSource || videoSource) ? 'loaded' : 'off';
+  if (gif) {
+    gif.hidden = true;
+    gif.removeAttribute('src');
+  }
+  if (video) {
+    video.hidden = true;
+    video.removeAttribute('src');
+    delete video.dataset.embed;
+    if (videoSource) video.dataset.embed = videoSource.embed;
+  }
+  // Das GIF läuft direkt, das Video startet per Eck-Knopf — beides bleibt belegt.
+  if (videoPlay) videoPlay.hidden = !videoSource;
+  if (videoLabel && videoSource) videoLabel.textContent = 'PLAY VIDEO';
+  if (broken) broken.hidden = true;
+
+  if (gifSource && gif) {
+    gif.alt = `${moment.label} — ${gifSource.title}`;
+    gif.onerror = () => {
+      gif.hidden = true;
+      media.dataset.state = 'broken';
+      mediaFallback(broken);
+      if (brokenLink) brokenLink.href = gifSource.page;
+    };
+    gif.onload = () => { media.dataset.state = 'loaded'; };
+    gif.src = gifSource.src;
+    gif.hidden = false;
+  } else if (videoSource && video) {
+    video.onerror = () => {
+      video.hidden = true;
+      media.dataset.state = 'broken';
+      mediaFallback(broken);
+      if (brokenLink) brokenLink.href = videoSource.page;
+    };
+  }
+  if (fallbackSource && brokenLink && !gifSource) brokenLink.href = fallbackSource.page;
+  renderMediaCredit(credit, [gifSource, videoSource].filter(Boolean), moment?.label ?? '');
+}
+
+// Quellenzeile: GIF und Video bleiben beide belegt — auch wenn nur eines läuft.
+function renderMediaCredit(container, sources, label) {
+  if (!container) return;
+  if (!sources.length) {
+    container.textContent = `${label} · media off`;
+    return;
+  }
+  container.innerHTML = sources.map((source) => {
+    const labelText = source.kind === 'video' ? `▶ ${source.title}` : `${source.credit} · ${source.title}`;
+    return `<a href="${source.page}" target="_blank" rel="noreferrer">${labelText} ↗</a>`;
+  }).join(' · ');
 }
 
 function renderChartMemeFrame(animate = true) {
@@ -1499,10 +1779,12 @@ function openChartMeme(index, { autoplay = true, reveal = true } = {}) {
   if (!memeMoments[index]) return;
   memePlayerState.index = index;
   memePlayerState.frame = 0;
-  const { player } = chartMemeElements();
+  const { player, hint } = chartMemeElements();
   if (player) player.hidden = false;
+  if (hint) hint.hidden = true;
   refreshChartMemeHeader();
   renderChartMemeFrame(false);
+  renderChartMemeMedia();
   setChartMemePlaying(autoplay);
   if (reveal) {
     const barIndex = memeIndices(chartState.resolution)[index];
@@ -1510,7 +1792,7 @@ function openChartMeme(index, { autoplay = true, reveal = true } = {}) {
   }
   terminalPaintKey = '';
   paintTerminal();
-  positionChartMeme();
+  positionDockTies();
 }
 
 // Kopfzeile (Label, Datum, Kurs) neu lesen — z. B. nach Modus- oder
@@ -1529,58 +1811,57 @@ function refreshChartMemeHeader() {
 function closeChartMeme() {
   setChartMemePlaying(false);
   memePlayerState.index = null;
-  const { player, fill } = chartMemeElements();
+  const { player, hint, fill, video, videoPlay } = chartMemeElements();
   if (player) player.hidden = true;
+  if (hint) hint.hidden = false;
   if (fill) fill.style.width = '0%';
+  if (video) {
+    video.hidden = true;
+    video.removeAttribute('src');
+  }
+  if (videoPlay) videoPlay.hidden = true;
+  const tick = document.querySelector('#dock-tick-meme');
+  if (tick) tick.hidden = true;
   terminalPaintKey = '';
   paintTerminal();
 }
 
-function positionChartMeme() {
-  const { player, pointer } = chartMemeElements();
+// Die Karten liegen im Dock, nicht mehr über der Kursfläche. Was bleibt, ist der
+// Anker: ein Marker an der Oberseite des Docks, exakt unter dem Bar, zu dem die
+// Karte gehört — der Verweis bleibt also erhalten, ohne etwas zu verdecken.
+function setDockTick(tickId, element) {
+  const tick = document.querySelector(tickId);
   const { terminal, viewport } = terminalElements();
-  if (!player || !terminal || !viewport || player.hidden || memePlayerState.index === null) return;
-
-  const chip = document.querySelector(`#chart-canvas .chart-meme-hit[data-meme-index="${memePlayerState.index}"]`);
-  if (!chip) return;
-
-  const chipRect = chip.getBoundingClientRect();
-  const terminalRect = terminal.getBoundingClientRect();
-  const viewportRect = viewport.getBoundingClientRect();
-  const playerRect = player.getBoundingClientRect();
-  const width = playerRect.width || player.offsetWidth || 380;
-  const height = playerRect.height || player.offsetHeight || 210;
-
-  if (chipRect.right < viewportRect.left - 40 || chipRect.left > viewportRect.right + 40) {
-    player.classList.add('is-parked');
+  if (!tick || !element || !terminal || !viewport) {
+    if (tick) tick.hidden = true;
     return;
   }
-  player.classList.remove('is-parked');
-
-  const centerX = chipRect.left - terminalRect.left + chipRect.width / 2;
-  const left = clamp(
-    centerX - width / 2,
-    12,
-    Math.max(12, terminal.clientWidth - width - 12)
-  );
-
-  const minTop = viewportRect.top - terminalRect.top + 8;
-  const maxTop = viewportRect.bottom - terminalRect.top - height - 8;
-  let top = chipRect.bottom - terminalRect.top + 14;
-  let placement = 'below';
-  if (top + height > viewportRect.bottom - terminalRect.top - 8) {
-    top = chipRect.top - terminalRect.top - height - 14;
-    placement = 'above';
+  const elementRect = element.getBoundingClientRect();
+  const terminalRect = terminal.getBoundingClientRect();
+  const viewportRect = viewport.getBoundingClientRect();
+  if (!elementRect.width && !elementRect.height) {
+    tick.hidden = true;
+    return;
   }
-  top = clamp(top, minTop, Math.max(minTop, maxTop));
-
-  player.style.left = `${Math.round(left)}px`;
-  player.style.top = `${Math.round(top)}px`;
-  player.dataset.placement = placement;
-  if (pointer) {
-    pointer.dataset.placement = placement;
-    pointer.style.left = `${Math.round(clamp(centerX - left, 20, width - 20))}px`;
+  if (elementRect.right < viewportRect.left - 60 || elementRect.left > viewportRect.right + 60) {
+    tick.hidden = true;
+    tick.dataset.state = 'off-screen';
+    return;
   }
+  const centerX = elementRect.left - terminalRect.left + elementRect.width / 2;
+  tick.hidden = false;
+  delete tick.dataset.state;
+  tick.style.left = `${Math.round(clamp(centerX, 6, terminal.clientWidth - 6))}px`;
+}
+
+function positionDockTies() {
+  const { player } = chartMemeElements();
+  const callout = document.querySelector('#event-callout');
+  const memeChip = memePlayerState.index === null
+    ? null
+    : document.querySelector(`#chart-canvas .chart-meme-hit[data-meme-index="${memePlayerState.index}"]`);
+  setDockTick('#dock-tick-event', callout?.classList.contains('is-hidden') ? null : callout);
+  setDockTick('#dock-tick-meme', player?.hidden ? null : memeChip);
 }
 
 function setMemesEnabled(enabled) {
@@ -1594,6 +1875,33 @@ function setMemesEnabled(enabled) {
   if (!enabled) closeChartMeme();
   terminalPaintKey = '';
   paintTerminal();
+}
+
+// Einbettungen von fremden Servern lassen sich komplett abschalten — der
+// Player bleibt dann rein textlich und löst keinen einzigen Request aus.
+function setMediaEnabled(enabled) {
+  mediaEnabled = enabled;
+  document.body.classList.toggle('media-off', !enabled);
+  const toggle = document.querySelector('#media-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-pressed', String(enabled));
+    const state = document.querySelector('#media-toggle-state');
+    if (state) state.textContent = enabled ? 'ON' : 'OFF';
+  }
+  if (memePlayerState.index !== null) renderChartMemeMedia();
+  renderMemeMedia();
+  loadWallMedia();
+  loadClipPosters();
+}
+
+// Clip-Poster kommen nach, sobald die Rail sichtbar wird oder MEDIA wieder
+// eingeschaltet wird.
+function loadClipPosters() {
+  document.querySelectorAll('.clip-poster').forEach((image) => {
+    if (!image.dataset.src || !mediaEnabled) return;
+    if (image.getAttribute('src')) return;
+    image.src = image.dataset.src;
+  });
 }
 
 /* ------------------------------------------------------- story overview --- */
@@ -1914,6 +2222,27 @@ function bindChartTerminal() {
     setChartMemePlaying(!memePlayerState.playing);
   });
 
+  document.querySelector('#media-toggle')?.addEventListener('click', () => {
+    setMediaEnabled(!mediaEnabled);
+  });
+
+  const dockToggle = document.querySelector('#dock-toggle');
+  if (dockToggle) {
+    dockToggle.addEventListener('click', () => {
+      const collapsed = document.body.classList.toggle('dock-collapsed');
+      dockToggle.setAttribute('aria-expanded', String(!collapsed));
+      const label = document.querySelector('#dock-toggle-label');
+      if (label) label.textContent = collapsed ? 'SHOW DOCK' : 'HIDE DOCK';
+      const signal = dockToggle.querySelector('.dock-toggle-signal');
+      if (signal) signal.textContent = collapsed ? '▸' : '▾';
+      window.setTimeout(() => {
+        terminalPaintKey = '';
+        paintTerminal();
+        paintCallout();
+      }, 240);
+    });
+  }
+
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     window.clearTimeout(resizeTimer);
@@ -1969,9 +2298,12 @@ function bindTimeline() {
 
 // der Text-Player unten nutzt dieselben Momente wie der In-Chart-Player
 const memeData = memeMoments.map((moment) => ({
+  id: moment.id,
+  iso: moment.iso,
   label: moment.label,
   quote: moment.frames[0].quote,
-  caption: moment.frames[0].caption
+  caption: moment.frames[0].caption,
+  media: moment.media ?? []
 }));
 
 let memeIndex = 0;
@@ -1979,6 +2311,64 @@ let memePlaying = false;
 let memeStartedAt = 0;
 let memeAnimationFrame = null;
 const memeDuration = 4400;
+
+function renderMemeMedia() {
+  const box = document.querySelector('#meme-media');
+  const gif = document.querySelector('#meme-gif');
+  const video = document.querySelector('#meme-video');
+  const playButton = document.querySelector('#meme-video-play');
+  const broken = document.querySelector('#meme-media-broken');
+  const brokenLink = document.querySelector('#meme-media-link');
+  const sourceLink = document.querySelector('#meme-source-link');
+  const kindLabel = document.querySelector('#meme-card-kind');
+  if (!box) return;
+  const item = memeData[memeIndex];
+  const gifSource = mediaEnabled ? primaryMedia(item, 'gif') : null;
+  const videoSource = mediaEnabled ? primaryMedia(item, 'video') : null;
+
+  box.dataset.state = mediaEnabled && (gifSource || videoSource) ? 'loaded' : 'off';
+  if (gif) {
+    gif.hidden = true;
+    gif.removeAttribute('src');
+  }
+  if (video) {
+    video.hidden = true;
+    video.removeAttribute('src');
+    delete video.dataset.embed;
+    if (videoSource) video.dataset.embed = videoSource.embed;
+  }
+  if (playButton) playButton.hidden = !videoSource;
+  if (broken) broken.hidden = true;
+
+  if (gifSource && gif) {
+    gif.alt = `${item.label} — ${gifSource.title}`;
+    gif.onerror = () => {
+      gif.hidden = true;
+      box.dataset.state = 'broken';
+      mediaFallback(broken);
+      if (brokenLink) brokenLink.href = gifSource.page;
+    };
+    gif.src = gifSource.src;
+    gif.hidden = false;
+  } else if (videoSource && video) {
+    video.onerror = () => {
+      video.hidden = true;
+      box.dataset.state = 'broken';
+      mediaFallback(broken);
+      if (brokenLink) brokenLink.href = videoSource.page;
+    };
+  }
+  if (brokenLink) brokenLink.href = (gifSource ?? videoSource)?.page ?? '#';
+  if (sourceLink) {
+    const target = gifSource ?? videoSource;
+    sourceLink.href = target?.page ?? 'https://giphy.com/explore/gamestop';
+    sourceLink.textContent = target?.credit ? `${target.credit} ↗` : 'open source post ↗';
+  }
+  if (kindLabel) {
+    kindLabel.textContent = gifSource ? 'GIF / LIVE' : videoSource ? 'VIDEO / CLICK' : 'PLAY / TEXT';
+  }
+  renderMediaCredit(document.querySelector('#meme-credit'), [gifSource, videoSource].filter(Boolean), item.label);
+}
 
 function renderMeme(index, animate = true) {
   const card = document.querySelector('#meme-card');
@@ -1994,7 +2384,9 @@ function renderMeme(index, animate = true) {
     if (caption) caption.textContent = item.caption;
     if (counter) counter.textContent = `${String(index + 1).padStart(2, '0')} — ${String(memeData.length).padStart(2, '0')}`;
     document.querySelectorAll('.meme-selector').forEach((button) => button.classList.toggle('is-active', Number(button.dataset.memeIndex) === index));
+    document.querySelectorAll('.wall-tile').forEach((tile) => tile.classList.toggle('is-active', Number(tile.dataset.memeIndex) === index));
     card.classList.remove('is-changing');
+    renderMemeMedia();
   };
 
   if (animate) {
@@ -2057,21 +2449,180 @@ function bindMemePlayer() {
     ).join('');
   }
 
+  const focusMeme = (index) => {
+    memeIndex = index;
+    renderMeme(memeIndex);
+    if (memePlaying) memeStartedAt = Date.now();
+    // direkt im Chart abspielen: hingehen, verankern, loslassen
+    const explorer = document.querySelector('#chart-explorer');
+    if (explorer && typeof explorer.scrollIntoView === 'function') {
+      explorer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    followPageScrollUntil = Date.now() + 1200;
+    openChartMeme(memeIndex);
+  };
+
   document.querySelectorAll('.meme-selector').forEach((button) => {
+    button.addEventListener('click', () => focusMeme(Number(button.dataset.memeIndex)));
+  });
+
+  buildMemeWall();
+  buildClipRail();
+  bindLazyVideo('.player-media', '#meme-video');
+  bindLazyVideo('.dock-slot-meme .meme-media', '#chart-meme-video');
+  renderMeme(0, false);
+}
+
+// Videos starten erst auf Klick: vorher steht nur das Posterbild, damit keine
+// Player im Hintergrund mitlaufen, während man den Chart ansieht.
+function bindLazyVideo(containerSelector, videoSelector) {
+  const container = document.querySelector(containerSelector);
+  const player = document.querySelector(videoSelector);
+  const button = container?.querySelector('.meme-media-play');
+  if (!container || !player || !button) return;
+  button.addEventListener('click', () => {
+    if (!player.dataset.embed) return;
+    player.src = `${player.dataset.embed}?autoplay=1&rel=0`;
+    player.hidden = false;
+    button.hidden = true;
+    container.dataset.state = 'video';
+  });
+}
+
+// Die Wand zeigt jeden Moment als eigenes Kästchen mit echtem GIF und verlinkt
+// auf den Original-Post — der Nachweis bleibt beim Bild.
+function buildMemeWall() {
+  const grid = document.querySelector('#wall-grid');
+  if (!grid) return;
+  grid.innerHTML = memeMoments.map((moment, index) => {
+    const gifSource = moment.media.find((entry) => entry.kind === 'gif');
+    const videoSource = moment.media.find((entry) => entry.kind === 'video');
+    const media = gifSource ?? videoSource;
+    const kind = gifSource ? 'GIF' : 'VIDEO';
+    const date = formatShortDay(moment.iso);
+    return `
+      <article class="wall-tile" data-meme-index="${index}">
+        <button class="wall-tile-hit" type="button" aria-label="${moment.label} im Chart öffnen — ${moment.frames[0].quote}">
+          <span class="wall-tile-frame">
+            <img class="wall-tile-image" data-src="${gifSource?.src ?? ''}" alt="${moment.label} — ${gifSource?.title ?? moment.frames[0].quote}" loading="lazy" decoding="async" />
+            <span class="wall-tile-kind">${kind}</span>
+          </span>
+          <span class="wall-tile-meta">
+            <b>${String(index + 1).padStart(2, '0')}</b>
+            <span class="wall-tile-label">${moment.label}</span>
+            <span class="wall-tile-date">${date}</span>
+          </span>
+          <span class="wall-tile-quote">${moment.frames[0].quote}</span>
+        </button>
+        <a class="wall-tile-source" href="${media?.page ?? '#'}" target="_blank" rel="noreferrer">${media?.credit ?? 'source'} ↗</a>
+        ${videoSource ? `<button class="wall-tile-video" type="button" data-embed="${videoSource.embed}" aria-label="Video abspielen: ${videoSource.title}">▶ VIDEO</button>` : ''}
+      </article>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.wall-tile-hit').forEach((button) => {
     button.addEventListener('click', () => {
-      memeIndex = Number(button.dataset.memeIndex);
-      renderMeme(memeIndex);
-      if (memePlaying) memeStartedAt = Date.now();
-      // direkt im Chart abspielen: hingehen, verankern, loslassen
       const explorer = document.querySelector('#chart-explorer');
       if (explorer && typeof explorer.scrollIntoView === 'function') {
         explorer.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
       followPageScrollUntil = Date.now() + 1200;
+      memeIndex = Number(button.closest('.wall-tile')?.dataset.memeIndex ?? 0);
+      renderMeme(memeIndex);
       openChartMeme(memeIndex);
     });
   });
-  renderMeme(0, false);
+
+  grid.querySelectorAll('.wall-tile-video').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const tile = button.closest('.wall-tile');
+      let frame = tile.querySelector('iframe');
+      if (!frame) {
+        frame = document.createElement('iframe');
+        frame.className = 'wall-tile-frame-video';
+        frame.title = button.getAttribute('aria-label') ?? 'Meme-Video';
+        frame.loading = 'lazy';
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        frame.allowFullscreen = true;
+        tile.querySelector('.wall-tile-frame').append(frame);
+      }
+      if (!frame.src) frame.src = `${button.dataset.embed}?autoplay=1&rel=0`;
+      button.hidden = true;
+      tile.classList.add('is-playing');
+    });
+  });
+}
+
+// GIFs werden erst geladen, wenn die Wand in die Nähe des Viewports kommt.
+function loadWallMedia() {
+  const grid = document.querySelector('#wall-grid');
+  if (!grid) return;
+  grid.querySelectorAll('.wall-tile-image').forEach((image) => {
+    const src = image.dataset.src;
+    if (!src) {
+      image.closest('.wall-tile-frame')?.classList.add('is-textual');
+      return;
+    }
+    if (!mediaEnabled) {
+      image.closest('.wall-tile-frame')?.classList.add('is-textual');
+      return;
+    }
+    if (image.getAttribute('src')) return;
+    image.src = src;
+  });
+}
+
+function buildClipRail() {
+  const grid = document.querySelector('#clip-grid');
+  if (!grid) return;
+  const clips = [];
+  memeMoments.forEach((moment) => {
+    (moment.media ?? []).forEach((entry) => {
+      if (entry.kind !== 'video' || clips.some((clip) => clip.embed === entry.embed)) return;
+      clips.push({ ...entry, label: moment.label, iso: moment.iso });
+    });
+  });
+  grid.innerHTML = clips.map((clip, index) => `
+    <article class="clip-card" data-embed-index="${index}">
+      <button class="clip-hit" type="button" aria-label="Video abspielen: ${clip.title} — ${clip.credit}">
+        <img class="clip-poster" data-src="${clip.poster}" alt="${clip.title}" loading="lazy" decoding="async" />
+        <span class="clip-play" aria-hidden="true">▶</span>
+        <span class="clip-meta">
+          <b>${formatShortDay(clip.iso)} · ${clip.label}</b>
+          <span>${clip.title}</span>
+        </span>
+      </button>
+      <div class="clip-foot">
+        <span>${clip.credit}</span>
+        <a href="${clip.page}" target="_blank" rel="noreferrer">Original ↗</a>
+      </div>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.clip-hit').forEach((button) => {
+    button.addEventListener('click', () => {
+      const clip = clips[Number(button.closest('.clip-card')?.dataset.embedIndex ?? 0)];
+      if (!clip) return;
+      let frame = button.parentElement.querySelector('iframe');
+      if (!frame) {
+        frame = document.createElement('iframe');
+        frame.className = 'clip-video';
+        frame.title = clip.title;
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        frame.allowFullscreen = true;
+        button.parentElement.append(frame);
+      }
+      if (!frame.src) frame.src = `${clip.embed}?autoplay=1&rel=0`;
+      button.hidden = true;
+      button.closest('.clip-card')?.classList.add('is-playing');
+    });
+  });
+
+  grid.querySelectorAll('.clip-poster').forEach((image) => {
+    image.addEventListener('error', () => image.closest('.clip-card')?.classList.add('is-textual'));
+  });
 }
 
 function bindSourceFilters() {
@@ -2180,6 +2731,23 @@ function initialise() {
   bindMemePlayer();
   bindSourceFilters();
   bindScrollProgress();
+
+  // Wand und Clip-Rail laden ihre Medien erst, wenn sie sichtbar werden.
+  const lazyTargets = [document.querySelector('#meme-wall'), document.querySelector('#clip-rail')].filter(Boolean);
+  if (typeof IntersectionObserver === 'function' && lazyTargets.length) {
+    const mediaObserver = new IntersectionObserver((entries, observer) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      entries.filter((entry) => entry.isIntersecting).forEach((entry) => {
+        loadWallMedia();
+        loadClipPosters();
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '320px 0px' });
+    lazyTargets.forEach((target) => mediaObserver.observe(target));
+  } else {
+    loadWallMedia();
+    loadClipPosters();
+  }
 
   const { viewport } = terminalElements();
   raf(() => {
