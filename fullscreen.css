@@ -16,10 +16,14 @@
   flex-direction: column;
 }
 
-.terminal-viewport {
+.terminal-chart-area {
   flex: 1 1 auto;
   height: auto;
   min-height: 0;
+}
+
+.chart-yaxis {
+  width: 76px;
 }
 
 .hero-bottomline {
@@ -28,73 +32,18 @@
   margin-top: 0;
 }
 
-.chart-media-dock {
-  position: absolute;
-  left: 18px;
-  bottom: 18px;
-  z-index: 5;
-  width: min(570px, calc(100% - 36px));
-  padding: 14px 15px 13px;
-  border: 1px solid rgba(216, 241, 62, 0.32);
-  background: rgba(9, 11, 9, 0.91);
-  box-shadow: 10px 10px 0 rgba(255, 92, 49, 0.72);
-  backdrop-filter: blur(12px);
-  transition: left 220ms ease;
-}
 
-.media-dock-header {
-  align-items: start;
-  margin-bottom: 11px;
-}
 
-.media-dock-header h3 {
-  max-width: 360px;
-  margin-top: 6px;
-  font-size: clamp(22px, 2.5vw, 32px);
-}
 
-.media-dock-date {
-  gap: 3px;
-  font-size: 8px;
-}
 
-.media-dock-grid {
-  gap: 6px;
-}
 
-.media-tile {
-  grid-template-columns: 66px minmax(0, 1fr);
-  min-height: 70px;
-}
 
-.media-art {
-  min-height: 70px;
-}
 
-.media-art-label {
-  font-size: 13px;
-}
 
-.media-art-label small {
-  margin-top: 4px;
-  font-size: 6px;
-}
 
-.media-tile-copy {
-  padding: 8px 9px 7px;
-}
 
-.media-tile-type {
-  font-size: 7px;
-}
 
-.media-tile-copy strong {
-  font-size: 13px;
-}
 
-.media-tile-copy small {
-  font-size: 7px;
-}
 
 .mode-toggle {
   display: inline-flex;
@@ -172,6 +121,15 @@ body.candles-active .market-chart .line-mode {
 
 body.candles-active .market-chart .candle-mode {
   display: block;
+}
+
+/* when a window is too dense for candles, keep the line in candle mode too */
+body.candles-active .market-chart.is-dense .line-mode {
+  display: block;
+}
+
+body.candles-active .market-chart.is-dense .candle-mode {
+  display: none;
 }
 
 .market-chart .candle-wick {
@@ -275,52 +233,22 @@ body.candles-active .market-chart .candle-mode {
     padding-block: 8px;
   }
 
-  .terminal-subbar > span:nth-child(2) {
-    display: inline;
-    margin-left: auto;
-  }
-
-  .terminal-subbar > span:nth-child(3) {
+  .subbar-res {
     display: none;
   }
 
-  .chart-media-dock {
-    width: min(440px, calc(100% - 28px));
-    left: 14px;
-    bottom: 14px;
-    padding: 12px;
-    box-shadow: 7px 7px 0 rgba(255, 92, 49, 0.72);
+  .event-callout {
+    width: min(310px, calc(100vw - 36px));
+    padding: 10px 11px 9px;
+    box-shadow: 6px 6px 0 rgba(255, 92, 49, 0.7);
   }
 
-  .media-dock-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .callout-title {
+    font-size: 18px;
   }
 
-  .media-tile {
-    display: block;
-    min-height: 72px;
-  }
-
-  .media-art {
-    min-height: 39px;
-  }
-
-  .media-art-label {
-    font-size: 11px;
-  }
-
-  .media-art-label small,
-  .media-tile-copy strong,
-  .media-tile-copy small {
+  .zoom-controls > span {
     display: none;
-  }
-
-  .media-tile-copy {
-    padding: 7px;
-  }
-
-  .media-tile-type {
-    font-size: 7px;
   }
 
   .hero-bottomline {
@@ -362,42 +290,21 @@ body.candles-active .market-chart .candle-mode {
     min-height: 0;
   }
 
-  .chart-media-dock {
-    width: calc(100% - 18px);
-    left: 9px;
-    bottom: 9px;
-    padding: 10px;
+  .event-callout {
+    width: calc(100vw - 26px);
   }
 
-  .media-dock-header h3 {
-    max-width: 230px;
-    font-size: 20px;
+  .callout-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .media-dock-date {
-    position: absolute;
-    top: 12px;
-    right: 10px;
+  .callout-link {
+    flex-direction: column;
+    gap: 3px;
   }
 
-  .media-dock-grid {
-    gap: 4px;
-  }
-
-  .media-tile {
-    min-height: 54px;
-  }
-
-  .media-art {
-    min-height: 30px;
-  }
-
-  .media-tile-copy {
-    padding: 5px 4px;
-  }
-
-  .media-tile-type {
-    font-size: 6px;
+  .callout-link-title {
+    font-size: 9px;
   }
 
   .terminal-range-row {

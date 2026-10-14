@@ -1081,6 +1081,55 @@ a:focus-visible {
   letter-spacing: 0.03em;
 }
 
+.market-chart .chart-point-halo {
+  fill: rgba(255, 92, 49, 0.08);
+  stroke: rgba(255, 92, 49, 0.35);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: fill 180ms ease, stroke 180ms ease;
+}
+
+.market-chart .chart-event.is-active .chart-point-halo {
+  fill: rgba(216, 241, 62, 0.09);
+  stroke: rgba(216, 241, 62, 0.44);
+}
+
+.market-chart .chart-point-pulse {
+  fill: none;
+  stroke: var(--acid);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: point-pulse 2.4s ease-out infinite;
+}
+
+@keyframes point-pulse {
+  0% { opacity: 0.9; transform: scale(0.6); }
+  70% { opacity: 0; transform: scale(2.1); }
+  100% { opacity: 0; transform: scale(2.1); }
+}
+
+.market-chart .chart-event.is-active .chart-point-label {
+  fill: var(--acid);
+}
+
+.market-chart .chart-split-line {
+  stroke: rgba(155, 206, 255, 0.5);
+  stroke-dasharray: 3 6;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.market-chart .chart-split-label {
+  fill: rgba(155, 206, 255, 0.78);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+/* dense zoom levels fall back to the line, even in candle mode — see fullscreen.css */
+
 .meme-section {
   display: grid;
   grid-template-columns: minmax(270px, 0.72fr) minmax(480px, 1.28fr);
