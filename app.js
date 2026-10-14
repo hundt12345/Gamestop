@@ -1,15 +1,15 @@
 const timelineData = [
-  { date: "SEP 2020", title: "The activist entry", price: 7.0, label: "RC / ENTRY", id: "event-rc" },
-  { date: "NOV 2020", title: "A letter, not a whisper", price: 8.0, label: "RC / LETTER", id: "event-letter" },
-  { date: "JAN 2021", title: "DFV keeps showing the receipts", price: 18.0, label: "DFV / WSB", id: "event-dfv" },
-  { date: "27 JAN 2021", title: "The squeeze goes vertical", price: 347.5, label: "SQUEEZE / PEAK", id: "event-squeeze" },
-  { date: "28 JAN 2021", title: "The buy button goes dark", price: 193.0, label: "BROKER / FRICTION", id: "event-robinhood" },
-  { date: "FEB 2021", title: "The hearing enters the record", price: 40.7, label: "HEARING / RECORD", id: "event-hearing" },
-  { date: "JUN 2021", title: "Superstonk builds an archive", price: 55.0, label: "DD / ARCHIVE", id: "event-superstonk" },
-  { date: "JUL 2022", title: "A split dividend, a new denominator", price: 35.0, label: "SPLIT / STRUCTURE", id: "event-split" },
-  { date: "MAR 2023", title: "Profit changes the texture", price: 23.0, label: "EARNINGS / BUSINESS", id: "event-profit" },
-  { date: "MAY 2024", title: "The return of Roaring Kitty", price: 46.6, label: "RETURN / VOLATILITY", id: "event-return" },
-  { date: "2025 →", title: "Warrants, filings, the long tail", price: 25.0, label: "FILINGS / LONG TAIL", id: "event-tail" }
+  { date: "SEP 2020", iso: "2020-09-01", title: "The activist entry", price: 7.0, label: "RC / ENTRY", id: "event-rc" },
+  { date: "NOV 2020", iso: "2020-11-16", title: "A letter, not a whisper", price: 8.0, label: "RC / LETTER", id: "event-letter" },
+  { date: "JAN 2021", iso: "2021-01-15", title: "DFV keeps showing the receipts", price: 18.0, label: "DFV / WSB", id: "event-dfv" },
+  { date: "27 JAN 2021", iso: "2021-01-27", title: "The squeeze goes vertical", price: 347.5, label: "SQUEEZE / PEAK", id: "event-squeeze" },
+  { date: "28 JAN 2021", iso: "2021-01-28", title: "The buy button goes dark", price: 193.0, label: "BROKER / FRICTION", id: "event-robinhood" },
+  { date: "FEB 2021", iso: "2021-02-18", title: "The hearing enters the record", price: 40.7, label: "HEARING / RECORD", id: "event-hearing" },
+  { date: "JUN 2021", iso: "2021-06-09", title: "Superstonk builds an archive", price: 55.0, label: "DD / ARCHIVE", id: "event-superstonk" },
+  { date: "JUL 2022", iso: "2022-07-22", title: "A split dividend, a new denominator", price: 35.0, label: "SPLIT / STRUCTURE", id: "event-split" },
+  { date: "MAR 2023", iso: "2023-03-22", title: "Profit changes the texture", price: 23.0, label: "EARNINGS / BUSINESS", id: "event-profit" },
+  { date: "MAY 2024", iso: "2024-05-13", title: "The return of Roaring Kitty", price: 46.6, label: "RETURN / VOLATILITY", id: "event-return" },
+  { date: "2025 →", iso: "2025-01-02", title: "Warrants, filings, the long tail", price: 25.0, label: "FILINGS / LONG TAIL", id: "event-tail" }
 ];
 
 const eventMedia = [
@@ -83,6 +83,107 @@ const chartDimensions = {
 };
 
 let activeIndex = 0;
+let currentResolution = "day";
+const marketSeriesCache = new Map();
+
+const marketAnchors = [
+  { date: "2020-01-02", price: 5.5 },
+  ...timelineData.map((event) => ({ date: event.iso, price: event.price })),
+  { date: "2025-12-31", price: 25.0 }
+].map((anchor) => ({ ...anchor, time: Date.parse(`${anchor.date}T00:00:00Z`) }));
+
+function utcDate(value) {
+  return new Date(`${value}T00:00:00Z`);
+}
+
+function dateKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function datesForResolution(resolution) {
+  const dates = [];
+  const cursor = utcDate("2020-01-02");
+  const end = utcDate("2025-12-31");
+
+  if (resolution === "month") {
+    cursor.setUTCDate(1);
+    while (cursor <= end) {
+      dates.push(new Date(cursor));
+      cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+    }
+    return dates;
+  }
+
+  while (cursor <= end) {
+    const day = cursor.getUTCDay();
+    if (resolution === "week" || (day !== 0 && day !== 6)) dates.push(new Date(cursor));
+    cursor.setUTCDate(cursor.getUTCDate() + (resolution === "week" ? 7 : 1));
+  }
+  return dates;
+}
+
+function interpolatedPrice(time) {
+  let left = marketAnchors[0];
+  let right = marketAnchors[marketAnchors.length - 1];
+  for (let index = 0; index < marketAnchors.length - 1; index += 1) {
+    if (time >= marketAnchors[index].time && time <= marketAnchors[index + 1].time) {
+      left = marketAnchors[index];
+      right = marketAnchors[index + 1];
+      break;
+    }
+  }
+  if (left.time === right.time) return left.price;
+  const progress = Math.min(1, Math.max(0, (time - left.time) / (right.time - left.time)));
+  return Math.exp(Math.log(left.price) + (Math.log(right.price) - Math.log(left.price)) * progress);
+}
+
+function seededNoise(index, amount = 1) {
+  const value = Math.sin(index * 12.9898 + 78.233) * 43758.5453;
+  return ((value - Math.floor(value)) - 0.5) * amount;
+}
+
+function nearestSeriesIndex(series, date) {
+  const target = date.getTime();
+  let nearest = 0;
+  let distance = Number.POSITIVE_INFINITY;
+  series.forEach((point, index) => {
+    const nextDistance = Math.abs(point.time - target);
+    if (nextDistance < distance) {
+      distance = nextDistance;
+      nearest = index;
+    }
+  });
+  return nearest;
+}
+
+function buildMarketSeries(resolution) {
+  if (marketSeriesCache.has(resolution)) return marketSeriesCache.get(resolution);
+  const dates = datesForResolution(resolution);
+  const spread = resolution === "day" ? 0.022 : resolution === "week" ? 0.052 : 0.105;
+  let previousClose = interpolatedPrice(dates[0].getTime());
+  const series = dates.map((date, index) => {
+    const base = interpolatedPrice(date.getTime());
+    const exactAnchor = marketAnchors.find((anchor) => anchor.date === dateKey(date));
+    const pulse = Math.sin(index * (resolution === "day" ? 0.31 : 0.71)) * spread * 0.54 + seededNoise(index, spread * 0.9);
+    const close = exactAnchor ? exactAnchor.price : Math.max(4, base * (1 + pulse));
+    const openPulse = seededNoise(index + 991, spread * 0.7);
+    const open = Math.max(4, previousClose * (1 + openPulse));
+    const range = spread * (1.25 + Math.abs(seededNoise(index + 419, 0.9)));
+    const high = Math.max(open, close) * (1 + range);
+    const low = Math.max(4, Math.min(open, close) * (1 - range * 0.86));
+    const eventDistance = marketAnchors.reduce((closest, anchor) => Math.min(closest, Math.abs(anchor.time - date.getTime())), Number.POSITIVE_INFINITY);
+    const eventPulse = Math.exp(-eventDistance / (resolution === "day" ? 1000 * 60 * 60 * 24 * 3 : 1000 * 60 * 60 * 24 * 17));
+    const volume = Math.round((0.65 + Math.abs(seededNoise(index + 61, 1.2)) + eventPulse * 5) * 1000000);
+    previousClose = close;
+    return { date: new Date(date), time: date.getTime(), open, high, low, close, volume };
+  });
+  marketSeriesCache.set(resolution, series);
+  return series;
+}
+
+function resolutionLabel(resolution) {
+  return resolution === "day" ? "1D / DAILY DETAIL" : resolution === "week" ? "1W / WEEKLY" : "1M / MONTHLY";
+}
 
 function svgElement(name, attributes = {}, text = "") {
   const element = document.createElementNS("http://www.w3.org/2000/svg", name);
@@ -93,16 +194,26 @@ function svgElement(name, attributes = {}, text = "") {
 
 function buildChart(svg) {
   if (!svg) return;
+  svg.replaceChildren();
 
+  const series = buildMarketSeries(currentResolution);
   const { width, height, pad } = chartDimensions;
   svg.setAttribute("preserveAspectRatio", "none");
   const plotWidth = width - pad.left - pad.right;
   const plotHeight = height - pad.top - pad.bottom;
-  const minLog = Math.log(4);
-  const maxLog = Math.log(400);
-  const xFor = (index) => pad.left + (index / (timelineData.length - 1)) * plotWidth;
-  const yFor = (price) => pad.top + (1 - (Math.log(price) - minLog) / (maxLog - minLog)) * plotHeight;
+  const rawMin = Math.min(...series.map((point) => point.low));
+  const rawMax = Math.max(...series.map((point) => point.high));
+  const minLog = Math.log(Math.max(2, rawMin * 0.88));
+  const maxLog = Math.log(rawMax * 1.12);
+  const xFor = (index) => pad.left + (index / Math.max(1, series.length - 1)) * plotWidth;
+  const yFor = (price) => pad.top + (1 - (Math.log(Math.max(2, price)) - minLog) / (maxLog - minLog)) * plotHeight;
   const yBottom = height - pad.bottom;
+  const seriesPoints = series.map((point, index) => ({ ...point, index, x: xFor(index), y: yFor(point.close) }));
+  const eventPoints = timelineData.map((item, index) => {
+    const seriesIndex = nearestSeriesIndex(series, utcDate(item.iso));
+    const row = series[seriesIndex];
+    return { ...item, index, seriesIndex, x: xFor(seriesIndex), y: yFor(row.close), close: row.close };
+  });
 
   const gradientId = `chart-area-gradient-${svg.id}`;
   const defs = svgElement("defs");
@@ -115,7 +226,9 @@ function buildChart(svg) {
   svg.append(defs);
 
   const grid = svgElement("g", { "aria-hidden": "true" });
-  [400, 100, 25, 5].forEach((value) => {
+  const yTicks = [5, 10, 25, 50, 100, 200, 400].filter((value) => value >= Math.exp(minLog) * 0.96 && value <= Math.exp(maxLog) * 1.04);
+  if (!yTicks.length) yTicks.push(Math.round(Math.exp((minLog + maxLog) / 2)));
+  yTicks.forEach((value) => {
     const y = yFor(value);
     grid.append(
       svgElement("line", { class: "chart-grid major", x1: pad.left, x2: width - pad.right, y1: y, y2: y }),
@@ -123,20 +236,28 @@ function buildChart(svg) {
     );
   });
 
-  const dateLabels = [0, 3, 4, 6, 7, 8, 9, 10];
+  const labelTargets = [];
+  for (let year = 2020; year <= 2025; year += 1) {
+    labelTargets.push(`${year}-01-01`);
+    if (currentResolution === "month") labelTargets.push(`${year}-07-01`);
+  }
+  const dateLabels = [...new Set(labelTargets.map((value) => nearestSeriesIndex(series, utcDate(value))))].sort((a, b) => a - b);
+  const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   dateLabels.forEach((index) => {
     const x = xFor(index);
+    const date = series[index].date;
+    const label = currentResolution === "day" || currentResolution === "week"
+      ? String(date.getUTCFullYear())
+      : `${monthNames[date.getUTCMonth()]} ${String(date.getUTCFullYear()).slice(-2)}`;
     grid.append(
       svgElement("line", { class: "chart-grid", x1: x, x2: x, y1: pad.top, y2: yBottom }),
-      svgElement("text", { class: "chart-date-label", x, y: height - 15, "text-anchor": index === 0 ? "start" : index === timelineData.length - 1 ? "end" : "middle" }, timelineData[index].date)
+      svgElement("text", { class: "chart-date-label", x, y: height - 15, "text-anchor": index === dateLabels[0] ? "start" : index === dateLabels[dateLabels.length - 1] ? "end" : "middle" }, label)
     );
   });
   svg.append(grid);
 
-  const points = timelineData.map((item, index) => ({ ...item, x: xFor(index), y: yFor(item.price) }));
-  const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
-  const areaPath = `${linePath} L${points[points.length - 1].x.toFixed(2)},${yBottom} L${points[0].x.toFixed(2)},${yBottom} Z`;
-
+  const linePath = seriesPoints.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+  const areaPath = `${linePath} L${seriesPoints[seriesPoints.length - 1].x.toFixed(2)},${yBottom} L${seriesPoints[0].x.toFixed(2)},${yBottom} Z`;
   const area = svgElement("path", { class: "chart-area line-mode", d: areaPath });
   area.style.fill = `url(#${gradientId})`;
   svg.append(
@@ -145,35 +266,47 @@ function buildChart(svg) {
     svgElement("path", { class: "chart-line line-mode", d: linePath })
   );
 
+  const maxVolume = Math.max(...series.map((point) => point.volume));
+  const volumeGroup = svgElement("g", { class: "chart-volume", "aria-hidden": "true" });
+  const volumeTop = yBottom - 52;
+  const volumeWidth = Math.max(0.45, plotWidth / series.length * (currentResolution === "day" ? 0.8 : 0.64));
+  seriesPoints.forEach((point) => {
+    const volumeHeight = (point.volume / maxVolume) * 48;
+    volumeGroup.append(svgElement("rect", {
+      class: point.close >= point.open ? "volume-bar up" : "volume-bar down",
+      x: point.x - volumeWidth / 2,
+      y: yBottom - volumeHeight,
+      width: volumeWidth,
+      height: volumeHeight
+    }));
+  });
+  svg.append(volumeGroup);
+
   const candleGroup = svgElement("g", { class: "candle-mode" });
-  points.forEach((point, index) => {
-    const previousClose = index === 0 ? point.price * 0.88 : points[index - 1].price;
-    const open = Math.max(4, previousClose * (point.price >= previousClose ? 0.91 : 1.09));
-    const high = Math.max(open, point.price) * 1.16;
-    const low = Math.max(4, Math.min(open, point.price) * 0.82);
-    const candleWidth = Math.max(8, plotWidth / timelineData.length * 0.42);
-    const bodyTop = Math.min(yFor(open), yFor(point.price));
-    const bodyHeight = Math.max(4, Math.abs(yFor(point.price) - yFor(open)));
-    const candle = svgElement("g", { class: point.price >= open ? "candle up" : "candle down", "data-index": index });
+  const candleWidth = Math.max(0.5, plotWidth / series.length * (currentResolution === "day" ? 0.82 : currentResolution === "week" ? 0.64 : 0.48));
+  seriesPoints.forEach((point) => {
+    const bodyTop = Math.min(yFor(point.open), yFor(point.close));
+    const bodyHeight = Math.max(0.9, Math.abs(yFor(point.close) - yFor(point.open)));
+    const candle = svgElement("g", { class: point.close >= point.open ? "candle up" : "candle down" });
     candle.append(
-      svgElement("line", { class: "candle-wick", x1: point.x, x2: point.x, y1: yFor(high), y2: yFor(low) }),
-      svgElement("rect", { class: "candle-body", x: point.x - candleWidth / 2, y: bodyTop, width: candleWidth, height: bodyHeight, rx: 1 })
+      svgElement("line", { class: "candle-wick", x1: point.x, x2: point.x, y1: yFor(point.high), y2: yFor(point.low) }),
+      svgElement("rect", { class: "candle-body", x: point.x - candleWidth / 2, y: bodyTop, width: candleWidth, height: bodyHeight, rx: 0.4 })
     );
     candleGroup.append(candle);
   });
   svg.append(candleGroup);
 
   const guides = svgElement("g", { "aria-hidden": "true" });
-  points.forEach((point) => {
+  eventPoints.forEach((point) => {
     guides.append(svgElement("line", { class: "chart-event-guide", x1: point.x, x2: point.x, y1: point.y, y2: yBottom }));
   });
   svg.append(guides);
 
   const marks = svgElement("g");
   const labelIndexes = new Set([0, 3, 4, 9]);
-  points.forEach((point, index) => {
+  eventPoints.forEach((point, index) => {
     const pointGroup = svgElement("g", { "data-index": index });
-    const hit = svgElement("circle", { class: "chart-point-hit", cx: point.x, cy: point.y, r: 18, tabindex: 0, role: "button", "aria-label": `${point.date}: ${point.title}` });
+    const hit = svgElement("circle", { class: "chart-point-hit", cx: point.x, cy: point.y, r: 20, tabindex: 0, role: "button", "aria-label": `${point.date}: ${point.title}` });
     const dot = svgElement("circle", { class: "chart-point", cx: point.x, cy: point.y, r: 4.2, "data-index": index });
     const title = svgElement("title", {}, `${point.date} — ${point.title} — $${point.price.toFixed(2)}`);
     dot.append(title);
@@ -182,23 +315,23 @@ function buildChart(svg) {
     if (labelIndexes.has(index)) {
       const isPeak = index === 3;
       const labelY = isPeak ? point.y + 27 : Math.max(point.y - 16, 18);
-      const label = svgElement("text", {
+      pointGroup.append(svgElement("text", {
         class: "chart-point-label",
         x: point.x,
         y: labelY,
         "text-anchor": index === 0 ? "start" : index === 9 ? "end" : "middle"
-      }, point.label);
-      pointGroup.append(label);
+      }, point.label));
     }
     marks.append(pointGroup);
   });
   svg.append(marks);
 
+  const eventX = (index) => eventPoints[index].x;
   const technicalOverlay = svgElement("g", { class: "technical-overlay", "aria-hidden": "true" });
-  const triangleOneStart = xFor(1) - 12;
-  const triangleOneEnd = xFor(3) + 18;
-  const triangleTwoStart = xFor(4) - 18;
-  const triangleTwoEnd = xFor(6) + 14;
+  const triangleOneStart = eventX(1) - 12;
+  const triangleOneEnd = eventX(3) + 18;
+  const triangleTwoStart = eventX(4) - 18;
+  const triangleTwoEnd = eventX(6) + 14;
   technicalOverlay.append(
     svgElement("path", { class: "ta-channel", d: `M${triangleOneStart},${yFor(27)} L${triangleOneEnd},${yFor(78)}` }),
     svgElement("path", { class: "ta-channel support", d: `M${triangleOneStart},${yFor(10)} L${triangleOneEnd},${yFor(78)}` }),
@@ -206,10 +339,10 @@ function buildChart(svg) {
     svgElement("path", { class: "ta-channel", d: `M${triangleTwoStart},${yFor(151)} L${triangleTwoEnd},${yFor(89)}` }),
     svgElement("path", { class: "ta-channel support", d: `M${triangleTwoStart},${yFor(42)} L${triangleTwoEnd},${yFor(89)}` }),
     svgElement("text", { class: "ta-label", x: triangleTwoStart + 16, y: yFor(146) + 22 }, "WEDGE / RE-TEST"),
-    svgElement("line", { class: "ta-resistance", x1: xFor(0), x2: xFor(5), y1: yFor(100), y2: yFor(100) }),
-    svgElement("text", { class: "ta-label red", x: xFor(0) + 12, y: yFor(100) - 8 }, "RESISTANCE"),
-    svgElement("line", { class: "ta-channel support", x1: xFor(5), x2: xFor(10), y1: yFor(22), y2: yFor(22) }),
-    svgElement("text", { class: "ta-label blue", x: xFor(7), y: yFor(22) + 17 }, "SUPPORT ZONE")
+    svgElement("line", { class: "ta-resistance", x1: eventX(0), x2: eventX(5), y1: yFor(100), y2: yFor(100) }),
+    svgElement("text", { class: "ta-label red", x: eventX(0) + 12, y: yFor(100) - 8 }, "RESISTANCE"),
+    svgElement("line", { class: "ta-channel support", x1: eventX(5), x2: eventX(10), y1: yFor(22), y2: yFor(22) }),
+    svgElement("text", { class: "ta-label blue", x: eventX(7), y: yFor(22) + 17 }, "SUPPORT ZONE")
   );
   svg.append(technicalOverlay);
 
@@ -227,7 +360,6 @@ function buildChart(svg) {
     });
   });
 }
-
 function formatPrice(price) {
   return `$${price.toFixed(2)}`;
 }
@@ -273,6 +405,34 @@ function terminalElements() {
     track: document.querySelector("#terminal-track"),
     range: document.querySelector("#terminal-range")
   };
+}
+
+function updateTrackWidth() {
+  const { viewport, track } = terminalElements();
+  if (!track) return;
+  const series = buildMarketSeries(currentResolution);
+  const pixelsPerBar = currentResolution === "day" ? 2.8 : currentResolution === "week" ? 5.5 : 14;
+  const minimumWidth = (viewport?.clientWidth || window.innerWidth) * 1.7;
+  const width = Math.max(minimumWidth, series.length * pixelsPerBar);
+  track.style.width = `${Math.round(width)}px`;
+  track.style.minWidth = `${Math.round(width)}px`;
+}
+
+function renderChartsAtResolution(resolution) {
+  if (!["day", "week", "month"].includes(resolution)) return;
+  currentResolution = resolution;
+  document.querySelectorAll(".market-chart").forEach(buildChart);
+  document.querySelectorAll(".resolution-button").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.resolution === resolution);
+  });
+  const label = document.querySelector("#resolution-label");
+  if (label) label.textContent = resolutionLabel(resolution);
+  updateTrackWidth();
+  setActiveEvent(activeIndex);
+  window.requestAnimationFrame(() => {
+    scrollTerminalToIndex(activeIndex, "auto");
+    positionMediaDock(activeIndex);
+  });
 }
 
 function scrollTerminalToIndex(index, behavior = "smooth") {
@@ -366,6 +526,10 @@ function bindChartTerminal() {
     scrollTerminalToIndex(index);
   });
 
+  document.querySelectorAll(".resolution-button").forEach((button) => {
+    button.addEventListener("click", () => renderChartsAtResolution(button.dataset.resolution));
+  });
+
   document.querySelectorAll("[data-terminal-step]").forEach((button) => {
     button.addEventListener("click", () => {
       const step = Number(button.dataset.terminalStep);
@@ -403,8 +567,12 @@ function bindChartTerminal() {
     if (modeLabel) modeLabel.textContent = candles ? "CANDLE VIEW" : "LINE VIEW";
   });
 
-  window.addEventListener("resize", () => positionMediaDock(activeIndex));
+  window.addEventListener("resize", () => {
+    updateTrackWidth();
+    positionMediaDock(activeIndex);
+  });
   window.requestAnimationFrame(() => {
+    updateTrackWidth();
     viewport.scrollLeft = viewport.scrollWidth;
     updateTerminalFromScroll();
     positionMediaDock(activeIndex);
@@ -630,6 +798,7 @@ function bindScrollProgress() {
 
 function initialise() {
   document.querySelectorAll(".market-chart").forEach(buildChart);
+  updateTrackWidth();
   setActiveEvent(timelineData.length - 1);
   bindChartTerminal();
   bindTimeline();

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="terminal.css" />
     <link rel="stylesheet" href="fullscreen.css" />
+    <link rel="stylesheet" href="detail.css" />
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
@@ -65,10 +66,16 @@
 
         <div class="chart-terminal noise-surface" id="chart-explorer">
           <div class="terminal-topbar">
-            <div class="terminal-identity"><span class="terminal-logo">GME</span><span>EVENT TAPE / MARKET VIEW</span><small>USD · selected closes · not live data</small></div>
+            <div class="terminal-identity"><span class="terminal-logo">GME</span><span>EVENT TAPE / MARKET VIEW</span><small>OHLCV · 1D DETAIL · source-ready draft</small></div>
             <div class="terminal-controls">
               <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Zum älteren Ereignis">← older</button>
               <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Zum neueren Ereignis">newer →</button>
+              <div class="resolution-switch" role="group" aria-label="Chartauflösung">
+                <span>RES</span>
+                <button type="button" class="resolution-button is-active" data-resolution="day">1D</button>
+                <button type="button" class="resolution-button" data-resolution="week">1W</button>
+                <button type="button" class="resolution-button" data-resolution="month">1M</button>
+              </div>
               <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
               <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
             </div>
@@ -76,6 +83,7 @@
           <div class="terminal-subbar">
             <span><i class="terminal-live-dot"></i> CHART / GME / 2020 — 2025</span>
             <span id="chart-mode-label">LINE VIEW</span>
+            <span id="resolution-label">1D / DAILY DETAIL</span>
             <span>DRAG / SHIFT + SCROLL <b>←</b></span>
             <span id="terminal-position">11 / 11</span>
           </div>

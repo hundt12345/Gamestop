@@ -1,0 +1,99 @@
+/* High-resolution bar controls */
+.resolution-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.resolution-switch > span {
+  padding: 0 4px 0 5px;
+  color: var(--dim);
+  font: 8px/1 var(--mono);
+  letter-spacing: 0.08em;
+}
+
+.resolution-button {
+  min-width: 25px;
+  padding: 5px 4px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font: 8px/1 var(--mono);
+  letter-spacing: 0.04em;
+}
+
+.resolution-button:hover,
+.resolution-button.is-active {
+  background: var(--acid);
+  color: var(--bg);
+}
+
+.market-chart .chart-volume {
+  opacity: 0.24;
+  pointer-events: none;
+}
+
+.market-chart .volume-bar {
+  shape-rendering: crispEdges;
+}
+
+.market-chart .volume-bar.up {
+  fill: var(--acid);
+}
+
+.market-chart .volume-bar.down {
+  fill: var(--orange);
+}
+
+@media (max-width: 1120px) {
+  .resolution-switch > span {
+    display: none;
+  }
+
+  .resolution-button {
+    min-width: 23px;
+    padding-inline: 3px;
+  }
+}
+
+@media (max-width: 820px) {
+  .resolution-switch {
+    gap: 1px;
+    padding: 2px;
+  }
+
+  .resolution-button {
+    min-width: 21px;
+    padding: 5px 3px;
+    font-size: 7px;
+  }
+
+  .terminal-subbar > span:nth-child(2),
+  .terminal-subbar > span:nth-child(4) {
+    display: none;
+  }
+
+  .terminal-subbar > span:nth-child(3) {
+    display: inline;
+    margin-left: auto;
+  }
+
+  .terminal-subbar > span:nth-child(5) {
+    display: inline;
+  }
+}
+
+@media (max-width: 520px) {
+  .resolution-switch {
+    border: 0;
+    background: transparent;
+  }
+
+  .resolution-button {
+    min-width: 19px;
+    padding: 5px 2px;
+  }
+}

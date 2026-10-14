@@ -25,6 +25,7 @@ Der Server bindet auf `0.0.0.0` und verwendet automatisch `process.env.PORT`, da
 - Full-screen chart surface mit elf Story-Ankern von 2020 bis 2025 →; neuester Punkt startet rechts
 - horizontaler Drag, Mousewheel/Shift-Scroll, Range-Scrubber, ältere/neuere Navigation und Sprünge zu 2020 / Jan 2021 / 2022 / 2024
 - umschaltbare Darstellung zwischen LINE und CANDLES
+- frei wählbare Auflösung 1D / 1W / 1M; die 1D-Ansicht zeigt eine detaillierte OHLCV-Serie statt nur Monats-/Quartalspunkten
 - Event Drop direkt im Chart, am aktiven Punkt: pro Ereignis Meme-, GIF-, Video- und Dokument-Links
 - Technical-Analysis-Button mit ein-/ausblendbaren Community-Annotations für Triangles, Wedge, Support und Resistance
 - Timeline-Karten zu RC, WSB, DFV / Roaring Kitty, Robinhood, der Anhörung, Superstonk, Split Dividend, Earnings und dem späteren Filing-/Warrant-Long-Tail
