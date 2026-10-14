@@ -13,6 +13,20 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const MARKET = typeof window !== 'undefined' ? window.GME_DAILY : null;
 
+/* ------------------------------------------------------------ support --- */
+/* SUPPORT-BUTTON EINRICHTEN (eine Zeile):
+ * 1. Kostenlos Konto anlegen — Empfehlung: https://ko-fi.com (0 % Plattform-
+ *    gebühr auf Tips) oder https://www.patreon.com (Memberships/Tiers).
+ * 2. Dort deine Seite erstellen, z. B. ko-fi.com/DEINNAME, und PayPal/Stripe
+ *    für Auszahlungen verbinden.
+ * 3. Die fertige URL hier bei `url` eintragen — Header-, Support- und
+ *    Footer-Button verlinken dann automatisch dorthin. Solange `url` leer
+ *    ist, führt der Button nur zur Erklär-Sektion #support auf dieser Seite. */
+const SUPPORT = {
+  provider: 'Ko-fi',
+  url: '' // <-- z. B. 'https://ko-fi.com/DEINNAME' oder 'https://www.patreon.com/DEINNAME'
+};
+
 /* ---------------------------------------------------------------- loading - */
 
 // Only used when market-data.js did not load: a coarse tape through the real
@@ -296,6 +310,18 @@ const memeMoments = [
     ]
   },
   {
+    id: 'meme-tendieman', iso: '2021-01-19', label: 'TENDIEMAN ♪',
+    frames: [
+      { quote: 'SOON MAY THE TENDIEMAN COME', caption: 'to send our rocket into the sun.' },
+      { quote: 'SING US A SONG, TENDIEMAN', caption: 'a sea shanty becomes the squeeze anthem.' },
+      { quote: 'WE’LL TAKE OUR GAINS AND GO', caption: 'one day, when the trading is done.' }
+    ],
+    media: [
+      video('umrR3Nl_DEQ', 'Sw4y / Antarres', 'The Tendieman — r/wallstreetbets Sea Shanty'),
+      video('bZDMkzV_sTA', 'YouTube', 'Sing Us a Song, You’re the Tendieman')
+    ]
+  },
+  {
     id: 'meme-yolo', iso: '2021-01-22', label: 'SECOND LEG',
     frames: [
       { quote: 'YOLO, BUT DOCUMENTED.', caption: 'risk, logged in public.' },
@@ -317,6 +343,19 @@ const memeMoments = [
     media: [
       gif('DnMMGxEvniha7CvASq', 'GetPartiful-to-the-moon-gme-stock-DnMMGxEvniha7CvASq', 'GIPHY / Partiful', 'to the moon / GME'),
       gif('IXWqceoF995QxrBnL0', 'bitcoin-cryptocurrency-diamond-hands-IXWqceoF995QxrBnL0', 'GIPHY', 'hold the line / diamond hands')
+    ]
+  },
+  {
+    id: 'meme-cats', iso: '2021-01-25', label: 'CAT MEMES 🐱',
+    frames: [
+      { quote: 'POPCAT KEEPS THE BEAT', caption: 'every green candle gets a pop.' },
+      { quote: 'THE CAT TYPES THE DD', caption: 'research, but make it feline.' },
+      { quote: 'WAKE UP — IT’S SQUEEZE DAY', caption: 'the cat saw the premarket first.' }
+    ],
+    media: [
+      gif('kO8QTqSMRsGMTyADqQ', 'stonks-popcat-onlymaxi-kO8QTqSMRsGMTyADqQ', 'GIPHY', 'stonks popcat'),
+      gif('5RNNQvq3fhYlOYDIQ2', 'cat-crypto-typing-5RNNQvq3fhYlOYDIQ2', 'GIPHY', 'the cat types'),
+      gif('E4QIM9nyWe8ced5ciy', 'cat-elgatitolover-elgatitoloves-E4QIM9nyWe8ced5ciy', 'GIPHY', 'wake up cat')
     ]
   },
   {
@@ -368,7 +407,7 @@ const memeMoments = [
     ]
   },
   {
-    id: 'meme-cat', iso: '2021-02-18', label: 'HEARING',
+    id: 'meme-cat', iso: '2021-02-18', label: 'I AM NOT A CAT 🐱',
     frames: [
       { quote: 'I AM NOT A CAT.', caption: 'a meme becomes testimony.' },
       { quote: 'ARE YOU A CAT, MR. GILL?', caption: 'congress reads the feed.' },
@@ -490,6 +529,56 @@ const memeMoments = [
   }
 ];
 
+/* ------------------------------------------- corporate events + RC tweets - */
+
+// Einklappbarer Chart-Layer: Unternehmens-Ereignisse (Earnings, Aktien-
+// Offerings/ATM, Split, Führung) als Rauten direkt auf der Kurslinie.
+// Kuratierte Auswahl, keine vollständige Filing-Liste — jede Karte verlinkt
+// auf die Primärquelle (GameStop IR / SEC EDGAR).
+const corporateEvents = [
+  { iso: '2020-12-09', type: 'earnings', title: 'Q3 2020 Earnings', detail: 'Quartalszahlen mitten im Umbau: Ab hier wird die RC-These an echten Zahlen gemessen — Umsatz, Marge, E-Commerce.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-03-23', type: 'earnings', title: 'Q4 2020 Earnings', detail: 'Die ersten Zahlen nach dem Squeeze-Januar. Der Kurs fällt nachbörslich — die Story wird vom Meme zurück zum Geschäftsbericht.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-04-26', type: 'offering', title: 'ATM-Offering abgeschlossen', detail: 'GameStop schließt sein At-the-Market-Programm: neue Aktien wurden direkt in die Stärke des Kurses hinein verkauft — Kapital statt Schulden.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
+  { iso: '2021-06-09', type: 'earnings', title: 'Q1 2021 Earnings + HV', detail: 'Quartalszahlen und Hauptversammlung am selben Tag: Ryan Cohen wird Chairman — und ein weiteres Aktienprogramm wird angekündigt.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-06-22', type: 'offering', title: 'ATM abgeschlossen: 5 Mio. Aktien', detail: 'Das zweite große At-the-Market-Programm ist durch. Die Community liest jede Zeile: Verwässerung gegen eine prall gefüllte Kriegskasse.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
+  { iso: '2022-03-17', type: 'earnings', title: 'Q4 2021 Earnings', detail: 'Verlust höher als erwartet, der Kurs sackt ab — am selben Tag macht eine AMC-Beteiligung im Filing die Runde (siehe Meme M16).', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2022-03-31', type: 'other', title: 'Split-Dividende angekündigt', detail: 'Der Vorstand kündigt einen Aktiensplit in Form einer Stock-Dividende an — beantragt wird die Genehmigung bei der Hauptversammlung.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2022-07-22', type: 'other', title: '4:1-Split wirksam', detail: 'Aus einer Aktie werden vier. Im Chart oben schaltet der Knopf SPLIT-ADJ ↔ AS TRADED zwischen beiden Sichtweisen um.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2023-03-21', type: 'earnings', title: 'Q4 2022: erster Gewinn seit 2 Jahren', detail: 'GameStop meldet $48.2M Nettogewinn (Q4, Vorjahr: −$147.5M) — Kostendisziplin statt Meme. Der Kurs springt am Folgetag (Meme „First Profit“).', url: 'https://investor.gamestop.com/news-releases/news-details/2023/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2022-Results-03-21-2023/default.aspx', source: 'GameStop IR / News release 21.03.2023' },
+  { iso: '2023-09-28', type: 'other', title: 'Ryan Cohen wird CEO', detail: 'Der Chairman übernimmt auch den CEO-Posten — ohne Gehalt, ohne Boni, bezahlt nur über den Aktienkurs. „Extremely intense“ inklusive.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2024-03-26', type: 'earnings', title: 'Q4 2023 Earnings', detail: 'Volljahr 2023 wieder profitabel, $1.199B Cash & Wertpapiere zum Stichtag — die Bilanz ist bereit für die volatile Phase ab Mai.', url: 'https://investor.gamestop.com/news-releases/news-details/2024/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2023-Results-03-26-2024/default.aspx', source: 'GameStop IR / News release 26.03.2024' },
+  { iso: '2024-05-24', type: 'offering', title: 'ATM abgeschlossen: $933.4M', detail: '45 Mio. neue Aktien, mitten in der Roaring-Kitty-Rückkehr verkauft. Bruttoerlös: rund $933.4M für „general corporate purposes“.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / GameStop IR, 24.05.2024' },
+  { iso: '2024-06-07', type: 'earnings', title: 'Q1 2024 Earnings + neues ATM', detail: 'Quartalszahlen vorbörslich — plus Filing für bis zu 75 Mio. weitere Aktien. Am selben Tag: Roaring Kittys Livestream (Meme M22).', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2024-06-11', type: 'offering', title: 'ATM abgeschlossen: $2.137B', detail: 'Alle 75 Mio. Aktien verkauft, Bruttoerlös ca. $2.137 Milliarden. Die Kriegskasse wächst schneller als jede Story im Feed.', url: 'https://gamestop.gcs-web.com/news-releases/news-release-details/gamestop-completes-market-equity-offering-program-2', source: 'GameStop IR / News release 11.06.2024' },
+  { iso: '2024-09-10', type: 'earnings', title: 'Q2 2024 Earnings', detail: 'Unerwarteter Quartalsgewinn — und gleichzeitig ein neues ATM-Programm über 20 Mio. Aktien. Der Kurs mag die Verwässerung weniger als die Zahlen.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2024-12-10', type: 'earnings', title: 'Q3 2024 Earnings', detail: 'Wieder Gewinn im Quartal, Cash-Berg wächst weiter. Die Frage im Feed verschiebt sich: Was macht GameStop mit dem Geld?', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-03-25', type: 'earnings', title: 'Q4 2024 Earnings', detail: 'Jahreszahlen mit deutlich besserem Ergebnis je Aktie als erwartet — direkt danach folgt die Krypto-Treasury-Debatte.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-03-27', type: 'offering', title: 'Wandelanleihen für BTC-Treasury', detail: 'GameStop kündigt Convertible Notes an, deren Erlös u. a. für Bitcoin-Käufe vorgesehen ist — das Offering wird zum Strategiestatement.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' }
+];
+
+const CORP_TYPE = {
+  earnings: { label: 'EARNINGS', glyph: 'E', word: 'Quartalszahlen' },
+  offering: { label: 'OFFERING', glyph: '$', word: 'Share offering / ATM' },
+  other: { label: 'CORPORATE', glyph: '!', word: 'Corporate event' }
+};
+
+// RC-Tweets als native Karten im Chart: X-Einbettungen sind ohne Login oft
+// blockiert, deshalb steht der Wortlaut hier als Text — mit Link aufs
+// Original (@ryancohen) und auf eine dokumentierte Timeline als Beleg.
+const rcTweets = [
+  { iso: '2021-01-06', text: '💩', note: 'Foto einer Blockbuster-Filiale dazu — die Antwort auf Jim Cramer Vergleich „GameStop wird das neue Blockbuster“.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
+  { iso: '2021-02-24', text: '🐸', note: 'Foto eines McDonald’s-Softeis dazu. GME verdoppelt sich noch am selben Tag auf $91.71 Close — der berühmteste Ein-Emoji-Tweet der Saga.', url: 'https://kotaku.com/gamestop-stock-explodes-again-following-board-members-m-1846348996', source: 'Kotaku, 24.02.2021' },
+  { iso: '2021-03-05', text: '📸 Pets.com-Puppe (Screenshot)', note: 'Screenshot mit der Pets.com-Werbefigur, dem Dotcom-Symbol schlechthin. Reuters datiert den nachmittäglichen Kursanstieg auf diesen Tweet.', url: 'https://www.reuters.com/business/retail-consumer/gamestop-spikes-investors-eye-cryptic-tweet-by-shareholder-2021-03-05/', source: 'Reuters, 05.03.2021' },
+  { iso: '2021-04-16', text: '🤜🤛', note: 'Fist-Bump-Emoji — gepostet, während Roaring Kitty seine Position weiter aufstockt. Der Feed liest es als: Wir sitzen im selben Boot.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-07-04', text: 'Power to the Players 🇺🇸', note: 'Zum Independence Day: der GameStop-Slogan als Gruß — halb Firmenmotto, halb Schlachtruf der Community.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-07-19', text: 'PG-13', note: 'Foto mit zwei Essstäbchen in der Nase. Superstonk deutet „PG-13“ als Seite 13 des Prospekts (Warrants/Units) — Beleg dafür, wie der Feed jeden Post seziert.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
+  { iso: '2021-09-26', text: 'Talk is cheap, it takes money to buy whiskey.', note: 'Ein Satz von 1891 als Führungscredo: weniger reden, mehr liefern. GMEDD widmet dem Tweet eine eigene Einordnung.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-10-31', text: 'MGGA', note: '„Make GameStop Great Again“ — vier Buchstaben, der Feed explodiert pünktlich zu Halloween.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' },
+  { iso: '2021-11-08', text: 'Deciding between two options for my GME shares: HOLD or HODL…', note: 'Verkaufen ist keine Option — der Chairman parodiert Elon Musk Verkaufs-Poll und bekennt sich öffentlich zum Halten.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' }
+];
+
+const RC_X_URL = 'https://x.com/ryancohen';
+
 /* --------------------------------------------------------- media helpers --- */
 
 // Einbettungen sind optional: mit ausgeschaltetem MEDIA-Bereich bleibt der
@@ -583,6 +672,33 @@ function memeIndices(resolution) {
     memeIndexCache.set(key, memeMoments.map((meme) => barIndexForDate(series, meme.iso)));
   }
   return memeIndexCache.get(key);
+}
+
+const layerIndexCache = new Map();
+function layerIndices(kind, resolution) {
+  const key = `${kind}|${seriesCacheKey(resolution)}`;
+  if (!layerIndexCache.has(key)) {
+    const series = seriesFor(resolution);
+    const items = kind === 'corp' ? corporateEvents : rcTweets;
+    layerIndexCache.set(key, items.map((item) => barIndexForDate(series, item.iso)));
+  }
+  return layerIndexCache.get(key);
+}
+
+// Zustand des einklappbaren Chart-Layers (Events + RC-Tweets)
+const layerState = {
+  corp: true,
+  tweets: true,
+  corpFilter: 'all', // all | earnings | offering | other
+  active: null // { kind: 'corp' | 'tweet', index }
+};
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 }
 
 function relativeChange(series, index) {
@@ -721,7 +837,7 @@ function drawSeries(svg, options) {
   const {
     bars, from, to, ppb, height, priceTop, priceBottom, volumeTop, volumeBottom,
     domainFrom, domainTo, events, activeIndex, splits, ta, axisInCanvas, interactive, gradientId,
-    priceMode: mode = 'asTraded', inspect = null, memes = null
+    priceMode: mode = 'asTraded', inspect = null, memes = null, corp = null, tweets = null, activeLayer = null
   } = options;
 
   svg.replaceChildren();
@@ -1036,6 +1152,87 @@ function drawSeries(svg, options) {
     svg.append(memeGroup);
   }
 
+  /* --------------------------------- corporate events + RC tweets ---- */
+  // Rauten (Earnings/Offerings) und X-Chips (RC-Tweets) sitzen direkt auf
+  // der Kurslinie; die Führungslinie verbindet Marker und Handelstag.
+  if (corp && corp.length) {
+    const corpGroup = svgElement('g', { class: 'chart-corp' });
+    corp.forEach((item) => {
+      if (item.barIndex < from - 1 || item.barIndex > to + 1) return;
+      const bar = bars[item.barIndex];
+      if (!bar) return;
+      const cx = x(item.barIndex);
+      const cy = y(bar.close);
+      const off = item.index % 2 === 0 ? -19 : 21;
+      const my = clamp(cy + off, priceTop + 11, priceBottom - 11);
+      const meta = CORP_TYPE[item.type] ?? CORP_TYPE.other;
+      const isActive = activeLayer?.kind === 'corp' && activeLayer.index === item.index;
+      const group = svgElement('g', {
+        class: `chart-corp-marker is-${item.type}${isActive ? ' is-active' : ''}`,
+        'data-corp-index': item.index
+      });
+      group.append(
+        svgElement('line', { class: 'chart-corp-guide', x1: cx, x2: cx, y1: cy, y2: my }),
+        svgElement('polygon', {
+          class: 'chart-corp-diamond',
+          points: `${cx},${my - 10} ${cx + 10},${my} ${cx},${my + 10} ${cx - 10},${my}`
+        }),
+        svgElement('text', { class: 'chart-corp-glyph', x: cx, y: my + 4.5, 'text-anchor': 'middle' }, meta.glyph)
+      );
+      if (interactive) {
+        group.append(svgElement('circle', {
+          class: 'chart-corp-hit',
+          cx, cy: my, r: 17,
+          'data-corp-index': item.index,
+          tabindex: 0,
+          role: 'button',
+          'aria-label': `${meta.label}, ${formatDay(item.iso)}: ${item.title}`
+        }));
+      }
+      corpGroup.append(group);
+    });
+    svg.append(corpGroup);
+  }
+
+  if (tweets && tweets.length) {
+    const tweetGroup = svgElement('g', { class: 'chart-tweets' });
+    tweets.forEach((tweet) => {
+      if (tweet.barIndex < from - 1 || tweet.barIndex > to + 1) return;
+      const bar = bars[tweet.barIndex];
+      if (!bar) return;
+      const cx = x(tweet.barIndex);
+      const cy = y(bar.close);
+      const chipW = 25;
+      const chipH = 20;
+      const my = clamp(cy - 30, priceTop + chipH + 2, priceBottom - 4);
+      const isActive = activeLayer?.kind === 'tweet' && activeLayer.index === tweet.index;
+      const group = svgElement('g', {
+        class: isActive ? 'chart-tweet-marker is-active' : 'chart-tweet-marker',
+        'data-tweet-index': tweet.index
+      });
+      group.append(
+        svgElement('line', { class: 'chart-tweet-guide', x1: cx, x2: cx, y1: my + chipH, y2: cy }),
+        svgElement('rect', {
+          class: 'chart-tweet-box',
+          x: cx - chipW / 2, y: my, width: chipW, height: chipH, rx: 4
+        }),
+        svgElement('text', { class: 'chart-tweet-glyph', x: cx, y: my + 14.5, 'text-anchor': 'middle' }, '𝕏')
+      );
+      if (interactive) {
+        group.append(svgElement('rect', {
+          class: 'chart-tweet-hit',
+          x: cx - chipW / 2 - 7, y: my - 6, width: chipW + 14, height: chipH + 12,
+          'data-tweet-index': tweet.index,
+          tabindex: 0,
+          role: 'button',
+          'aria-label': `RC-Tweet, ${formatDay(tweet.iso)}: ${tweet.text}`
+        }));
+      }
+      tweetGroup.append(group);
+    });
+    svg.append(tweetGroup);
+  }
+
   /* ----------------------------------------------- click crosshair ---- */
   if (inspect && Number.isFinite(inspect.barIndex) && inspect.barIndex >= from - 1 && inspect.barIndex <= to + 1) {
     const cross = svgElement('g', { class: 'chart-inspect-cross', 'aria-hidden': 'true' });
@@ -1126,6 +1323,14 @@ function paintTerminal({ force = false } = {}) {
   const memes = memesEnabled()
     ? memeMoments.map((meme, index) => ({ ...meme, index, barIndex: memeIndices(chartState.resolution)[index] }))
     : [];
+  const corp = layerState.corp
+    ? corporateEvents
+        .map((item, index) => ({ ...item, index, barIndex: layerIndices('corp', chartState.resolution)[index] }))
+        .filter((item) => layerState.corpFilter === 'all' || item.type === layerState.corpFilter)
+    : [];
+  const tweets = layerState.tweets
+    ? rcTweets.map((tweet, index) => ({ ...tweet, index, barIndex: layerIndices('tweet', chartState.resolution)[index] }))
+    : [];
 
   const paintKey = [
     chartState.resolution,
@@ -1137,6 +1342,9 @@ function paintTerminal({ force = false } = {}) {
     document.body.classList.contains('ta-active') ? 'ta' : '-',
     priceMode.mode,
     memesEnabled() ? `memes-${memePlayerState.index}` : 'memes-off',
+    `corp-${layerState.corp}-${layerState.corpFilter}`,
+    `tweets-${layerState.tweets}`,
+    layerState.active ? `${layerState.active.kind}-${layerState.active.index}` : 'layer-',
     inspectState.barIndex ?? '-',
     inspectState.price ? inspectState.price.toFixed(3) : '-'
   ].join('|');
@@ -1170,7 +1378,10 @@ function paintTerminal({ force = false } = {}) {
     gradientId: 'chart-area-gradient-terminal',
     priceMode: priceMode.mode,
     inspect,
-    memes
+    memes,
+    corp,
+    tweets,
+    activeLayer: layerState.active
   });
 
   terminalScale = { yToPrice, priceTop, priceBottom };
@@ -1203,6 +1414,34 @@ function paintTerminal({ force = false } = {}) {
     const activate = () => {
       const index = Number(target.dataset.index);
       if (!Number.isNaN(index)) focusEvent(index);
+    };
+    target.addEventListener('click', activate);
+    target.addEventListener('keydown', (keyboardEvent) => {
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        keyboardEvent.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  canvas.querySelectorAll('.chart-corp-hit').forEach((target) => {
+    const activate = () => {
+      const index = Number(target.dataset.corpIndex);
+      if (!Number.isNaN(index)) openLayerItem('corp', index);
+    };
+    target.addEventListener('click', activate);
+    target.addEventListener('keydown', (keyboardEvent) => {
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        keyboardEvent.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  canvas.querySelectorAll('.chart-tweet-hit').forEach((target) => {
+    const activate = () => {
+      const index = Number(target.dataset.tweetIndex);
+      if (!Number.isNaN(index)) openLayerItem('tweet', index);
     };
     target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
@@ -1488,6 +1727,7 @@ function setResolution(resolution) {
   paintStoryChart();
   scrollToEvent(chartState.activeIndex);
   applyActive(chartState.activeIndex);
+  renderLayerDetail();
 }
 
 function resolutionLabel(resolution) {
@@ -1533,6 +1773,7 @@ function setPriceMode(mode) {
   }
   updateInspectChip();
   refreshChartMemeHeader();
+  renderLayerDetail();
   paintCallout();
   stampProvenance();
 }
@@ -1904,6 +2145,196 @@ function loadClipPosters() {
   });
 }
 
+/* ---------------------------------------------- chart layers (corp/RC) --- */
+
+function layerBar(kind, index) {
+  const series = seriesFor(chartState.resolution);
+  const barIndex = layerIndices(kind, chartState.resolution)[index];
+  return { series, barIndex, bar: series[barIndex] };
+}
+
+function renderLayerDetail() {
+  const box = document.querySelector('#layer-detail');
+  if (!box) return;
+  const active = layerState.active;
+  if (!active) {
+    box.innerHTML = '<p class="layer-detail-hint">Klick auf eine <b>◆ Raute</b> (Earnings / Offerings), einen <b>𝕏-Chip</b> (RC-Tweet) im Chart — oder auf einen Eintrag in der Liste. Kurs, Tagesänderung und Quelle erscheinen hier.</p>';
+    return;
+  }
+  const { series, barIndex, bar } = layerBar(active.kind, active.index);
+  const change = bar ? relativeChange(series, barIndex) : null;
+  const priceLine = bar
+    ? `<span class="layer-detail-price">${formatPrice(bar.close)}</span><span class="inspect-delta ${Number.isFinite(change) && change < 0 ? 'is-down' : 'is-up'}">${formatPercent(change)}</span><span>${formatCompact(bar.volume)} SHARES</span>`
+    : '';
+
+  if (active.kind === 'corp') {
+    const item = corporateEvents[active.index];
+    const meta = CORP_TYPE[item.type] ?? CORP_TYPE.other;
+    box.innerHTML = `
+      <div class="layer-detail-head"><span class="layer-kind is-corp">${meta.label}</span><time>${formatDay(item.iso)}</time><span class="layer-detail-prices">${priceLine}</span></div>
+      <h4 class="layer-detail-title">${escapeHtml(item.title)}</h4>
+      <p class="layer-detail-text">${escapeHtml(item.detail)}</p>
+      <p class="layer-detail-links"><a href="${item.url}" target="_blank" rel="noreferrer">${escapeHtml(item.source)} ↗</a></p>`;
+    return;
+  }
+
+  const tweet = rcTweets[active.index];
+  box.innerHTML = `
+    <div class="layer-detail-head"><span class="layer-kind is-tweet">RC / 𝕏 TWEET</span><time>${formatDay(tweet.iso)}</time><span class="layer-detail-prices">${priceLine}</span></div>
+    <blockquote class="layer-tweet-text">„${escapeHtml(tweet.text)}“</blockquote>
+    <p class="layer-detail-text">${escapeHtml(tweet.note)}</p>
+    <p class="layer-detail-links"><a href="${RC_X_URL}" target="_blank" rel="noreferrer">Original: @ryancohen auf X ↗</a><a href="${tweet.url}" target="_blank" rel="noreferrer">Beleg: ${escapeHtml(tweet.source)} ↗</a></p>`;
+}
+
+function buildLayerList() {
+  const list = document.querySelector('#layer-list');
+  if (!list) return;
+  const entries = [];
+  if (layerState.corp) {
+    corporateEvents.forEach((item, index) => {
+      if (layerState.corpFilter !== 'all' && item.type !== layerState.corpFilter) return;
+      entries.push({ kind: 'corp', index, iso: item.iso, item });
+    });
+  }
+  if (layerState.tweets) {
+    rcTweets.forEach((tweet, index) => entries.push({ kind: 'tweet', index, iso: tweet.iso, item: tweet }));
+  }
+  entries.sort((a, b) => a.iso.localeCompare(b.iso));
+
+  list.innerHTML = entries.map((entry) => {
+    const isActive = layerState.active?.kind === entry.kind && layerState.active?.index === entry.index;
+    if (entry.kind === 'corp') {
+      const meta = CORP_TYPE[entry.item.type] ?? CORP_TYPE.other;
+      return `<button type="button" class="layer-item is-corp${isActive ? ' is-active' : ''}" data-layer-kind="corp" data-layer-index="${entry.index}">
+        <span class="layer-item-date">${formatShortDay(entry.iso)}</span>
+        <span class="layer-item-kind">${meta.label}</span>
+        <span class="layer-item-title">${escapeHtml(entry.item.title)}</span>
+      </button>`;
+    }
+    return `<button type="button" class="layer-item is-tweet${isActive ? ' is-active' : ''}" data-layer-kind="tweet" data-layer-index="${entry.index}">
+      <span class="layer-item-date">${formatShortDay(entry.iso)}</span>
+      <span class="layer-item-kind">RC 𝕏</span>
+      <span class="layer-item-title">${escapeHtml(entry.item.text)}</span>
+    </button>`;
+  }).join('') || '<p class="layer-detail-hint">Keine Einträge — Layer oben wieder einschalten.</p>';
+
+  list.querySelectorAll('.layer-item').forEach((button) => {
+    button.addEventListener('click', () => openLayerItem(button.dataset.layerKind, Number(button.dataset.layerIndex)));
+  });
+}
+
+function setLayersCollapsed(collapsed) {
+  const terminal = document.querySelector('.chart-terminal');
+  terminal?.classList.toggle('layers-collapsed', collapsed);
+  const toggle = document.querySelector('#layers-toggle');
+  toggle?.setAttribute('aria-expanded', String(!collapsed));
+  const signal = document.querySelector('#layers-toggle-signal');
+  if (signal) signal.textContent = collapsed ? '▸' : '▾';
+  const panel = document.querySelector('#layer-panel');
+  if (panel) panel.hidden = collapsed;
+  window.setTimeout(() => { terminalPaintKey = ''; paintTerminal(); paintCallout(); }, 60);
+}
+
+function openLayerItem(kind, index, { reveal = true } = {}) {
+  const items = kind === 'corp' ? corporateEvents : rcTweets;
+  if (!items[index]) return;
+  layerState.active = { kind, index };
+  if (kind === 'corp') layerState.corp = true;
+  if (kind === 'tweet') layerState.tweets = true;
+  setLayersCollapsed(false);
+  syncLayerControls();
+  buildLayerList();
+  renderLayerDetail();
+  if (reveal) {
+    const { barIndex } = layerBar(kind, index);
+    if (barIndex !== undefined) scrollMemeIntoView(barIndex);
+  }
+  terminalPaintKey = '';
+  paintTerminal();
+}
+
+function syncLayerControls() {
+  const corpToggle = document.querySelector('#corp-toggle');
+  corpToggle?.setAttribute('aria-pressed', String(layerState.corp));
+  corpToggle?.classList.toggle('is-on', layerState.corp);
+  const corpState = document.querySelector('#corp-toggle-state');
+  if (corpState) corpState.textContent = layerState.corp ? 'ON' : 'OFF';
+  const tweetToggle = document.querySelector('#tweet-toggle');
+  tweetToggle?.setAttribute('aria-pressed', String(layerState.tweets));
+  tweetToggle?.classList.toggle('is-on', layerState.tweets);
+  const tweetState = document.querySelector('#tweet-toggle-state');
+  if (tweetState) tweetState.textContent = layerState.tweets ? 'ON' : 'OFF';
+  document.querySelectorAll('[data-corp-filter]').forEach((button) => {
+    button.classList.toggle('is-active', button.dataset.corpFilter === layerState.corpFilter);
+  });
+  const count = document.querySelector('#layer-count');
+  if (count) count.textContent = `${corporateEvents.length} EVENTS · ${rcTweets.length} RC-TWEETS · ${memeMoments.length} MEMES`;
+}
+
+function bindChartLayers() {
+  document.querySelector('#layers-toggle')?.addEventListener('click', () => {
+    const collapsed = !document.querySelector('.chart-terminal')?.classList.contains('layers-collapsed');
+    setLayersCollapsed(collapsed);
+  });
+  document.querySelector('#corp-toggle')?.addEventListener('click', () => {
+    layerState.corp = !layerState.corp;
+    syncLayerControls(); buildLayerList(); terminalPaintKey = ''; paintTerminal();
+  });
+  document.querySelector('#tweet-toggle')?.addEventListener('click', () => {
+    layerState.tweets = !layerState.tweets;
+    syncLayerControls(); buildLayerList(); terminalPaintKey = ''; paintTerminal();
+  });
+  document.querySelectorAll('[data-corp-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      layerState.corpFilter = button.dataset.corpFilter;
+      layerState.corp = true;
+      syncLayerControls(); buildLayerList(); terminalPaintKey = ''; paintTerminal();
+    });
+  });
+
+  // Direktsprünge: Tendieman + Katzenmemes im Chart abspielen
+  document.querySelectorAll('[data-open-meme]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const index = memeMoments.findIndex((moment) => moment.id === button.dataset.openMeme);
+      if (index < 0) return;
+      document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      followPageScrollUntil = Date.now() + 1200;
+      memeIndex = index;
+      renderMeme(index);
+      openChartMeme(index);
+    });
+  });
+
+  syncLayerControls();
+  buildLayerList();
+  renderLayerDetail();
+}
+
+/* ------------------------------------------------------------- support --- */
+
+function initSupport() {
+  const configured = typeof SUPPORT.url === 'string' && /^https:\/\//.test(SUPPORT.url);
+  document.querySelectorAll('[data-support-link]').forEach((link) => {
+    if (configured) {
+      link.href = SUPPORT.url;
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      link.removeAttribute('aria-disabled');
+    } else {
+      link.href = '#support';
+      link.removeAttribute('target');
+    }
+    const label = link.querySelector('[data-support-label]');
+    if (label) label.textContent = configured ? `Support auf ${SUPPORT.provider}` : 'Support einrichten';
+  });
+  const note = document.querySelector('#support-setup-note');
+  if (note) {
+    note.textContent = configured
+      ? `Live: Dieser Button verlinkt auf ${SUPPORT.url} (${SUPPORT.provider}). Ändern: SUPPORT.url in app.js anpassen.`
+      : 'Noch nicht eingerichtet: Trage in app.js bei SUPPORT.url deine Ko-fi- oder Patreon-Adresse ein — der Button wird dann automatisch zum echten Spendenlink (Anleitung unten).';
+  }
+}
+
 /* ------------------------------------------------------- story overview --- */
 
 function paintStoryChart({ force = false } = {}) {
@@ -2063,7 +2494,7 @@ function bindChartTerminal() {
 
   // suppress the click that follows a pan gesture
   viewport.addEventListener('click', (event) => {
-    if (Number(viewport.dataset.dragDistance) > 6 && event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit')) {
+    if (Number(viewport.dataset.dragDistance) > 6 && event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-corp-hit, .chart-tweet-hit')) {
       event.stopPropagation();
       event.preventDefault();
       viewport.dataset.dragDistance = '0';
@@ -2089,7 +2520,7 @@ function bindChartTerminal() {
   // Klick an eine beliebige Stelle im Chart → Kurs dieses Tages zeigen
   viewport.addEventListener('click', (event) => {
     if (Number(viewport.dataset.dragDistance) > 6) return;
-    if (event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-meme-chip')) return;
+    if (event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-meme-chip, .chart-corp-hit, .chart-tweet-hit')) return;
     if (!terminalScale) return;
     const rect = viewport.getBoundingClientRect();
     const localX = event.clientX - rect.left;
@@ -2726,6 +3157,8 @@ function initialise() {
   paintTerminal();
   paintStoryChart();
   bindChartTerminal();
+  bindChartLayers();
+  initSupport();
   bindTimeline();
   bindMobileNav();
   bindMemePlayer();
