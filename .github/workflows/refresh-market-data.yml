@@ -1,0 +1,47 @@
+name: Refresh market data
+
+# Keeps market-data.js on the current snapshot of the real GME tape.
+# Runs on demand, monthly, and whenever the fetcher itself changes.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 1 * *'
+  push:
+    paths:
+      - '.github/workflows/refresh-market-data.yml'
+      - 'scripts/fetch-market-data.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-market-data-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch GME daily candles
+        run: node scripts/fetch-market-data.mjs
+
+      - name: Commit when the tape changed
+        run: |
+          git config user.name "gamestop-event-tape[bot]"
+          git config user.email "gamestop-event-tape[bot]@users.noreply.github.com"
+          git add market-data.js
+          if git diff --cached --quiet; then
+            echo "market-data.js already up to date"
+          else
+            git commit -m "chore: refresh GME market data"
+            git push
+          fi
