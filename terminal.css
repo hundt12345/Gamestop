@@ -29,7 +29,7 @@
   align-items: center;
   gap: 9px;
   color: var(--acid);
-  font: 9px/1.2 var(--mono);
+  font: 11px/1.2 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -99,7 +99,7 @@
 .terminal-identity {
   gap: 11px;
   color: var(--muted);
-  font: 10px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -107,7 +107,7 @@
 .terminal-identity small {
   margin-left: 8px;
   color: var(--dim);
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.04em;
 }
 
@@ -118,13 +118,15 @@
   place-items: center;
   border: 1px solid var(--orange);
   color: var(--orange);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.08em;
 }
 
 .terminal-controls {
   gap: 15px;
+  flex-wrap: wrap;
+  row-gap: 10px;
 }
 
 .terminal-step,
@@ -136,7 +138,7 @@
   color: var(--muted);
   background: transparent;
   cursor: pointer;
-  font: 9px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 160ms ease;
@@ -163,7 +165,7 @@
 
 .analysis-toggle b {
   color: var(--dim);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 400;
 }
 
@@ -186,11 +188,11 @@
 
 .terminal-subbar {
   justify-content: space-between;
-  gap: 18px;
+  gap: 14px;
   padding: 12px 21px 10px;
   color: var(--dim);
-  font: 8px/1 var(--mono);
-  letter-spacing: 0.09em;
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -288,8 +290,8 @@
   border: 1px solid rgba(216, 241, 62, 0.32);
   background: rgba(9, 11, 9, 0.88);
   color: var(--acid);
-  font: 8px/1 var(--mono);
-  letter-spacing: 0.06em;
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
@@ -311,7 +313,7 @@
 .chart-yaxis .axis-tick-label {
   fill: var(--muted);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.03em;
 }
 
@@ -322,7 +324,7 @@
   padding: 8px 10px;
   color: var(--acid);
   background: rgba(9, 11, 9, 0.82);
-  font: 700 9px/1.25 var(--mono);
+  font: 700 11px/1.25 var(--mono);
   letter-spacing: 0.07em;
   pointer-events: none;
   text-transform: uppercase;
@@ -331,7 +333,7 @@
 
 .terminal-edge-label span {
   color: var(--dim);
-  font-size: 7px;
+  font-size: 10px;
   font-weight: 400;
 }
 
@@ -349,7 +351,7 @@
   padding: 12px 21px 15px;
   border-top: 1px solid var(--line-soft);
   color: var(--dim);
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.08em;
 }
 
@@ -410,7 +412,7 @@ body.ta-active .analysis-panel {
   padding: 7px 8px;
   border: 1px solid var(--line);
   color: var(--muted);
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
@@ -457,7 +459,7 @@ body.ta-active .market-chart .technical-overlay {
 .market-chart .technical-overlay .ta-label {
   fill: var(--acid);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.05em;
 }
 
@@ -526,7 +528,7 @@ body.ta-active .market-chart .technical-overlay {
   align-items: center;
   gap: 9px;
   color: var(--dim);
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -594,7 +596,7 @@ body.ta-active .market-chart .technical-overlay {
 .callout-volume {
   margin-left: auto;
   color: var(--dim);
-  font: 7px/1 var(--mono);
+  font: 10px/1 var(--mono);
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
@@ -621,9 +623,9 @@ body.ta-active .market-chart .technical-overlay {
 }
 
 .callout-link-kind {
-  flex: 0 0 46px;
+  flex: 0 0 54px;
   color: var(--orange);
-  font: 7px/1.3 var(--mono);
+  font: 10px/1.3 var(--mono);
   letter-spacing: 0.07em;
 }
 
@@ -631,7 +633,7 @@ body.ta-active .market-chart .technical-overlay {
   min-width: 0;
   overflow: hidden;
   color: var(--muted);
-  font: 10px/1.3 var(--sans);
+  font: 13px/1.3 var(--sans);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -649,7 +651,7 @@ body.ta-active .market-chart .technical-overlay {
   color: var(--acid);
   background: transparent;
   cursor: pointer;
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.06em;
   text-align: left;
   text-transform: uppercase;
@@ -674,7 +676,7 @@ body.ta-active .market-chart .technical-overlay {
 .zoom-controls > span {
   padding: 0 5px 0 4px;
   color: var(--dim);
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.08em;
 }
 
@@ -685,12 +687,12 @@ body.ta-active .market-chart .technical-overlay {
   color: var(--muted);
   background: transparent;
   cursor: pointer;
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   transition: background 140ms ease, color 140ms ease;
 }
 
 .zoom-button.zoom-fit {
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.05em;
 }
 
@@ -702,13 +704,13 @@ body.ta-active .market-chart .technical-overlay {
 
 .sticky-readout .sticky-delta {
   color: var(--muted);
-  font: 10px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.03em;
 }
 
 .sticky-readout .sticky-readout-note {
   color: var(--dim);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.04em;
 }
 
@@ -788,7 +790,7 @@ body.ta-active .market-chart .technical-overlay {
 
   .subbar-live,
   .subbar-position {
-    font-size: 7px;
+    font-size: 10px;
   }
 
   .subbar-mode {
@@ -805,12 +807,12 @@ body.ta-active .market-chart .technical-overlay {
   }
 
   .terminal-step {
-    font-size: 8px;
+    font-size: 11px;
   }
 
   .analysis-toggle {
     margin-left: 0;
-    font-size: 8px;
+    font-size: 11px;
   }
 
   .analysis-panel {
@@ -834,7 +836,7 @@ body.ta-active .market-chart .technical-overlay {
   }
 
   .callout-link-title {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .chart-yaxis {
@@ -843,5 +845,430 @@ body.ta-active .market-chart .technical-overlay {
 
   .playhead-tag {
     display: none;
+  }
+}
+
+/* ------------------------------------------------ price mode + meme toggles */
+
+.subbar-price {
+  color: var(--blue);
+}
+
+.price-mode-signal,
+.meme-signal {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 17px;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.price-mode-toggle {
+  color: var(--blue);
+}
+
+.price-mode-toggle:hover,
+.price-mode-toggle[aria-pressed="true"] {
+  border-color: rgba(155, 206, 255, 0.6);
+  color: var(--blue);
+  background: rgba(155, 206, 255, 0.1);
+}
+
+.meme-toggle {
+  color: var(--orange);
+}
+
+.meme-toggle:hover,
+.meme-toggle[aria-pressed="true"] {
+  border-color: rgba(255, 92, 49, 0.6);
+  color: var(--orange);
+  background: rgba(255, 92, 49, 0.1);
+}
+
+.mode-toggle[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------- click-to-inspect chip */
+
+.chart-inspect {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  z-index: 7;
+  min-width: 250px;
+  padding: 10px 12px 9px;
+  border: 1px solid rgba(237, 241, 221, 0.4);
+  background: rgba(9, 11, 9, 0.93);
+  box-shadow: 6px 6px 0 rgba(237, 241, 221, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.chart-inspect[hidden] {
+  display: none;
+}
+
+.inspect-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.inspect-head time {
+  color: var(--ink);
+}
+
+.inspect-cursor {
+  color: var(--acid);
+}
+
+.inspect-close {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font: 14px/1 var(--mono);
+}
+
+.inspect-close:hover {
+  color: var(--orange);
+}
+
+.inspect-ohlc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 9px;
+  color: var(--dim);
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.03em;
+}
+
+.inspect-ohlc b {
+  color: var(--acid);
+  font-weight: 500;
+}
+
+.inspect-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--dim);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.inspect-delta.is-up {
+  color: var(--acid);
+}
+
+.inspect-delta.is-down {
+  color: var(--orange);
+}
+
+.inspect-hint {
+  margin-left: auto;
+}
+
+/* --------------------------------------------------- in-chart meme player */
+
+.chart-meme-player {
+  position: absolute;
+  z-index: 5;
+  width: clamp(320px, 32vw, 430px);
+  padding: 11px 13px 12px;
+  border: 1px solid rgba(155, 206, 255, 0.55);
+  background: rgba(9, 11, 9, 0.95);
+  box-shadow: 8px 8px 0 rgba(155, 206, 255, 0.5);
+  backdrop-filter: blur(12px);
+  transition: left 120ms linear, top 120ms linear;
+}
+
+.chart-meme-player[hidden] {
+  display: none;
+}
+
+.chart-meme-player.is-parked {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.meme-pointer {
+  position: absolute;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-right: 1px solid rgba(155, 206, 255, 0.55);
+  border-bottom: 1px solid rgba(155, 206, 255, 0.55);
+  background: rgba(9, 11, 9, 0.95);
+  transform: rotate(45deg);
+}
+
+.chart-meme-player[data-placement="above"] .meme-pointer {
+  top: -6px;
+  bottom: auto;
+  border: 0;
+  border-top: 1px solid rgba(155, 206, 255, 0.55);
+  border-left: 1px solid rgba(155, 206, 255, 0.55);
+}
+
+.chart-meme-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.chart-meme-kicker {
+  color: var(--blue);
+}
+
+.chart-meme-head strong {
+  margin-left: auto;
+  color: var(--acid);
+  font: 500 15px/1 var(--mono);
+  letter-spacing: -0.05em;
+}
+
+.chart-meme-close {
+  width: 20px;
+  height: 20px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font: 14px/1 var(--mono);
+}
+
+.chart-meme-close:hover {
+  color: var(--orange);
+}
+
+.chart-meme-stage {
+  position: relative;
+  margin-top: 10px;
+  padding: 20px 14px 16px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 3px, rgba(155, 206, 255, 0.04) 3px 4px),
+    var(--surface-warm);
+  text-align: center;
+}
+
+.chart-meme-quote {
+  margin: 0;
+  color: var(--ink);
+  font: 800 clamp(26px, 2.4vw, 38px)/0.95 var(--display);
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.chart-meme-caption {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font: 12px/1.4 var(--sans);
+  transition: opacity 150ms ease;
+}
+
+.chart-meme-quote.is-changing {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.chart-meme-caption.is-changing {
+  opacity: 0;
+}
+
+.chart-meme-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.chart-meme-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid rgba(155, 206, 255, 0.55);
+  color: var(--blue);
+  background: transparent;
+  cursor: pointer;
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.chart-meme-play:hover,
+.chart-meme-play.is-playing {
+  background: rgba(155, 206, 255, 0.12);
+}
+
+.chart-meme-play .pause-icon {
+  display: none;
+}
+
+.chart-meme-play.is-playing .pause-icon {
+  display: inline;
+}
+
+.chart-meme-play.is-playing .play-icon {
+  display: none;
+}
+
+.chart-meme-progress {
+  flex: 1;
+  height: 4px;
+  overflow: hidden;
+  background: var(--line-soft);
+}
+
+.chart-meme-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--blue);
+}
+
+.chart-meme-count {
+  color: var(--dim);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.05em;
+}
+
+/* ----------------------------------------------------- meme chart markers */
+
+.market-chart .chart-meme-guide {
+  stroke: rgba(155, 206, 255, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.market-chart .chart-meme-chip-box {
+  fill: rgba(9, 11, 9, 0.88);
+  stroke: rgba(155, 206, 255, 0.65);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: fill 160ms ease, stroke 160ms ease;
+}
+
+.market-chart .chart-meme-chip-text {
+  fill: var(--blue);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.market-chart .chart-meme-chip:hover .chart-meme-chip-box,
+.market-chart .chart-meme-chip.is-active .chart-meme-chip-box {
+  fill: rgba(155, 206, 255, 0.22);
+  stroke: var(--blue);
+}
+
+.market-chart .chart-meme-chip.is-active .chart-meme-chip-text {
+  fill: #d9ecff;
+}
+
+.market-chart .chart-meme-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.market-chart .chart-meme-hit:focus-visible {
+  outline: none;
+  stroke: var(--blue);
+  stroke-width: 1.5;
+}
+
+/* ------------------------------------------------------- inspect crosshair */
+
+.market-chart .chart-inspect-cross .inspect-vline,
+.market-chart .chart-inspect-cross .inspect-hline {
+  stroke: rgba(241, 242, 233, 0.6);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.market-chart .chart-inspect-cross .inspect-hline {
+  stroke: rgba(216, 241, 62, 0.55);
+}
+
+.market-chart .chart-inspect-cross .inspect-dot {
+  fill: var(--ink);
+  stroke: var(--bg);
+  stroke-width: 2;
+}
+
+.chart-yaxis .axis-flag {
+  fill: var(--ink);
+}
+
+.chart-yaxis .axis-flag-label {
+  fill: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 820px) {
+  .chart-inspect {
+    top: 8px;
+    left: 8px;
+    min-width: 220px;
+  }
+
+  .chart-meme-player {
+    width: min(340px, calc(100vw - 40px));
+    box-shadow: 6px 6px 0 rgba(155, 206, 255, 0.5);
+  }
+}
+
+@media (max-width: 520px) {
+  .chart-inspect {
+    right: 8px;
+    min-width: 0;
+    padding: 8px 10px 7px;
+  }
+
+  .inspect-ohlc {
+    gap: 4px 10px;
+    font-size: 11px;
+  }
+
+  .inspect-hint {
+    display: none;
+  }
+
+  .chart-meme-player {
+    width: calc(100vw - 28px);
+  }
+
+  .chart-meme-quote {
+    font-size: 24px;
   }
 }

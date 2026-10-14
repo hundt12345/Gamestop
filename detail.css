@@ -11,7 +11,7 @@
 .resolution-switch > span {
   padding: 0 4px 0 5px;
   color: var(--dim);
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.08em;
 }
 
@@ -21,7 +21,7 @@
   color: var(--dim);
   background: transparent;
   cursor: pointer;
-  font: 8px/1 var(--mono);
+  font: 11px/1 var(--mono);
   letter-spacing: 0.04em;
 }
 
@@ -89,7 +89,7 @@
   .resolution-button {
     min-width: 21px;
     padding: 5px 3px;
-    font-size: 7px;
+    font-size: 10px;
   }
 
 }

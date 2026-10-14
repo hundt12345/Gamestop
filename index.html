@@ -55,7 +55,7 @@
           </div>
             <div class="hero-side-note">
             <div class="side-note-label"><span class="state-dot"></span> NEWEST → RIGHT / OLDEST → LEFT</div>
-            <p>Die Standardansicht startet am rechten Rand. Ziehe die Zeitachse zurück, scrolle mit dem Rad oder zoome mit <b>STRG + Rad</b>, den Zoom-Buttons und einem Doppelklick — bis hinunter auf wenige Handelstage. Jedes Ereignis klappt direkt am Kurs auf.</p>
+            <p>Die Standardansicht startet am rechten Rand. Ziehe die Zeitachse zurück, scrolle mit dem Rad oder zoome mit <b>STRG + Rad</b> — bis hinunter auf wenige Handelstage. <b>Klick an eine beliebige Stelle</b> zeigt den Kurs dieses Tages, jedes Ereignis klappt direkt am Kurs auf, und die <b>Memes spielen direkt im Chart</b>.</p>
             <div class="hero-numbers" aria-label="Archivdaten">
               <div><strong>07</strong><span>years in frame</span></div>
               <div><strong>11</strong><span>anchor moments</span></div>
@@ -82,6 +82,16 @@
                 <button type="button" class="resolution-button" data-resolution="week">1W</button>
                 <button type="button" class="resolution-button" data-resolution="month">1M</button>
               </div>
+              <button type="button" class="mode-toggle price-mode-toggle" id="price-mode-toggle" aria-pressed="true" title="Split-bereinigte Kurse anzeigen — der 4:1-Split vom Juli 2022 wird herausgerechnet">
+                <span class="price-mode-signal">÷4</span>
+                <span class="mode-word" id="price-mode-word">SPLIT-ADJ</span>
+                <b id="price-mode-hint">↔ AS TRADED</b>
+              </button>
+              <button type="button" class="mode-toggle meme-toggle" id="meme-toggle" aria-pressed="true" title="Meme-Marker im Chart anzeigen und direkt abspielen">
+                <span class="meme-signal">▶</span>
+                <span class="mode-word">MEMES</span>
+                <b id="meme-toggle-state">ON</b>
+              </button>
               <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
               <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
             </div>
@@ -90,14 +100,15 @@
             <span class="subbar-live"><i class="terminal-live-dot"></i> CHART / GME / 2019 — 2026</span>
             <span class="subbar-mode" id="chart-mode-label">LINE VIEW</span>
             <span class="subbar-res" id="resolution-label">1D / DAILY DETAIL</span>
+            <span class="subbar-price" id="price-mode-label">SPLIT-ADJUSTED (÷4)</span>
             <span class="subbar-window" id="chart-window-label">rolling window</span>
-            <span class="subbar-hint">DRAG · ⌃WHEEL ZOOM</span>
+            <span class="subbar-hint">DRAG · ⌃WHEEL ZOOM · CLICK = PRICE</span>
             <span class="subbar-position" id="terminal-position">11 / 11</span>
-            <span class="subbar-source" id="chart-data-note">EOD / AS TRADED</span>
+            <span class="subbar-source" id="chart-data-note">EOD / SPLIT-ADJUSTED</span>
           </div>
 
           <div class="terminal-chart-area">
-            <div class="terminal-viewport" id="terminal-viewport" tabindex="0" role="region" aria-label="Horizontaler GameStop-Zeitachsen-Chart mit Tageskerzen seit 2019. Neueste Ereignisse stehen rechts.">
+            <div class="terminal-viewport" id="terminal-viewport" tabindex="0" role="region" aria-label="Horizontaler GameStop-Zeitachsen-Chart mit Tageskerzen seit 2019. Neueste Ereignisse stehen rechts. Klicke an eine Stelle im Chart, um den Kurs dieses Tages zu sehen.">
               <div class="terminal-track" id="terminal-track">
                 <svg id="chart-canvas" class="market-chart" role="img" aria-label="GameStop-Tageskurse von 2019 bis heute, mit den Ereignissen der Chronik"></svg>
                 <div class="terminal-edge-label terminal-edge-left">2019<br /><span>BASELINE</span></div>
@@ -108,6 +119,24 @@
               <span class="playhead-tag" id="playhead-tag">—</span>
             </div>
             <svg id="chart-yaxis" class="chart-yaxis" aria-hidden="true"></svg>
+            <div class="chart-inspect" id="chart-inspect" aria-live="polite" hidden>
+              <div class="inspect-head">
+                <time id="inspect-date">—</time>
+                <span class="inspect-cursor" id="inspect-cursor">—</span>
+                <button type="button" class="inspect-close" id="inspect-close" aria-label="Kurs-Anzeige schließen (Esc)">×</button>
+              </div>
+              <div class="inspect-ohlc">
+                <span>O <b id="inspect-open">—</b></span>
+                <span>H <b id="inspect-high">—</b></span>
+                <span>L <b id="inspect-low">—</b></span>
+                <span>C <b id="inspect-close-price">—</b></span>
+              </div>
+              <div class="inspect-foot">
+                <span class="inspect-delta" id="inspect-delta">—</span>
+                <span class="inspect-volume" id="inspect-volume">—</span>
+                <span class="inspect-hint">ESC = CLOSE</span>
+              </div>
+            </div>
           </div>
 
           <div class="event-callout" id="event-callout" aria-live="polite">
@@ -125,6 +154,27 @@
             </div>
             <div class="callout-links" id="callout-links"></div>
             <button type="button" class="callout-open" data-callout-open="event-tail">full entry · archive still updating</button>
+          </div>
+
+          <div class="chart-meme-player" id="chart-meme-player" role="region" aria-label="Meme-Player im Chart" hidden>
+            <span class="meme-pointer" aria-hidden="true"></span>
+            <div class="chart-meme-head">
+              <span class="chart-meme-kicker" id="chart-meme-label">MEME / 01</span>
+              <time id="chart-meme-date">—</time>
+              <strong id="chart-meme-price">—</strong>
+              <button type="button" class="chart-meme-close" id="chart-meme-close" aria-label="Meme im Chart schließen">×</button>
+            </div>
+            <div class="chart-meme-stage">
+              <p class="chart-meme-quote" id="chart-meme-quote">I LIKE THE STOCK.</p>
+              <p class="chart-meme-caption" id="chart-meme-caption">conviction, condensed.</p>
+            </div>
+            <div class="chart-meme-controls">
+              <button class="chart-meme-play" id="chart-meme-play" type="button" aria-pressed="true" aria-label="Meme im Chart abspielen oder pausieren">
+                <span class="play-icon" aria-hidden="true">▶</span><span class="pause-icon" aria-hidden="true">Ⅱ</span><span id="chart-meme-play-label">PAUSE</span>
+              </button>
+              <div class="chart-meme-progress" aria-hidden="true"><span id="chart-meme-progress-fill"></span></div>
+              <span class="chart-meme-count" id="chart-meme-count">01 / 02</span>
+            </div>
           </div>
 
           <div class="terminal-range-row">
@@ -149,7 +199,7 @@
 
       <section class="method-strip section-shell" id="method" aria-label="Methodik">
         <div class="strip-label">READING THE TAPE</div>
-        <p>Keine Anlageberatung. Der Chart zeigt die echten GME-Tageskerzen seit Dezember 2019 — Schlusskurse, wie sie damals gehandelt wurden (inklusive des 4:1-Splits im Juli 2022, deshalb der Sprung im Kurs). Jede Karte führt zu Primärquellen, Archiven oder Original-Posts.</p>
+        <p>Keine Anlageberatung. Der Chart zeigt die echten GME-Tageskerzen seit Dezember 2019 — standardmäßig <b>split-bereinigt</b>: der 4:1-Split vom Juli 2022 ist rückwirkend herausgerechnet, die Kurve ist durchgehend vergleichbar. Per Knopf oben rechts schaltest du auf <b>as traded</b> um, also auf die Kurse, wie sie damals im Tape standen. Jede Karte führt zu Primärquellen, Archiven oder Original-Posts.</p>
         <a href="#source-room">Sources first <span aria-hidden="true">↗</span></a>
       </section>
 
@@ -189,7 +239,7 @@
               <div class="sticky-chart-canvas">
                 <svg id="story-chart" class="market-chart" viewBox="0 0 1000 470" role="img" aria-label="Interaktiver Zeitachsen-Chart"></svg>
               </div>
-              <div class="chart-caption"><span>click a point</span><span>or keep scrolling <b>↓</b></span></div>
+              <div class="chart-caption"><span>click anywhere for the price</span><span>or keep scrolling <b>↓</b></span></div>
               <div class="chart-index" aria-label="Chartpunkte">
                 <button class="chart-index-dot is-active" type="button" data-index="0" aria-label="September 2020, The activist entry"><span>01</span></button>
                 <button class="chart-index-dot" type="button" data-index="1" aria-label="November 2020, A letter not a whisper"><span>02</span></button>
@@ -326,8 +376,8 @@
         <div class="meme-copy">
           <p class="eyebrow"><span class="eyebrow-index">02</span> Culture / compressed</p>
           <h2 id="meme-title">The meme tape<br /><em>is not decoration.</em></h2>
-          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Dieser kleine Player loopt Textkarten — bewusst ohne Autoplay-Audio — und verlinkt zurück zu den Quellen.</p>
-          <div class="meme-note"><span class="state-dot"></span><span>illustrated loop / sound off</span></div>
+          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Die Memes hängen jetzt direkt am Chart: Klick im Chart auf einen <b>MEME</b>-Marker (oder hier auf eine Nummer) spielt die Karte am Kurs dieses Tages ab — bewusst ohne Autoplay-Audio.</p>
+          <div class="meme-note"><span class="state-dot"></span><span>plays in-chart / sound off</span></div>
         </div>
         <div class="meme-player" aria-label="Meme tape player">
           <div class="player-topline"><span>MEME TAPE / 02</span><span id="meme-counter">01 — 03</span></div>

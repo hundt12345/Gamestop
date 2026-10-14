@@ -54,7 +54,7 @@
   color: var(--muted);
   background: transparent;
   cursor: pointer;
-  font: 9px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
@@ -69,7 +69,7 @@
 
 .mode-toggle b {
   color: var(--dim);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 400;
 }
 
@@ -192,7 +192,7 @@ body.candles-active .market-chart.is-dense .candle-mode {
   .terminal-identity {
     flex-wrap: nowrap;
     gap: 7px;
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .terminal-identity small {
@@ -202,7 +202,7 @@ body.candles-active .market-chart.is-dense .candle-mode {
   .terminal-logo {
     width: 30px;
     height: 21px;
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .terminal-controls {
@@ -304,7 +304,7 @@ body.candles-active .market-chart.is-dense .candle-mode {
   }
 
   .callout-link-title {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .terminal-range-row {
