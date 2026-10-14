@@ -106,6 +106,44 @@ const marketMeta = {
   splits: Array.isArray(MARKET?.splits) ? MARKET.splits.filter((split) => split?.date) : []
 };
 
+/* --------------------------------------------------------- price modes --- */
+
+// Split-bereinigt: alle Kurse vor einem Split werden durch das Split-Verhältnis
+// geteilt, damit die Kurve über den 4:1-Split (Juli 2022) hinweg vergleichbar
+// bleibt. "as traded" zeigt die Kurse so, wie sie damals im Tape standen.
+const priceMode = {
+  mode: marketMeta.splits.length > 0 ? 'adjusted' : 'asTraded',
+  available: marketMeta.splits.length > 0
+};
+
+function splitFactorBefore(date) {
+  let factor = 1;
+  marketMeta.splits.forEach((split) => {
+    if (date < split.date) factor *= Number(split.ratio) || 4;
+  });
+  return factor;
+}
+
+const asTradedBars = dailyBars;
+const adjustedBars = priceMode.available
+  ? dailyBars.map((bar) => {
+      const factor = splitFactorBefore(bar.date);
+      if (factor === 1) return bar;
+      return {
+        ...bar,
+        open: bar.open / factor,
+        high: bar.high / factor,
+        low: bar.low / factor,
+        close: bar.close / factor,
+        volume: bar.volume * factor
+      };
+    })
+  : dailyBars;
+
+function activeDailyBars() {
+  return priceMode.mode === 'adjusted' ? adjustedBars : asTradedBars;
+}
+
 /* ----------------------------------------------------------------- events - */
 
 const eventMedia = {
@@ -183,6 +221,69 @@ const storyEvents = [
 // the final anchor always points at the newest bar in the tape
 storyEvents[storyEvents.length - 1].iso = marketMeta.end;
 
+/* ----------------------------------------------------------- meme tape --- */
+
+// Die Memes hängen direkt an echten Handelstagen: jede Karte wird im Chart an
+// ihrem Bar verankert und lässt sich dort abspielen.
+const memeMoments = [
+  {
+    id: 'meme-thesis', iso: '2020-09-01', label: 'WSB / SEP 2020',
+    frames: [
+      { quote: 'CHWY 2.0?', caption: 'the thesis gets a mascot.' },
+      { quote: 'RC ENTERS THE FRAME', caption: 'a stake becomes a story.' }
+    ]
+  },
+  {
+    id: 'meme-like', iso: '2021-01-15', label: 'DFV / WSB',
+    frames: [
+      { quote: 'I LIKE THE STOCK.', caption: 'conviction, condensed.' },
+      { quote: 'DIAMOND HANDS 💎🙌', caption: 'slang becomes a strategy.' }
+    ]
+  },
+  {
+    id: 'meme-moon', iso: '2021-01-27', label: 'WSB / SQUEEZE',
+    frames: [
+      { quote: 'TO THE MOON 🚀', caption: 'the line stops behaving.' },
+      { quote: 'THIS IS THE WAY.', caption: 'the feed becomes a rally.' }
+    ]
+  },
+  {
+    id: 'meme-button', iso: '2021-01-28', label: 'ROBINHOOD / 2021',
+    frames: [
+      { quote: 'WHERE IS THE BUY BUTTON?', caption: 'access becomes the question.' },
+      { quote: 'TO THE MOON? TO THE EXIT.', caption: 'friction, live on tape.' }
+    ]
+  },
+  {
+    id: 'meme-cat', iso: '2021-02-18', label: 'HEARING / 2021',
+    frames: [
+      { quote: 'I AM NOT A CAT.', caption: 'a meme becomes testimony.' },
+      { quote: 'ARE YOU A CAT, MR. GILL?', caption: 'congress reads the feed.' }
+    ]
+  },
+  {
+    id: 'meme-hodl', iso: '2021-06-09', label: 'SUPERSTONK / 2021',
+    frames: [
+      { quote: 'HODL THE LINE.', caption: 'an internet learns to archive.' },
+      { quote: 'DYOR.', caption: 'hype becomes due diligence.' }
+    ]
+  },
+  {
+    id: 'meme-split', iso: '2022-07-22', label: 'SPLIT / 2022',
+    frames: [
+      { quote: '1 ➜ 4', caption: 'the denominator changes.' },
+      { quote: 'STILL LIKE THE STOCK.', caption: 'same thesis, new share count.' }
+    ]
+  },
+  {
+    id: 'meme-return', iso: '2024-05-13', label: 'ROARING KITTY / 2024',
+    frames: [
+      { quote: '👀', caption: 'one post ends the silence.' },
+      { quote: 'THE CAT IS BACK.', caption: 'the tape reacts in minutes.' }
+    ]
+  }
+];
+
 /* ------------------------------------------------------------ aggregation - */
 
 function weekKey(time) {
@@ -212,9 +313,13 @@ function aggregateBars(bars, resolution) {
 }
 
 const seriesCache = new Map();
+function seriesCacheKey(resolution) {
+  return `${resolution}|${priceMode.mode}`;
+}
 function seriesFor(resolution) {
-  if (!seriesCache.has(resolution)) seriesCache.set(resolution, aggregateBars(dailyBars, resolution));
-  return seriesCache.get(resolution);
+  const key = seriesCacheKey(resolution);
+  if (!seriesCache.has(key)) seriesCache.set(key, aggregateBars(activeDailyBars(), resolution));
+  return seriesCache.get(key);
 }
 
 function barIndexForDate(series, iso) {
@@ -229,11 +334,22 @@ function barIndexForDate(series, iso) {
 
 const eventIndexCache = new Map();
 function eventIndices(resolution) {
-  if (!eventIndexCache.has(resolution)) {
+  const key = seriesCacheKey(resolution);
+  if (!eventIndexCache.has(key)) {
     const series = seriesFor(resolution);
-    eventIndexCache.set(resolution, storyEvents.map((event) => barIndexForDate(series, event.iso)));
+    eventIndexCache.set(key, storyEvents.map((event) => barIndexForDate(series, event.iso)));
   }
-  return eventIndexCache.get(resolution);
+  return eventIndexCache.get(key);
+}
+
+const memeIndexCache = new Map();
+function memeIndices(resolution) {
+  const key = seriesCacheKey(resolution);
+  if (!memeIndexCache.has(key)) {
+    const series = seriesFor(resolution);
+    memeIndexCache.set(key, memeMoments.map((meme) => barIndexForDate(series, meme.iso)));
+  }
+  return memeIndexCache.get(key);
 }
 
 function relativeChange(series, index) {
@@ -347,6 +463,18 @@ const chartState = {
   calloutHidden: false
 };
 
+// click-to-inspect: der Bar + die exakte Kursposition, auf die geklickt wurde
+const inspectState = { barIndex: null, price: null, pixelY: null };
+// y↔price mapping des zuletzt gezeichneten Terminal-Charts (für Klicks)
+let terminalScale = null;
+
+const memePlayerState = { index: null, frame: 0, playing: false, startedAt: 0, rafId: null };
+const MEME_FRAME_MS = 3000;
+
+function memesEnabled() {
+  return !document.body.classList.contains('memes-off');
+}
+
 // the terminal canvas only has to be re-drawn when its window, zoom or the
 // active event changes — panning alone just moves the existing canvas.
 let terminalPaintKey = '';
@@ -359,7 +487,8 @@ let followPageScrollUntil = 0;
 function drawSeries(svg, options) {
   const {
     bars, from, to, ppb, height, priceTop, priceBottom, volumeTop, volumeBottom,
-    domainFrom, domainTo, events, activeIndex, splits, ta, axisInCanvas, interactive, gradientId
+    domainFrom, domainTo, events, activeIndex, splits, ta, axisInCanvas, interactive, gradientId,
+    priceMode: mode = 'asTraded', inspect = null, memes = null
   } = options;
 
   svg.replaceChildren();
@@ -380,6 +509,10 @@ function drawSeries(svg, options) {
   const minLog = Math.log(Math.max(0.4, min));
   const maxLog = Math.log(Math.max(min * 1.05, max));
   const y = (price) => priceBottom - ((Math.log(Math.max(0.3, price)) - minLog) / (maxLog - minLog)) * (priceBottom - priceTop);
+  const yToPrice = (pixel) => {
+    const clamped = clamp(pixel, priceTop, priceBottom);
+    return Math.exp(minLog + ((priceBottom - clamped) / (priceBottom - priceTop)) * (maxLog - minLog));
+  };
 
   const defs = svgElement('defs');
   const gradient = svgElement('linearGradient', { id: gradientId, x1: '0', x2: '0', y1: '0', y2: '1' });
@@ -482,10 +615,12 @@ function drawSeries(svg, options) {
     if (index < from - 1 || index > to + 1) return;
     const splitX = x(index);
     const group = svgElement('g', { class: 'chart-split', 'aria-hidden': 'true' });
+    const label = mode === 'adjusted'
+      ? `${split.ratio}:1 SPLIT / ÷${split.ratio} APPLIED`
+      : `${split.ratio}:1 SPLIT / AS TRADED`;
     group.append(
       svgElement('line', { class: 'chart-split-line', x1: splitX, x2: splitX, y1: priceTop, y2: volumeBottom }),
-      svgElement('text', { class: 'chart-split-label', x: splitX + 5, y: priceTop + 12 },
-        `${split.ratio}:1 SPLIT / AS TRADED`)
+      svgElement('text', { class: 'chart-split-label', x: splitX + 5, y: Math.max(11, priceTop - 10) }, label)
     );
     svg.append(group);
   });
@@ -513,12 +648,12 @@ function drawSeries(svg, options) {
     if (event.index === activeIndex) {
       group.append(svgElement('circle', { class: 'chart-point-pulse', cx: pointX, cy: pointY, r: 9 }));
     }
-    if (event.label && pointX - lastLabelX > 96) {
+    if (event.label && pointX - lastLabelX > 118) {
       const above = event.barIndex % 2 === 0;
       const labelX = clamp(pointX, from * ppb + 46, width - 46);
       const labelY = above ? Math.max(priceTop + 10, pointY - 15) : Math.min(volumeBottom - 8, pointY + 24);
       group.append(svgElement('text', { class: 'chart-point-label', x: labelX, y: labelY, 'text-anchor': 'middle' }, event.label));
-      labelBoxes.push({ x: labelX, y: labelY, width: event.label.length * 5.6 });
+      labelBoxes.push({ x: labelX, y: labelY, width: event.label.length * 7.2 });
       lastLabelX = pointX;
     }
     if (interactive) {
@@ -545,14 +680,23 @@ function drawSeries(svg, options) {
     const minVisible = Math.exp(minLog);
     const maxVisible = Math.exp(maxLog);
 
+    // TA-Level sind in "as traded"-Kursen notiert — im bereinigten Modus werden
+    // Vorkurs-Split-Marken durch den Split-Faktor ihres Anker-Datums geteilt.
+    const taAdj = (price, anchorIndex) => {
+      if (mode !== 'adjusted') return price;
+      const anchor = bars[anchorIndex];
+      if (!anchor) return price;
+      return price / splitFactorBefore(anchor.date);
+    };
+
     const line = (kind, from_, to_) => svgElement('line', {
       class: kind, x1: from_.x, y1: from_.y, x2: to_.x, y2: to_.y
     });
 
     // levels only make sense while they are actually on screen
-    const drawLevel = (kind, price, x1, x2, text, tone) => {
+    const drawLevel = (kind, price, x1, x2, text, tone, anchorIndex = barIndex[4]) => {
       if (price < minVisible * 1.02 || price > maxVisible * 0.985) return;
-      const anchor = at(barIndex[4], price);
+      const anchor = at(anchorIndex, price);
       const labelY = price > maxVisible * 0.9 ? anchor.y + 18 : anchor.y - 8;
       placeLabel(text, clamp(anchor.x + 10, 6, width - 6), labelY, tone);
       overlay.append(line(kind, { x: x1, y: anchor.y }, { x: x2, y: anchor.y }));
@@ -560,19 +704,19 @@ function drawSeries(svg, options) {
 
     const placeLabel = (text, x, labelY, tone = '') => {
       const boxes = labelBoxes.concat(labelPlacements);
-      const width_ = text.length * 5.6;
+      const width_ = text.length * 7.2;
       const collides = boxes.some((box) => {
         const boxWidth = box.width ?? 0;
-        return Math.abs(box.y - labelY) < 13 && Math.abs(box.x - x) < (boxWidth + width_) / 2 + 12;
+        return Math.abs(box.y - labelY) < 14 && Math.abs(box.x - x) < (boxWidth + width_) / 2 + 12;
       });
-      if (collides || labelY < priceTop + 12 || labelY > priceBottom - 4) return;
+      if (collides || labelY < priceTop + 14 || labelY > priceBottom - 4) return;
       labelPlacements.push({ x, y: labelY, width: width_ });
       overlay.append(svgElement('text', { class: `ta-label${tone ? ` ${tone}` : ''}`, x, y: labelY }, text));
     };
 
     const labelPlacements = [];
-    const triangleTop = { from: at(barIndex[1], 27), to: at(barIndex[3], 150) };
-    const triangleBase = { from: at(barIndex[1], 11), to: at(barIndex[3], 62) };
+    const triangleTop = { from: at(barIndex[1], taAdj(27, barIndex[1])), to: at(barIndex[3], taAdj(150, barIndex[3])) };
+    const triangleBase = { from: at(barIndex[1], taAdj(11, barIndex[1])), to: at(barIndex[3], taAdj(62, barIndex[3])) };
     if (triangleTop.from.y > priceTop && triangleBase.to.y < priceBottom) {
       overlay.append(
         line('ta-channel', triangleTop.from, triangleTop.to),
@@ -584,8 +728,8 @@ function drawSeries(svg, options) {
       );
     }
 
-    const wedgeTop = { from: at(barIndex[4], 150), to: at(barIndex[6], 330) };
-    const wedgeBase = { from: at(barIndex[4], 40), to: at(barIndex[6], 180) };
+    const wedgeTop = { from: at(barIndex[4], taAdj(150, barIndex[4])), to: at(barIndex[6], taAdj(330, barIndex[6])) };
+    const wedgeBase = { from: at(barIndex[4], taAdj(40, barIndex[4])), to: at(barIndex[6], taAdj(180, barIndex[6])) };
     if (wedgeBase.from.y < priceBottom && wedgeTop.to.y > priceTop) {
       overlay.append(
         line('ta-channel', wedgeTop.from, wedgeTop.to),
@@ -597,13 +741,82 @@ function drawSeries(svg, options) {
       );
     }
 
-    drawLevel('ta-resistance', 483, x(barIndex[4]), x(lastBar), 'RESISTANCE / 483.00', 'red');
-    drawLevel('ta-channel support', 20, x(barIndex[7]), x(lastBar), 'SUPPORT / 20 ZONE', 'blue');
+    const resistance = taAdj(483, barIndex[4]);
+    drawLevel('ta-resistance', resistance, x(barIndex[4]), x(lastBar), `RESISTANCE / ${formatAxisPrice(resistance)}`, 'red');
+    drawLevel('ta-channel support', 20, x(barIndex[7]), x(lastBar), 'SUPPORT / 20 ZONE', 'blue', barIndex[7]);
 
     svg.append(overlay);
   }
 
-  return { ticks, y };
+  /* ---------------------------------------------------- meme chips ---- */
+  if (memes && memes.length) {
+    const memeGroup = svgElement('g', { class: 'chart-memes' });
+    const rowEnds = [];
+    memes.forEach((meme) => {
+      if (meme.barIndex < from - 2 || meme.barIndex > to + 2) return;
+      const bar = bars[meme.barIndex];
+      if (!bar) return;
+      const mx = x(meme.barIndex);
+      const chipWidth = 46;
+      const chipHeight = 19;
+      let row = 0;
+      while (row < rowEnds.length && rowEnds[row] + 14 > mx - chipWidth / 2) row += 1;
+      rowEnds[row] = mx + chipWidth / 2;
+      const chipY = priceTop + 2 + row * (chipHeight + 5);
+      const isActive = meme.index === memePlayerState.index;
+      const chip = svgElement('g', {
+        class: isActive ? 'chart-meme-chip is-active' : 'chart-meme-chip',
+        'data-meme-index': meme.index
+      });
+      chip.append(
+        svgElement('line', { class: 'chart-meme-guide', x1: mx, x2: mx, y1: chipY + chipHeight, y2: y(bar.close) }),
+        svgElement('rect', {
+          class: 'chart-meme-chip-box',
+          x: mx - chipWidth / 2,
+          y: chipY,
+          width: chipWidth,
+          height: chipHeight,
+          rx: 3
+        }),
+        svgElement('text', {
+          class: 'chart-meme-chip-text',
+          x: mx,
+          y: chipY + 13.5,
+          'text-anchor': 'middle'
+        }, `M${meme.index + 1} ▶`)
+      );
+      if (interactive) {
+        chip.append(svgElement('rect', {
+          class: 'chart-meme-hit',
+          x: mx - chipWidth / 2 - 8,
+          y: chipY - 5,
+          width: chipWidth + 16,
+          height: chipHeight + 10,
+          'data-meme-index': meme.index,
+          tabindex: 0,
+          role: 'button',
+          'aria-label': `Meme ${meme.index + 1} von ${memes.length} abspielen: ${meme.label}`
+        }));
+      }
+      memeGroup.append(chip);
+    });
+    svg.append(memeGroup);
+  }
+
+  /* ----------------------------------------------- click crosshair ---- */
+  if (inspect && Number.isFinite(inspect.barIndex) && inspect.barIndex >= from - 1 && inspect.barIndex <= to + 1) {
+    const cross = svgElement('g', { class: 'chart-inspect-cross', 'aria-hidden': 'true' });
+    const inspectX = x(inspect.barIndex);
+    const inspectY = y(inspect.price);
+    cross.append(
+      svgElement('line', { class: 'inspect-vline', x1: inspectX, x2: inspectX, y1: priceTop, y2: volumeBottom }),
+      svgElement('line', { class: 'inspect-hline', x1: 0, x2: width, y1: inspectY, y2: inspectY }),
+      svgElement('circle', { class: 'inspect-dot', cx: inspectX, cy: inspectY, r: 4 })
+    );
+    svg.append(cross);
+  }
+
+  return { ticks, y, yToPrice, priceTop, priceBottom };
 }
 
 /* --------------------------------------------------- terminal (big chart) - */
@@ -677,6 +890,9 @@ function paintTerminal({ force = false } = {}) {
 
   const events = storyEvents.map((event, index) => ({ ...event, index, barIndex: eventIndices(chartState.resolution)[index] }));
   const splits = marketMeta.splits.map((split) => ({ date: split.date, ratio: split.ratio ?? 4 }));
+  const memes = memesEnabled()
+    ? memeMoments.map((meme, index) => ({ ...meme, index, barIndex: memeIndices(chartState.resolution)[index] }))
+    : [];
 
   const paintKey = [
     chartState.resolution,
@@ -685,7 +901,11 @@ function paintTerminal({ force = false } = {}) {
     to,
     height.toFixed(1),
     chartState.activeIndex,
-    document.body.classList.contains('ta-active') ? 'ta' : '-'
+    document.body.classList.contains('ta-active') ? 'ta' : '-',
+    priceMode.mode,
+    memesEnabled() ? `memes-${memePlayerState.index}` : 'memes-off',
+    inspectState.barIndex ?? '-',
+    inspectState.price ? inspectState.price.toFixed(3) : '-'
   ].join('|');
 
   if (!force && paintKey === terminalPaintKey) {
@@ -694,7 +914,9 @@ function paintTerminal({ force = false } = {}) {
   }
   terminalPaintKey = paintKey;
 
-  const { ticks, y } = drawSeries(canvas, {
+  const inspect = inspectState.barIndex === null ? null : { barIndex: inspectState.barIndex, price: inspectState.price };
+
+  const { ticks, y, yToPrice } = drawSeries(canvas, {
     bars,
     from,
     to,
@@ -712,9 +934,13 @@ function paintTerminal({ force = false } = {}) {
     ta: document.body.classList.contains('ta-active'),
     axisInCanvas: false,
     interactive: true,
-    gradientId: 'chart-area-gradient-terminal'
+    gradientId: 'chart-area-gradient-terminal',
+    priceMode: priceMode.mode,
+    inspect,
+    memes
   });
 
+  terminalScale = { yToPrice, priceTop, priceBottom };
   canvas.classList.toggle('is-dense', chartState.ppb < 2.2);
 
   if (yAxis) {
@@ -730,12 +956,34 @@ function paintTerminal({ force = false } = {}) {
         svgElement('text', { class: 'axis-tick-label', x: 8, y: lineY - 5 }, formatAxisPrice(value))
       );
     });
+    if (inspect) {
+      const flagY = y(inspect.price);
+      const flagLabel = formatAxisPrice(inspect.price);
+      yAxis.append(
+        svgElement('rect', { class: 'axis-flag', x: 2, y: flagY - 9, width: 72, height: 18, rx: 2 }),
+        svgElement('text', { class: 'axis-flag-label', x: 38, y: flagY + 4, 'text-anchor': 'middle' }, flagLabel)
+      );
+    }
   }
 
   canvas.querySelectorAll('.chart-point-hit, .chart-point, .chart-point-halo').forEach((target) => {
     const activate = () => {
       const index = Number(target.dataset.index);
       if (!Number.isNaN(index)) focusEvent(index);
+    };
+    target.addEventListener('click', activate);
+    target.addEventListener('keydown', (keyboardEvent) => {
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        keyboardEvent.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  canvas.querySelectorAll('.chart-meme-hit').forEach((target) => {
+    const activate = () => {
+      const index = Number(target.dataset.memeIndex);
+      if (!Number.isNaN(index)) openChartMeme(index);
     };
     target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
@@ -874,6 +1122,7 @@ function paintCallout() {
   const { callout, pointer } = calloutElements();
   const { terminal, viewport } = terminalElements();
   if (!callout || !terminal || !viewport) return;
+  positionChartMeme();
 
   const marker = document.querySelector(`#chart-canvas .chart-point[data-index="${chartState.activeIndex}"]`);
   const visible = marker && !chartState.calloutHidden;
@@ -1018,6 +1267,16 @@ function setResolution(resolution) {
   chartState.ppb = CHART_LIMITS[resolution].base;
   terminalPaintKey = '';
   storyPaintKey = '';
+  // Bar-Indizes ändern ihre Bedeutung — Inspektor zurücksetzen, Meme neu verankern
+  inspectState.barIndex = null;
+  inspectState.price = null;
+  const { panel } = inspectElements();
+  if (panel) panel.hidden = true;
+  if (memePlayerState.index !== null) {
+    const openIndex = memePlayerState.index;
+    memePlayerState.index = null;
+    openChartMeme(openIndex, { autoplay: memePlayerState.playing, reveal: false });
+  }
   document.querySelectorAll('.resolution-button').forEach((button) => {
     button.classList.toggle('is-active', button.dataset.resolution === resolution);
   });
@@ -1033,6 +1292,308 @@ function resolutionLabel(resolution) {
   if (resolution === 'week') return '1W / WEEKLY';
   if (resolution === 'month') return '1M / MONTHLY';
   return '1D / DAILY DETAIL';
+}
+
+/* ---------------------------------------------------- price mode (÷4) --- */
+
+function updatePriceModeUI() {
+  const adjusted = priceMode.mode === 'adjusted';
+  const toggle = document.querySelector('#price-mode-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-pressed', String(adjusted));
+    toggle.title = adjusted
+      ? 'Aktuell split-bereinigt — Klick zeigt die Kurse so, wie sie damals gehandelt wurden'
+      : 'Aktuell as traded — Klick rechnet den 4:1-Split (Juli 2022) rückwirkend heraus';
+  }
+  const word = document.querySelector('#price-mode-word');
+  if (word) word.textContent = adjusted ? 'SPLIT-ADJ' : 'AS TRADED';
+  const hint = document.querySelector('#price-mode-hint');
+  if (hint) hint.textContent = adjusted ? '↔ AS TRADED' : '↔ SPLIT-ADJ';
+  const label = document.querySelector('#price-mode-label');
+  if (label) label.textContent = adjusted ? 'SPLIT-ADJUSTED (÷4)' : 'AS TRADED';
+}
+
+function setPriceMode(mode) {
+  if (!priceMode.available || mode === priceMode.mode) return;
+  priceMode.mode = mode;
+  terminalPaintKey = '';
+  storyPaintKey = '';
+  updatePriceModeUI();
+  paintTerminal();
+  paintStoryChart({ force: true });
+  applyActive(chartState.activeIndex);
+  // Inspektor bleibt an der geklickten Pixel-Position — der Kurs dahinter
+  // ändert sich mit dem Modus.
+  if (inspectState.barIndex !== null && terminalScale) {
+    inspectState.price = terminalScale.yToPrice(inspectState.pixelY ?? 0);
+    terminalPaintKey = '';
+    paintTerminal();
+  }
+  updateInspectChip();
+  refreshChartMemeHeader();
+  paintCallout();
+  stampProvenance();
+}
+
+/* ------------------------------------------------- click-to-inspect --- */
+
+function inspectElements() {
+  const panel = document.querySelector('#chart-inspect');
+  return {
+    panel,
+    date: panel?.querySelector('#inspect-date'),
+    cursor: panel?.querySelector('#inspect-cursor'),
+    open: panel?.querySelector('#inspect-open'),
+    high: panel?.querySelector('#inspect-high'),
+    low: panel?.querySelector('#inspect-low'),
+    close: panel?.querySelector('#inspect-close-price'),
+    delta: panel?.querySelector('#inspect-delta'),
+    volume: panel?.querySelector('#inspect-volume')
+  };
+}
+
+function setInspect(barIndex, price, pixelY) {
+  inspectState.barIndex = barIndex;
+  inspectState.price = price;
+  inspectState.pixelY = pixelY ?? null;
+  terminalPaintKey = '';
+  paintTerminal();
+  updateInspectChip();
+}
+
+function clearInspect() {
+  if (inspectState.barIndex === null) return;
+  inspectState.barIndex = null;
+  inspectState.price = null;
+  inspectState.pixelY = null;
+  terminalPaintKey = '';
+  paintTerminal();
+  const { panel } = inspectElements();
+  if (panel) panel.hidden = true;
+}
+
+function updateInspectChip() {
+  const { panel, date, cursor, open, high, low, close, delta, volume } = inspectElements();
+  if (!panel || inspectState.barIndex === null) {
+    if (panel) panel.hidden = true;
+    return;
+  }
+  const series = seriesFor(chartState.resolution);
+  const barIndex = clamp(inspectState.barIndex, 0, series.length - 1);
+  const bar = series[barIndex];
+  if (!bar) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+  if (date) date.textContent = formatDay(bar.date);
+  if (cursor) cursor.textContent = `CURSOR ${formatPrice(inspectState.price)}`;
+  if (open) open.textContent = formatPrice(bar.open);
+  if (high) high.textContent = formatPrice(bar.high);
+  if (low) low.textContent = formatPrice(bar.low);
+  if (close) close.textContent = formatPrice(bar.close);
+  if (volume) volume.textContent = `${formatCompact(bar.volume)} SHARES`;
+  if (delta) {
+    const change = relativeChange(series, barIndex);
+    delta.textContent = formatPercent(change);
+    delta.classList.toggle('is-up', Number.isFinite(change) && change >= 0);
+    delta.classList.toggle('is-down', Number.isFinite(change) && change < 0);
+  }
+}
+
+/* ------------------------------------------------ in-chart meme player - */
+
+function chartMemeElements() {
+  const player = document.querySelector('#chart-meme-player');
+  return {
+    player,
+    pointer: player?.querySelector('.meme-pointer'),
+    label: player?.querySelector('#chart-meme-label'),
+    date: player?.querySelector('#chart-meme-date'),
+    price: player?.querySelector('#chart-meme-price'),
+    quote: player?.querySelector('#chart-meme-quote'),
+    caption: player?.querySelector('#chart-meme-caption'),
+    play: player?.querySelector('#chart-meme-play'),
+    playLabel: player?.querySelector('#chart-meme-play-label'),
+    fill: player?.querySelector('#chart-meme-progress-fill'),
+    count: player?.querySelector('#chart-meme-count'),
+    close: player?.querySelector('#chart-meme-close')
+  };
+}
+
+function renderChartMemeFrame(animate = true) {
+  const { quote, caption, count } = chartMemeElements();
+  const moment = memeMoments[memePlayerState.index];
+  if (!moment || !quote || !caption) return;
+  const frame = moment.frames[memePlayerState.frame] ?? moment.frames[0];
+  const apply = () => {
+    quote.textContent = frame.quote;
+    caption.textContent = frame.caption;
+    if (count) count.textContent = `${String(memePlayerState.frame + 1).padStart(2, '0')} / ${String(moment.frames.length).padStart(2, '0')}`;
+    quote.classList.remove('is-changing');
+    caption.classList.remove('is-changing');
+  };
+  if (animate) {
+    quote.classList.add('is-changing');
+    caption.classList.add('is-changing');
+    window.setTimeout(apply, 150);
+  } else {
+    apply();
+  }
+}
+
+function tickChartMeme() {
+  const { fill } = chartMemeElements();
+  if (!memePlayerState.playing || memePlayerState.index === null) {
+    memePlayerState.rafId = null;
+    return;
+  }
+  const moment = memeMoments[memePlayerState.index];
+  const elapsed = Date.now() - memePlayerState.startedAt;
+  const progress = Math.min(1, elapsed / MEME_FRAME_MS);
+  if (fill) fill.style.width = `${progress * 100}%`;
+  if (progress >= 1 && moment) {
+    memePlayerState.frame = (memePlayerState.frame + 1) % moment.frames.length;
+    renderChartMemeFrame();
+    memePlayerState.startedAt = Date.now();
+  }
+  memePlayerState.rafId = raf(tickChartMeme);
+}
+
+function setChartMemePlaying(playing) {
+  memePlayerState.playing = playing;
+  const { play, playLabel, fill } = chartMemeElements();
+  if (play) {
+    play.classList.toggle('is-playing', playing);
+    play.setAttribute('aria-pressed', String(playing));
+  }
+  if (playLabel) playLabel.textContent = playing ? 'PAUSE' : 'PLAY';
+  if (playing) {
+    memePlayerState.startedAt = Date.now();
+    if (!memePlayerState.rafId) memePlayerState.rafId = raf(tickChartMeme);
+  } else {
+    if (memePlayerState.rafId && typeof window.cancelAnimationFrame === 'function') window.cancelAnimationFrame(memePlayerState.rafId);
+    memePlayerState.rafId = null;
+    if (fill) fill.style.width = '0%';
+  }
+}
+
+function scrollMemeIntoView(barIndex) {
+  const { viewport } = terminalElements();
+  if (!viewport) return;
+  const markerX = (barIndex + 0.5) * chartState.ppb - viewport.scrollLeft;
+  if (markerX >= 60 && markerX <= viewport.clientWidth - 60) return;
+  const target = clamp(
+    (barIndex + 0.5) * chartState.ppb - viewport.clientWidth * 0.42,
+    0,
+    Math.max(0, viewport.scrollWidth - viewport.clientWidth)
+  );
+  try {
+    viewport.scrollTo({ left: target, behavior: 'smooth' });
+  } catch {
+    viewport.scrollLeft = target;
+  }
+}
+
+function openChartMeme(index, { autoplay = true, reveal = true } = {}) {
+  if (!memeMoments[index]) return;
+  memePlayerState.index = index;
+  memePlayerState.frame = 0;
+  const { player } = chartMemeElements();
+  if (player) player.hidden = false;
+  refreshChartMemeHeader();
+  renderChartMemeFrame(false);
+  setChartMemePlaying(autoplay);
+  if (reveal) {
+    const barIndex = memeIndices(chartState.resolution)[index];
+    if (barIndex !== undefined) scrollMemeIntoView(barIndex);
+  }
+  terminalPaintKey = '';
+  paintTerminal();
+  positionChartMeme();
+}
+
+// Kopfzeile (Label, Datum, Kurs) neu lesen — z. B. nach Modus- oder
+// Auflösungswechsel, ohne die laufende Wiedergabe neu zu starten.
+function refreshChartMemeHeader() {
+  if (memePlayerState.index === null) return;
+  const { label, date, price } = chartMemeElements();
+  const series = seriesFor(chartState.resolution);
+  const barIndex = memeIndices(chartState.resolution)[memePlayerState.index];
+  const bar = series[barIndex];
+  if (label) label.textContent = `${memeMoments[memePlayerState.index].label} · M${memePlayerState.index + 1}`;
+  if (date && bar) date.textContent = formatDay(bar.date);
+  if (price && bar) price.textContent = formatPrice(bar.close);
+}
+
+function closeChartMeme() {
+  setChartMemePlaying(false);
+  memePlayerState.index = null;
+  const { player, fill } = chartMemeElements();
+  if (player) player.hidden = true;
+  if (fill) fill.style.width = '0%';
+  terminalPaintKey = '';
+  paintTerminal();
+}
+
+function positionChartMeme() {
+  const { player, pointer } = chartMemeElements();
+  const { terminal, viewport } = terminalElements();
+  if (!player || !terminal || !viewport || player.hidden || memePlayerState.index === null) return;
+
+  const chip = document.querySelector(`#chart-canvas .chart-meme-hit[data-meme-index="${memePlayerState.index}"]`);
+  if (!chip) return;
+
+  const chipRect = chip.getBoundingClientRect();
+  const terminalRect = terminal.getBoundingClientRect();
+  const viewportRect = viewport.getBoundingClientRect();
+  const playerRect = player.getBoundingClientRect();
+  const width = playerRect.width || player.offsetWidth || 380;
+  const height = playerRect.height || player.offsetHeight || 210;
+
+  if (chipRect.right < viewportRect.left - 40 || chipRect.left > viewportRect.right + 40) {
+    player.classList.add('is-parked');
+    return;
+  }
+  player.classList.remove('is-parked');
+
+  const centerX = chipRect.left - terminalRect.left + chipRect.width / 2;
+  const left = clamp(
+    centerX - width / 2,
+    12,
+    Math.max(12, terminal.clientWidth - width - 12)
+  );
+
+  const minTop = viewportRect.top - terminalRect.top + 8;
+  const maxTop = viewportRect.bottom - terminalRect.top - height - 8;
+  let top = chipRect.bottom - terminalRect.top + 14;
+  let placement = 'below';
+  if (top + height > viewportRect.bottom - terminalRect.top - 8) {
+    top = chipRect.top - terminalRect.top - height - 14;
+    placement = 'above';
+  }
+  top = clamp(top, minTop, Math.max(minTop, maxTop));
+
+  player.style.left = `${Math.round(left)}px`;
+  player.style.top = `${Math.round(top)}px`;
+  player.dataset.placement = placement;
+  if (pointer) {
+    pointer.dataset.placement = placement;
+    pointer.style.left = `${Math.round(clamp(centerX - left, 20, width - 20))}px`;
+  }
+}
+
+function setMemesEnabled(enabled) {
+  document.body.classList.toggle('memes-off', !enabled);
+  const toggle = document.querySelector('#meme-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-pressed', String(enabled));
+    const state = toggle.querySelector('#meme-toggle-state');
+    if (state) state.textContent = enabled ? 'ON' : 'OFF';
+  }
+  if (!enabled) closeChartMeme();
+  terminalPaintKey = '';
+  paintTerminal();
 }
 
 /* ------------------------------------------------------- story overview --- */
@@ -1079,7 +1640,8 @@ function paintStoryChart({ force = false } = {}) {
     ta: document.body.classList.contains('ta-active'),
     axisInCanvas: true,
     interactive: true,
-    gradientId: 'chart-area-gradient-story'
+    gradientId: 'chart-area-gradient-story',
+    priceMode: priceMode.mode
   });
 
   svg.classList.toggle('is-dense', ppb < 2.2);
@@ -1193,7 +1755,7 @@ function bindChartTerminal() {
 
   // suppress the click that follows a pan gesture
   viewport.addEventListener('click', (event) => {
-    if (Number(viewport.dataset.dragDistance) > 6 && event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo')) {
+    if (Number(viewport.dataset.dragDistance) > 6 && event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit')) {
       event.stopPropagation();
       event.preventDefault();
       viewport.dataset.dragDistance = '0';
@@ -1214,6 +1776,37 @@ function bindChartTerminal() {
       }
     });
     focusEvent(nearest);
+  });
+
+  // Klick an eine beliebige Stelle im Chart → Kurs dieses Tages zeigen
+  viewport.addEventListener('click', (event) => {
+    if (Number(viewport.dataset.dragDistance) > 6) return;
+    if (event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-meme-chip')) return;
+    if (!terminalScale) return;
+    const rect = viewport.getBoundingClientRect();
+    const localX = event.clientX - rect.left;
+    const localY = event.clientY - rect.top;
+    if (localY < 0 || localY > rect.height) return;
+    const bars = seriesFor(chartState.resolution);
+    const barIndex = clamp(
+      Math.round((viewport.scrollLeft + localX) / chartState.ppb - 0.5),
+      0,
+      bars.length - 1
+    );
+    const price = terminalScale.yToPrice(localY);
+    setInspect(barIndex, price, localY);
+  });
+
+  document.querySelector('#inspect-close')?.addEventListener('click', clearInspect);
+
+  // Esc schließt zuerst den Meme-Player, dann die Kurs-Anzeige
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (memePlayerState.index !== null) {
+      closeChartMeme();
+      return;
+    }
+    clearInspect();
   });
 
   viewport.addEventListener('keydown', (event) => {
@@ -1307,6 +1900,20 @@ function bindChartTerminal() {
     if (modeLabel) modeLabel.textContent = candles ? 'CANDLE VIEW' : 'LINE VIEW';
   });
 
+  document.querySelector('#price-mode-toggle')?.addEventListener('click', () => {
+    setPriceMode(priceMode.mode === 'adjusted' ? 'asTraded' : 'adjusted');
+  });
+
+  document.querySelector('#meme-toggle')?.addEventListener('click', () => {
+    setMemesEnabled(!memesEnabled());
+  });
+
+  document.querySelector('#chart-meme-close')?.addEventListener('click', closeChartMeme);
+  document.querySelector('#chart-meme-play')?.addEventListener('click', () => {
+    if (memePlayerState.index === null) return;
+    setChartMemePlaying(!memePlayerState.playing);
+  });
+
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     window.clearTimeout(resizeTimer);
@@ -1360,11 +1967,12 @@ function bindTimeline() {
 
 /* ------------------------------------------------------- meme + sources --- */
 
-const memeData = [
-  { label: 'WSB / 2021', quote: 'I LIKE THE STOCK.', caption: 'conviction, condensed.' },
-  { label: 'HEARING / 2021', quote: 'I AM NOT A CAT.', caption: 'a meme becomes testimony.' },
-  { label: 'COMMUNITY / ALWAYS', quote: 'HODL THE LINE.', caption: 'an internet learns to archive.' }
-];
+// der Text-Player unten nutzt dieselben Momente wie der In-Chart-Player
+const memeData = memeMoments.map((moment) => ({
+  label: moment.label,
+  quote: moment.frames[0].quote,
+  caption: moment.frames[0].caption
+}));
 
 let memeIndex = 0;
 let memePlaying = false;
@@ -1440,11 +2048,27 @@ function setMemePlaying(playing) {
 
 function bindMemePlayer() {
   document.querySelector('#meme-play')?.addEventListener('click', () => setMemePlaying(!memePlaying));
+
+  // Auswahlknöpfe entsprechen den Meme-Markern im Chart
+  const selectorRow = document.querySelector('.meme-selectors');
+  if (selectorRow) {
+    selectorRow.innerHTML = memeMoments.map((_, index) =>
+      `<button class="meme-selector" type="button" data-meme-index="${index}" aria-label="Meme ${index + 1} im Chart abspielen">${String(index + 1).padStart(2, '0')}</button>`
+    ).join('');
+  }
+
   document.querySelectorAll('.meme-selector').forEach((button) => {
     button.addEventListener('click', () => {
       memeIndex = Number(button.dataset.memeIndex);
       renderMeme(memeIndex);
       if (memePlaying) memeStartedAt = Date.now();
+      // direkt im Chart abspielen: hingehen, verankern, loslassen
+      const explorer = document.querySelector('#chart-explorer');
+      if (explorer && typeof explorer.scrollIntoView === 'function') {
+        explorer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      followPageScrollUntil = Date.now() + 1200;
+      openChartMeme(memeIndex);
     });
   });
   renderMeme(0, false);
@@ -1509,10 +2133,18 @@ function stampProvenance() {
   const note = document.querySelector('#chart-data-note');
   if (note) {
     const origin = usingFallback ? 'FALLBACK TAPE' : 'YAHOO EOD';
-    note.textContent = `${origin} · ${marketMeta.asTraded ? 'AS TRADED' : 'ADJUSTED'} · LAST BAR ${formatShortDay(marketMeta.end).toUpperCase()}`;
+    const modeLabel = priceMode.available
+      ? (priceMode.mode === 'adjusted' ? 'SPLIT-ADJUSTED' : 'AS TRADED')
+      : 'AS TRADED';
+    note.textContent = `${origin} · ${modeLabel} · LAST BAR ${formatShortDay(marketMeta.end).toUpperCase()}`;
     note.title = usingFallback
       ? 'market-data.js fehlt — der Chart zeigt eine Ersatzlinie aus den dokumentierten Schlusskursen.'
-      : `${dailyBars.length} echte Tagesbars seit ${formatDay(dailyBars[0].date)}, zuletzt aktualisiert am ${marketMeta.updated}.`;
+      : `${asTradedBars.length} echte Tagesbars seit ${formatDay(asTradedBars[0].date)}, zuletzt aktualisiert am ${marketMeta.updated}. ` +
+        (priceMode.available
+          ? (priceMode.mode === 'adjusted'
+            ? 'Split-bereinigt: alle Kurse vor dem 4:1-Split (22. Juli 2022) sind durch 4 geteilt.'
+            : 'As traded: die Kurse stehen so im Chart, wie sie damals gehandelt wurden.')
+          : 'As traded: keine Split-Informationen verfügbar.');
   }
   const latestEvent = storyEvents[storyEvents.length - 1];
   const card = document.getElementById(latestEvent.id);
@@ -1534,6 +2166,11 @@ function stampProvenance() {
 
 function initialise() {
   stampProvenance();
+  updatePriceModeUI();
+  if (!priceMode.available) {
+    document.querySelector('#price-mode-toggle')?.setAttribute('disabled', '');
+    document.querySelector('#price-mode-toggle')?.setAttribute('title', 'Keine Split-Daten verfügbar — Kurse bleiben as traded');
+  }
   applyActive(storyEvents.length - 1);
   paintTerminal();
   paintStoryChart();
