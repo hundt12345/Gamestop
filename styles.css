@@ -18,6 +18,8 @@
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --section: min(1400px, calc(100% - 96px));
   --header-height: 76px;
+  /* Hoehe des Docks unter dem Chart — dort liegen alle Einblendungen */
+  --dock-height: clamp(272px, 26vw, 306px);
 }
 
 * {
@@ -39,7 +41,7 @@ body {
     var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -173,7 +175,7 @@ a:focus-visible {
 
 .brand-name small {
   color: var(--dim);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.04em;
 }
 
@@ -204,7 +206,7 @@ a:focus-visible {
 .primary-nav a span,
 .mobile-nav a span {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .header-state,
@@ -214,7 +216,7 @@ a:focus-visible {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font: 10px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -317,7 +319,7 @@ a:focus-visible {
   align-items: center;
   margin: 0 0 25px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
@@ -437,7 +439,7 @@ a:focus-visible {
 
 .hero-numbers span {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
 
@@ -469,13 +471,13 @@ a:focus-visible {
 .chart-overline,
 .strip-label {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
 .chart-live {
   color: var(--acid);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .hero-chart-heading {
@@ -514,7 +516,7 @@ a:focus-visible {
 .hero-chart-readout span,
 .hero-chart-readout small {
   color: var(--muted);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -554,7 +556,7 @@ a:focus-visible {
 .chart-footline {
   margin-top: 14px;
   color: var(--dim);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -566,7 +568,7 @@ a:focus-visible {
 .chart-footline b,
 .chart-caption b {
   color: var(--acid);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
 }
 
@@ -586,7 +588,7 @@ a:focus-visible {
   gap: 20px;
   margin-top: 17px;
   color: var(--dim);
-  font: 10px/1.4 var(--mono);
+  font: 12px/1.4 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -621,7 +623,7 @@ a:focus-visible {
   max-width: 760px;
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .method-strip > a {
@@ -691,7 +693,7 @@ a:focus-visible {
   color: var(--dim);
   background: transparent;
   cursor: pointer;
-  font: 11px/1.3 var(--mono);
+  font: 13px/1.3 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 160ms ease;
@@ -751,7 +753,7 @@ a:focus-visible {
 
 .active-event-count {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
 
@@ -771,7 +773,7 @@ a:focus-visible {
 
 .sticky-readout span:first-child {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.08em;
 }
 
@@ -784,7 +786,7 @@ a:focus-visible {
 .sticky-readout span:last-child {
   margin-left: auto;
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.04em;
 }
 
@@ -795,7 +797,7 @@ a:focus-visible {
 
 .chart-caption {
   color: var(--dim);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -832,7 +834,7 @@ a:focus-visible {
   bottom: -18px;
   left: 50%;
   color: var(--dim);
-  font: 10px/1 var(--mono);
+  font: 12px/1 var(--mono);
   transform: translateX(-50%);
 }
 
@@ -854,7 +856,7 @@ a:focus-visible {
 .feed-intro {
   margin: 0 0 2px;
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
@@ -899,7 +901,7 @@ a:focus-visible {
   border-radius: 50%;
   background: var(--bg);
   color: var(--dim);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   transition: 180ms ease;
 }
 
@@ -927,7 +929,7 @@ a:focus-visible {
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
@@ -969,7 +971,7 @@ a:focus-visible {
   padding: 7px 9px;
   border: 1px solid var(--line);
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
 
@@ -981,7 +983,7 @@ a:focus-visible {
 
 .event-links a {
   color: var(--ink);
-  font: 10px/1 var(--mono);
+  font: 12px/1 var(--mono);
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
@@ -992,7 +994,7 @@ a:focus-visible {
 
 .event-links a span {
   color: var(--acid);
-  font-size: 13px;
+  font-size: 15px;
 }
 
 /* SVG chart primitives are injected by app.js. */
@@ -1010,13 +1012,13 @@ a:focus-visible {
 .market-chart .chart-date-label {
   fill: #687067;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.04em;
 }
 
 .market-chart .chart-date-label {
   fill: #8b9489;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .market-chart .chart-area {
@@ -1077,7 +1079,7 @@ a:focus-visible {
 .market-chart .chart-point-label {
   fill: var(--muted);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.03em;
 }
 
@@ -1124,7 +1126,7 @@ a:focus-visible {
 .market-chart .chart-split-label {
   fill: rgba(155, 206, 255, 0.85);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
 
@@ -1148,7 +1150,7 @@ a:focus-visible {
 
 .meme-note {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .meme-player {
@@ -1161,7 +1163,7 @@ a:focus-visible {
 .player-topline,
 .player-footer {
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1em;
 }
 
@@ -1172,8 +1174,12 @@ a:focus-visible {
 .player-stage {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  align-items: center;
+  gap: clamp(14px, 2vw, 26px);
   min-height: 370px;
   margin: 18px 0;
+  padding: clamp(14px, 2vw, 24px);
   place-items: center;
   overflow: hidden;
   border: 1px solid rgba(216, 241, 62, 0.26);
@@ -1181,6 +1187,14 @@ a:focus-visible {
     radial-gradient(circle at 24% 28%, rgba(255, 92, 49, 0.18), transparent 29%),
     radial-gradient(circle at 76% 72%, rgba(216, 241, 62, 0.12), transparent 35%),
     #11130f;
+}
+
+/* im großen Tape-Player darf das Medium die halbe Bühne füllen */
+.player-media.meme-media {
+  width: 100%;
+  max-height: 300px;
+  aspect-ratio: 4 / 3;
+  box-shadow: 8px 8px 0 rgba(155, 206, 255, 0.22);
 }
 
 .player-stage::before,
@@ -1220,7 +1234,7 @@ a:focus-visible {
 .meme-card {
   position: relative;
   z-index: 1;
-  width: min(82%, 510px);
+  width: 100%;
   min-height: 244px;
   display: flex;
   flex-direction: column;
@@ -1244,7 +1258,7 @@ a:focus-visible {
   justify-content: space-between;
   gap: 15px;
   color: var(--acid);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -1263,7 +1277,7 @@ a:focus-visible {
 
 .meme-card-bottom {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .meme-card-bottom span:last-child {
@@ -1323,19 +1337,20 @@ a:focus-visible {
 
 .meme-selectors {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .meme-selector {
   padding: 0;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .player-footer {
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid var(--line-soft);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .player-footer a {
@@ -1344,6 +1359,313 @@ a:focus-visible {
 
 .player-footer a:hover {
   color: var(--acid);
+}
+
+/* ------------------------------------------------- meme wall + clips --- */
+
+.meme-wall,
+.clip-rail {
+  grid-column: 1 / -1;
+  margin-top: clamp(52px, 7vw, 96px);
+  padding-top: clamp(30px, 4vw, 48px);
+  border-top: 1px solid var(--line);
+}
+
+.wall-head {
+  display: grid;
+  grid-template-columns: minmax(0, 0.66fr) minmax(0, 1.34fr);
+  align-items: end;
+  gap: clamp(20px, 4vw, 56px);
+  margin-bottom: clamp(22px, 3vw, 34px);
+}
+
+.wall-head .eyebrow {
+  margin: 0;
+}
+
+.wall-head > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.62;
+}
+
+.wall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: 12px;
+}
+
+.wall-tile {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+
+.wall-tile:hover,
+.wall-tile.is-active {
+  border-color: var(--blue);
+  background: var(--surface-raised);
+  transform: translateY(-2px);
+}
+
+.wall-tile.is-active {
+  box-shadow: inset 0 0 0 1px rgba(155, 206, 255, 0.4);
+}
+
+.wall-tile-hit {
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.wall-tile-frame {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  place-items: center;
+  background:
+    repeating-linear-gradient(135deg, rgba(155, 206, 255, 0.05) 0 7px, transparent 7px 14px),
+    var(--surface-warm);
+}
+
+.wall-tile-frame.is-textual {
+  background: var(--surface-warm);
+}
+
+.wall-tile-frame.is-textual::after {
+  content: "GIF OFF · MEDIA";
+  color: var(--dim);
+  font: 13px/1 var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.wall-tile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wall-tile-frame-video {
+  position: absolute;
+  inset: 0;
+  background: #000;
+}
+
+.wall-tile-kind {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  padding: 3px 6px;
+  background: rgba(9, 11, 9, 0.85);
+  color: var(--blue);
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.wall-tile-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 10px 0;
+  color: var(--dim);
+  font: 13px/1 var(--mono);
+  letter-spacing: 0.06em;
+}
+
+.wall-tile-meta b {
+  color: var(--acid);
+}
+
+.wall-tile-label {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wall-tile-date {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wall-tile-quote {
+  display: block;
+  padding: 5px 10px 10px;
+  color: var(--ink);
+  font: 700 15px/1.15 var(--display);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.wall-tile-source,
+.wall-tile-video {
+  margin: 0 10px 10px;
+  color: var(--dim);
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wall-tile-source:hover {
+  color: var(--acid);
+}
+
+.wall-tile-video {
+  align-self: flex-start;
+  margin-top: -4px;
+  padding: 5px 8px;
+  border: 1px solid rgba(155, 206, 255, 0.5);
+  color: var(--blue);
+  background: transparent;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.wall-tile-video:hover {
+  background: var(--blue);
+  color: var(--bg);
+}
+
+.clip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
+  gap: 14px;
+}
+
+.clip-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.clip-card.is-playing {
+  border-color: var(--blue);
+}
+
+.clip-hit {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  background: #05060a;
+  cursor: pointer;
+  text-align: left;
+}
+
+.clip-hit[hidden] {
+  display: none;
+}
+
+.clip-poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.clip-card.is-textual .clip-poster {
+  display: none;
+}
+
+.clip-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+
+.clip-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgba(216, 241, 62, 0.8);
+  border-radius: 50%;
+  color: var(--acid);
+  background: rgba(9, 11, 9, 0.78);
+  font-size: 15px;
+  transform: translate(-50%, -50%);
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.clip-hit:hover .clip-play {
+  background: var(--acid);
+  color: var(--bg);
+}
+
+.clip-meta {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: grid;
+  gap: 4px;
+  padding: 26px 12px 11px;
+  background: linear-gradient(transparent, rgba(5, 6, 10, 0.95));
+}
+
+.clip-meta b {
+  color: var(--acid);
+  font: 13px/1.3 var(--mono);
+  letter-spacing: 0.08em;
+}
+
+.clip-meta span {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.clip-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  color: var(--dim);
+  font: 13px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clip-foot a {
+  color: var(--muted);
+}
+
+.clip-foot a:hover {
+  color: var(--acid);
+}
+
+@media (max-width: 700px) {
+  .player-stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wall-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .wall-grid {
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  }
 }
 
 .source-section {
@@ -1369,7 +1691,7 @@ a:focus-visible {
 
 .source-filter {
   position: relative;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .source-filter.is-active::after {
@@ -1411,7 +1733,7 @@ a:focus-visible {
   display: flex;
   justify-content: space-between;
   color: var(--acid);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1em;
 }
 
@@ -1432,21 +1754,21 @@ a:focus-visible {
 .source-card > span:not(.source-card-top) {
   max-width: 300px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.55;
 }
 
 .source-card small {
   margin-top: 21px;
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.05em;
 }
 
 .source-cta {
   padding-top: 17px;
   color: var(--dim);
-  font: 11px/1 var(--mono);
+  font: 13px/1 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -1490,7 +1812,7 @@ a:focus-visible {
 .site-footer {
   min-height: 84px;
   color: var(--dim);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1503,7 +1825,7 @@ a:focus-visible {
 
 .footer-logo {
   color: var(--acid);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .site-footer a:hover {
@@ -1601,7 +1923,7 @@ a:focus-visible {
   .mobile-nav a {
     justify-content: center;
     padding: 18px 5px;
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .hero {
@@ -1728,11 +2050,11 @@ a:focus-visible {
   }
 
   .brand-name {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .brand-name small {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .hero-copy {
@@ -1763,7 +2085,7 @@ a:focus-visible {
   }
 
   .hero-numbers span {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .hero-chart-wrap {
@@ -1847,7 +2169,7 @@ a:focus-visible {
   .event-rail > span {
     width: 27px;
     height: 27px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .event-rail i {
@@ -1858,7 +2180,7 @@ a:focus-visible {
     align-items: start;
     flex-direction: column;
     gap: 5px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .event-content h3 {
