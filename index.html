@@ -25,11 +25,15 @@
           <a href="#chart-explorer">Chart <span>01</span></a>
           <a href="#meme-tape">Meme tape <span>02</span></a>
           <a href="#source-room">Source room <span>03</span></a>
+          <a href="#support">Support <span>04</span></a>
         </nav>
         <div class="header-state">
           <span class="state-dot"></span>
           <span>ARCHIVE / LIVE</span>
         </div>
+        <a class="support-button" data-support-link href="#support" title="Dieses Archiv unterstützen — oder den Button selbst einrichten">
+          <span aria-hidden="true">♥</span> <span data-support-label>Support einrichten</span>
+        </a>
         <button class="menu-toggle" type="button" aria-label="Navigation öffnen" aria-expanded="false">
           <span></span><span></span>
         </button>
@@ -38,6 +42,7 @@
         <a href="#chart-explorer">Chart <span>01</span></a>
         <a href="#meme-tape">Meme tape <span>02</span></a>
         <a href="#source-room">Source room <span>03</span></a>
+        <a href="#support">Support <span>04</span></a>
       </div>
     </header>
 
@@ -108,6 +113,38 @@
             <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="GIFs und Videos von Giphy und YouTube laden — aus schaltet die Einbettungen ab, der Player bleibt textlich">
               <span class="media-toggle-signal" aria-hidden="true">◉</span> MEDIA <b id="media-toggle-state">ON</b>
             </button>
+          </div>
+
+          <!-- EINKLAPPBARER CHART-LAYER: Earnings, Offerings, RC-Tweets.
+               Marker sitzen direkt auf der Kurslinie, Details hier im Panel —
+               der Chart selbst bleibt frei. -->
+          <div class="chart-layers" id="chart-layers">
+            <div class="layers-head">
+              <button type="button" class="layers-toggle" id="layers-toggle" aria-expanded="true" aria-controls="layer-panel" title="Layer-Panel ein-/ausklappen">
+                <span id="layers-toggle-signal" aria-hidden="true">▾</span> CHART LAYERS
+              </button>
+              <span class="layers-legend"><i class="legend-diamond"></i> EARNINGS / OFFERINGS <i class="legend-x">𝕏</i> RC-TWEETS</span>
+              <span class="layers-count" id="layer-count">— EVENTS</span>
+              <span class="layers-shortcuts">
+                <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ TENDIEMAN</button>
+                <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 KATZENMEMES</button>
+                <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 NOT A CAT</button>
+              </span>
+            </div>
+            <div class="layer-panel" id="layer-panel">
+              <div class="layer-controls" role="group" aria-label="Chart-Layer filtern">
+                <button type="button" class="layer-toggle is-on" id="corp-toggle" aria-pressed="true">◆ EVENTS <b id="corp-toggle-state">ON</b></button>
+                <div class="layer-filters" role="group" aria-label="Ereignistyp">
+                  <button type="button" class="layer-filter is-active" data-corp-filter="all">ALLE</button>
+                  <button type="button" class="layer-filter" data-corp-filter="earnings">EARNINGS</button>
+                  <button type="button" class="layer-filter" data-corp-filter="offering">OFFERINGS</button>
+                  <button type="button" class="layer-filter" data-corp-filter="other">SONSTIGE</button>
+                </div>
+                <button type="button" class="layer-toggle is-on" id="tweet-toggle" aria-pressed="true">𝕏 RC TWEETS <b id="tweet-toggle-state">ON</b></button>
+              </div>
+              <div class="layer-list" id="layer-list" aria-label="Ereignisse und RC-Tweets in chronologischer Reihenfolge"></div>
+              <div class="layer-detail" id="layer-detail" aria-live="polite"></div>
+            </div>
           </div>
 
           <div class="terminal-chart-area">
@@ -421,6 +458,12 @@
           <h2 id="meme-title">The meme tape<br /><em>is not decoration.</em></h2>
           <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Die Memes hängen jetzt direkt am Chart: Klick im Chart auf einen <b>MEME</b>-Marker (oder hier auf eine Nummer) spielt die Karte am Kurs dieses Tages ab — mit echtem GIF oder Video, ohne Autoplay-Audio. Die Einblendung landet im <b>Dock unter dem Chart</b>, damit die Kursfläche nie verdeckt wird.</p>
           <div class="meme-note"><span class="state-dot"></span><span>real GIF + video / plays in the dock / sound off</span></div>
+          <div class="meme-shortcuts">
+            <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ Tendieman abspielen</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 Katzenmemes</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 I am not a cat</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-return">🐱 The cat returns</button>
+          </div>
         </div>
         <div class="meme-player" aria-label="Meme tape player">
           <div class="player-topline"><span>MEME TAPE / 02</span><span id="meme-counter">01 — 03</span></div>
@@ -464,7 +507,7 @@
         <div class="clip-rail" id="clip-rail" aria-label="Video-Einbettungen">
           <div class="wall-head">
             <p class="eyebrow"><span class="eyebrow-index">02c</span> The clips</p>
-            <p>Vier Originalaufnahmen, die im Meme-Tape nur zitiert werden: die Anhörung im Kongress, Roaring Kittys Livestream 2024 und die beiden Kanäle davor. Posterbild laden, Player startet erst auf Klick.</p>
+            <p>Die Originalaufnahmen, die im Meme-Tape nur zitiert werden: der Tendieman-Shanty, die Anhörung im Kongress, Roaring Kittys „Cheers Everyone!“ und sein Livestream 2024. Posterbild laden, Player startet erst auf Klick.</p>
           </div>
           <div class="clip-grid" id="clip-grid"></div>
         </div>
@@ -525,6 +568,22 @@
         <div class="source-cta"><span>Want to add a source?</span><a href="mailto:archive@example.com?subject=GameStop%20Event%20Tape%20source">send a link <span>↗</span></a></div>
       </section>
 
+      <section class="support-section section-shell" id="support" aria-labelledby="support-title">
+        <div class="support-copy">
+          <p class="eyebrow"><span class="eyebrow-index">04</span> Support / keep the archive open</p>
+          <h2 id="support-title">Support the<br /><em>event tape.</em></h2>
+          <p>Das Archiv ist ein Freizeitprojekt ohne Werbung und ohne Paywall. Wer die Kuratierung — Chart-Layer, Meme-Quellen, Earnings- und Tweet-Recherche — unterstützen will, kann das über einen Support-Button tun. Aktuell ist <b>Ko-fi</b> dafür die pragmatischste Wahl: kostenlos starten, 0&nbsp;% Plattformgebühr auf Tips, Auszahlung über PayPal/Stripe. <b>Patreon</b> lohnt sich erst, wenn du Mitgliedschafts-Stufen (Tiers) mit exklusiven Inhalten anbieten willst; <b>Buy Me a Coffee</b> ist die simpelste Tip-Jar-Alternative.</p>
+          <a class="button button-primary support-cta" data-support-link href="#support"><span aria-hidden="true">♥</span> <span data-support-label>Support einrichten</span> <span aria-hidden="true">↗</span></a>
+          <p class="support-note" id="support-setup-note">Noch nicht eingerichtet — Anleitung rechts, Code-Stelle: <code>SUPPORT.url</code> in <code>app.js</code>.</p>
+        </div>
+        <ol class="support-steps">
+          <li><b>1 · Konto anlegen</b><span>Auf <a href="https://ko-fi.com" target="_blank" rel="noreferrer">ko-fi.com</a> (oder <a href="https://www.patreon.com" target="_blank" rel="noreferrer">patreon.com</a>) kostenlos registrieren, Seitenname wählen — z.&nbsp;B. <code>ko-fi.com/DEINNAME</code> — und PayPal oder Stripe für Auszahlungen verbinden.</span></li>
+          <li><b>2 · Seite füllen</b><span>Kurzer Text, was das Archiv ist, optional ein Ziel („Serverkosten / Recherchezeit“). Bei Ko-fi reicht die Tip-Funktion; bei Patreon legst du 1–3 Membership-Tiers an.</span></li>
+          <li><b>3 · URL eintragen</b><span>In <code>app.js</code> ganz oben bei <code>SUPPORT</code> die fertige Adresse eintragen: <code>url: 'https://ko-fi.com/DEINNAME'</code>. Speichern, deployen — fertig.</span></li>
+          <li><b>4 · Fertig</b><span>Header-, Support- und Footer-Button verlinken ab dann automatisch extern auf deine Seite. Solange die URL leer ist, führt der Button nur zu dieser Erklärung — es geht also nie ein Link ins Leere.</span></li>
+        </ol>
+      </section>
+
       <section class="closing-section section-shell" aria-label="Abschluss">
         <div class="closing-mark">GME<span>↗</span></div>
         <p>THE RECORD<br /><em>IS STILL OPEN.</em></p>
@@ -534,7 +593,7 @@
 
     <footer class="site-footer section-shell">
       <div><span class="footer-logo">GS / EVENT TAPE</span><span>draft 01 / source-linked prototype</span></div>
-      <div><span>built for the long view</span><a href="#method">methodology ↗</a></div>
+      <div><span>built for the long view</span><a href="#method">methodology ↗</a><a data-support-link href="#support">♥ <span data-support-label>Support einrichten</span> ↗</a></div>
     </footer>
 
     <script src="market-data.js" defer></script>
