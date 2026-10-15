@@ -22,15 +22,11 @@
           <span class="brand-name">EVENT TAPE <small>/ 01</small></span>
         </a>
         <nav class="primary-nav" aria-label="Hauptnavigation">
-          <a href="#chart-explorer">Chart <span>01</span></a>
-          <a href="#meme-tape">Meme tape <span>02</span></a>
-          <a href="#source-room">Source room <span>03</span></a>
-          <a href="#support">Support <span>04</span></a>
+          <a href="#chart-explorer">Chart</a>
+          <a href="#meme-tape">Meme tape</a>
+          <a href="#source-room">Sources</a>
+          <a href="#support">Support</a>
         </nav>
-        <div class="header-state">
-          <span class="state-dot"></span>
-          <span>ARCHIVE / LIVE</span>
-        </div>
         <a class="support-button" data-support-link href="#support" title="Dieses Archiv unterstützen — oder den Button selbst einrichten">
           <span aria-hidden="true">♥</span> <span data-support-label>Support einrichten</span>
         </a>
@@ -39,10 +35,10 @@
         </button>
       </div>
       <div class="mobile-nav" aria-hidden="true">
-        <a href="#chart-explorer">Chart <span>01</span></a>
-        <a href="#meme-tape">Meme tape <span>02</span></a>
-        <a href="#source-room">Source room <span>03</span></a>
-        <a href="#support">Support <span>04</span></a>
+        <a href="#chart-explorer">Chart</a>
+        <a href="#meme-tape">Meme tape</a>
+        <a href="#source-room">Sources</a>
+        <a href="#support">Support</a>
       </div>
     </header>
 
@@ -71,10 +67,12 @@
 
         <div class="chart-terminal noise-surface" id="chart-explorer">
           <div class="terminal-topbar">
-            <div class="terminal-identity"><span class="terminal-logo">GME</span><span>EVENT TAPE / MARKET VIEW</span><small>OHLCV · 1D DETAIL · source-ready draft</small></div>
+            <div class="terminal-identity"><span class="terminal-logo">GME</span><span>EVENT TAPE</span></div>
             <div class="terminal-controls">
-              <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Zum älteren Ereignis">← older</button>
-              <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Zum neueren Ereignis">newer →</button>
+              <div class="step-controls" role="group" aria-label="Zwischen Ereignissen springen">
+                <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Zum älteren Ereignis" title="Zum älteren Ereignis">←</button>
+                <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Zum neueren Ereignis" title="Zum neueren Ereignis">→</button>
+              </div>
               <div class="zoom-controls" role="group" aria-label="Chart-Zoom">
                 <span>ZOOM</span>
                 <button type="button" class="zoom-button" id="zoom-out" aria-label="Herauszoomen">−</button>
@@ -82,37 +80,40 @@
                 <button type="button" class="zoom-button zoom-fit" id="zoom-fit" aria-label="Gesamte Historie anzeigen">FIT</button>
               </div>
               <div class="resolution-switch" role="group" aria-label="Chartauflösung">
-                <span>RES</span>
                 <button type="button" class="resolution-button is-active" data-resolution="day">1D</button>
                 <button type="button" class="resolution-button" data-resolution="week">1W</button>
                 <button type="button" class="resolution-button" data-resolution="month">1M</button>
               </div>
-              <button type="button" class="mode-toggle price-mode-toggle" id="price-mode-toggle" aria-pressed="true" title="Split-bereinigte Kurse anzeigen — der 4:1-Split vom Juli 2022 wird herausgerechnet">
-                <span class="price-mode-signal">÷4</span>
-                <span class="mode-word" id="price-mode-word">SPLIT-ADJ</span>
-                <b id="price-mode-hint">↔ AS TRADED</b>
+              <button type="button" class="controls-toggle" id="controls-toggle" aria-expanded="false" aria-controls="view-controls" title="Weitere Anzeige-Optionen ein-/ausklappen">
+                <span class="controls-toggle-signal" aria-hidden="true">▾</span> ANZEIGE
               </button>
-              <button type="button" class="mode-toggle meme-toggle" id="meme-toggle" aria-pressed="true" title="Meme-Marker im Chart anzeigen und direkt abspielen">
-                <span class="meme-signal">▶</span>
-                <span class="mode-word">MEMES</span>
-                <b id="meme-toggle-state">ON</b>
-              </button>
-              <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
-              <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
             </div>
           </div>
-          <div class="terminal-subbar">
-            <span class="subbar-live"><i class="terminal-live-dot"></i> CHART / GME / 2019 — 2026</span>
-            <span class="subbar-mode" id="chart-mode-label">LINE VIEW</span>
-            <span class="subbar-res" id="resolution-label">1D / DAILY DETAIL</span>
-            <span class="subbar-price" id="price-mode-label">SPLIT-ADJUSTED (÷4)</span>
-            <span class="subbar-window" id="chart-window-label">rolling window</span>
-            <span class="subbar-hint">DRAG · ⌃WHEEL ZOOM · CLICK = PRICE</span>
-            <span class="subbar-position" id="terminal-position">11 / 11</span>
-            <span class="subbar-source" id="chart-data-note">EOD / SPLIT-ADJUSTED</span>
+
+          <!-- Zweite, ruhige Ebene: alle Anzeige-Schalter sind hier
+               zusammengefasst und standardmäßig eingeklappt. -->
+          <div class="view-controls" id="view-controls" hidden>
+            <button type="button" class="mode-toggle price-mode-toggle" id="price-mode-toggle" aria-pressed="true" title="Split-bereinigte Kurse anzeigen — der 4:1-Split vom Juli 2022 wird herausgerechnet">
+              <span class="price-mode-signal">÷4</span>
+              <span class="mode-word" id="price-mode-word">SPLIT-ADJ</span>
+              <b id="price-mode-hint">↔ AS TRADED</b>
+            </button>
+            <button type="button" class="mode-toggle meme-toggle" id="meme-toggle" aria-pressed="true" title="Meme-Marker im Chart anzeigen und direkt abspielen">
+              <span class="meme-signal">▶</span>
+              <span class="mode-word">MEMES</span>
+              <b id="meme-toggle-state">ON</b>
+            </button>
+            <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
+            <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
             <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="GIFs und Videos von Giphy und YouTube laden — aus schaltet die Einbettungen ab, der Player bleibt textlich">
               <span class="media-toggle-signal" aria-hidden="true">◉</span> MEDIA <b id="media-toggle-state">ON</b>
             </button>
+          </div>
+
+          <div class="terminal-subbar">
+            <span class="subbar-live"><i class="terminal-live-dot"></i> GME / 2019 — 2026</span>
+            <span class="subbar-window" id="chart-window-label">rolling window</span>
+            <span class="subbar-source" id="chart-data-note">EOD</span>
           </div>
 
           <!-- EINKLAPPBARER CHART-LAYER: Earnings, Offerings, RC-Tweets.
@@ -123,13 +124,7 @@
               <button type="button" class="layers-toggle" id="layers-toggle" aria-expanded="true" aria-controls="layer-panel" title="Layer-Panel ein-/ausklappen">
                 <span id="layers-toggle-signal" aria-hidden="true">▾</span> CHART LAYERS
               </button>
-              <span class="layers-legend"><i class="legend-diamond"></i> EARNINGS / OFFERINGS <i class="legend-x">𝕏</i> RC-TWEETS</span>
               <span class="layers-count" id="layer-count">— EVENTS</span>
-              <span class="layers-shortcuts">
-                <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ TENDIEMAN</button>
-                <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 KATZENMEMES</button>
-                <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 NOT A CAT</button>
-              </span>
             </div>
             <div class="layer-panel" id="layer-panel">
               <div class="layer-controls" role="group" aria-label="Chart-Layer filtern">
@@ -141,6 +136,11 @@
                   <button type="button" class="layer-filter" data-corp-filter="other">SONSTIGE</button>
                 </div>
                 <button type="button" class="layer-toggle is-on" id="tweet-toggle" aria-pressed="true">𝕏 RC TWEETS <b id="tweet-toggle-state">ON</b></button>
+                <div class="layers-shortcuts" role="group" aria-label="Memes direkt abspielen">
+                  <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ TENDIEMAN</button>
+                  <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 KATZENMEMES</button>
+                  <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 NOT A CAT</button>
+                </div>
               </div>
               <div class="layer-list" id="layer-list" aria-label="Ereignisse und RC-Tweets in chronologischer Reihenfolge"></div>
               <div class="layer-detail" id="layer-detail" aria-live="polite"></div>
@@ -169,8 +169,7 @@
               <span class="dock-tick dock-tick-meme" id="dock-tick-meme" hidden></span>
             </div>
             <div class="dock-head">
-              <span class="dock-title">DOCK / THREE SLOTS · chart stays clear</span>
-              <span class="dock-note" id="dock-note">Ereignis · Meme · Cursor</span>
+              <span class="dock-title">DOCK</span>
               <button type="button" class="dock-toggle" id="dock-toggle" aria-expanded="true" aria-controls="terminal-dock" title="Dock einklappen — der Chart wächst über die volle Höhe">
                 <span class="dock-toggle-signal" aria-hidden="true">▾</span><span id="dock-toggle-label">HIDE DOCK</span>
               </button>
