@@ -794,19 +794,28 @@ function formatAxisPrice(value) {
 
 /* ------------------------------------------------------------ chart state - */
 
+// ppb = Pixel pro Balken. Das Startfenster ist bewusst eng: beim Laden sind
+// höchstens ~ein Monat Tape sichtbar (ca. 21 Handelstage), erst FIT oder
+// Herauszoomen öffnet die ganze Historie.
 const CHART_LIMITS = {
-  day: { min: 0.45, max: 72, base: 3.4 },
-  week: { min: 1.6, max: 82, base: 7.6 },
-  month: { min: 3.2, max: 96, base: 17 }
+  day: { min: 0.45, max: 260, window: 21 },
+  week: { min: 1.6, max: 360, window: 5 },
+  month: { min: 3.2, max: 520, window: 2 }
 };
 
 const PLOT = { top: 26, bottom: 46, volume: 54, gap: 12 };
 const OVERSCAN = 60;
 const PLAYHEAD_RATIO = 0.88;
 
+function windowPpb(resolution) {
+  const limits = CHART_LIMITS[resolution] ?? CHART_LIMITS.day;
+  const { width } = terminalMetrics();
+  return clamp(width / limits.window, limits.min, limits.max);
+}
+
 const chartState = {
   resolution: 'day',
-  ppb: CHART_LIMITS.day.base,
+  ppb: CHART_LIMITS.day.window > 0 ? 1200 / CHART_LIMITS.day.window : 3.4,
   mode: 'line',
   activeIndex: storyEvents.length - 1,
   calloutHidden: false
@@ -1410,58 +1419,44 @@ function paintTerminal({ force = false } = {}) {
     }
   }
 
+  // Klicks laufen über Delegation im Viewport (verhindert Doppel-Auslösung,
+  // siehe bindChartTerminal) — hier bleiben nur die Tastatur-Bindings.
   canvas.querySelectorAll('.chart-point-hit, .chart-point, .chart-point-halo').forEach((target) => {
-    const activate = () => {
-      const index = Number(target.dataset.index);
-      if (!Number.isNaN(index)) focusEvent(index);
-    };
-    target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
       if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
         keyboardEvent.preventDefault();
-        activate();
+        const index = Number(target.dataset.index);
+        if (!Number.isNaN(index)) focusEvent(index);
       }
     });
   });
 
   canvas.querySelectorAll('.chart-corp-hit').forEach((target) => {
-    const activate = () => {
-      const index = Number(target.dataset.corpIndex);
-      if (!Number.isNaN(index)) openLayerItem('corp', index);
-    };
-    target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
       if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
         keyboardEvent.preventDefault();
-        activate();
+        const index = Number(target.dataset.corpIndex);
+        if (!Number.isNaN(index)) openLayerItem('corp', index);
       }
     });
   });
 
   canvas.querySelectorAll('.chart-tweet-hit').forEach((target) => {
-    const activate = () => {
-      const index = Number(target.dataset.tweetIndex);
-      if (!Number.isNaN(index)) openLayerItem('tweet', index);
-    };
-    target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
       if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
         keyboardEvent.preventDefault();
-        activate();
+        const index = Number(target.dataset.tweetIndex);
+        if (!Number.isNaN(index)) openLayerItem('tweet', index);
       }
     });
   });
 
   canvas.querySelectorAll('.chart-meme-hit').forEach((target) => {
-    const activate = () => {
-      const index = Number(target.dataset.memeIndex);
-      if (!Number.isNaN(index)) openChartMeme(index);
-    };
-    target.addEventListener('click', activate);
     target.addEventListener('keydown', (keyboardEvent) => {
       if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
         keyboardEvent.preventDefault();
-        activate();
+        const index = Number(target.dataset.memeIndex);
+        if (!Number.isNaN(index)) openChartMeme(index);
       }
     });
   });
@@ -1700,10 +1695,25 @@ function fitHistory() {
   paintCallout();
 }
 
+// Start-/Standardfenster: höchstens ca. ein Monat Tape sichtbar.
+function applyDefaultZoom({ anchor = 'end' } = {}) {
+  const { viewport } = terminalElements();
+  if (!viewport) return;
+  terminalPaintKey = '';
+  chartState.ppb = windowPpb(chartState.resolution);
+  paintTerminal();
+  if (anchor === 'end') {
+    viewport.scrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+  }
+  paintTerminal();
+  syncActiveFromScroll();
+  paintCallout();
+}
+
 function setResolution(resolution) {
   if (!['day', 'week', 'month'].includes(resolution) || resolution === chartState.resolution) return;
   chartState.resolution = resolution;
-  chartState.ppb = CHART_LIMITS[resolution].base;
+  chartState.ppb = windowPpb(resolution);
   terminalPaintKey = '';
   storyPaintKey = '';
   // Bar-Indizes ändern ihre Bedeutung — Inspektor zurücksetzen, Meme neu verankern
@@ -2251,6 +2261,15 @@ function openLayerItem(kind, index, { reveal = true } = {}) {
   }
   terminalPaintKey = '';
   paintTerminal();
+  // Die Detailkarte deutlich nach vorne holen: kurz aufleuchten und in den
+  // sichtbaren Bereich des Panels scrollen, damit der Klick eine Antwort gibt.
+  const detail = document.querySelector('#layer-detail');
+  if (detail) {
+    detail.classList.remove('is-flash');
+    void detail.offsetWidth;
+    detail.classList.add('is-flash');
+    detail.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+  }
 }
 
 function syncLayerControls() {
@@ -2440,15 +2459,18 @@ function bindChartTerminal() {
   let dragStart = null;
   let pinchStart = null;
   let moved = 0;
+  let capturedId = null;
 
+  // WICHTIG: kein setPointerCapture schon bei pointerdown — in Chrome/Safari
+  // würde der folgende Klick auf Marker (Memes, Earnings, Events) sonst auf
+  // den Viewport umgeleitet und die Marker-Klicks würden nie auslösen. Die
+  // Capture geschieht erst, sobald der Zeiger wirklich zieht.
   viewport.addEventListener('pointerdown', (event) => {
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    viewport.setPointerCapture?.(event.pointerId);
     if (pointers.size === 1) {
-      dragStart = { x: event.clientX, scroll: viewport.scrollLeft };
+      dragStart = { x: event.clientX, scroll: viewport.scrollLeft, pointerId: event.pointerId };
       moved = 0;
       viewport.dataset.dragDistance = '0';
-      viewport.classList.add('is-dragging');
     } else if (pointers.size === 2) {
       const [first, second] = [...pointers.values()];
       pinchStart = {
@@ -2474,11 +2496,22 @@ function bindChartTerminal() {
     if (!dragStart) return;
     const delta = event.clientX - dragStart.x;
     moved = Math.max(moved, Math.abs(delta));
-    viewport.scrollLeft = dragStart.scroll - delta;
+    if (moved > 6) {
+      // erst jetzt greift die Capture — reine Klicks bleiben unberührt
+      viewport.classList.add('is-dragging');
+      if (capturedId === null) {
+        try {
+          viewport.setPointerCapture(event.pointerId);
+          capturedId = event.pointerId;
+        } catch { /* Zeiger schon weg — egal */ }
+      }
+    }
+    if (moved > 6) viewport.scrollLeft = dragStart.scroll - delta;
   });
 
   const endPointer = (event) => {
     pointers.delete(event.pointerId);
+    if (capturedId === event.pointerId) capturedId = null;
     if (pointers.size < 2) pinchStart = null;
     if (pointers.size === 0) {
       dragStart = null;
@@ -2492,9 +2525,46 @@ function bindChartTerminal() {
     if (event.buttons === 0) endPointer(event);
   });
 
+  // Marker-Aktivierung über Delegation: egal, ob der Klick sein Ziel noch
+  // kennt (normale Klicks) oder umgeleitet wurde (nach Drag-Capture) —
+  // wir finden den Marker unter dem Zeiger und öffnen seine Karte.
+  const MARKER_SELECTOR = '.chart-point-hit, .chart-point, .chart-point-halo, .chart-meme-hit, .chart-corp-hit, .chart-tweet-hit';
+
+  const markerFromEvent = (event) => {
+    const direct = event.target.closest?.(MARKER_SELECTOR);
+    if (direct && viewport.contains(direct)) return direct;
+    if (typeof document.elementFromPoint === 'function') {
+      const below = document.elementFromPoint(event.clientX, event.clientY)?.closest?.(MARKER_SELECTOR);
+      if (below && viewport.contains(below)) return below;
+    }
+    return null;
+  };
+
+  const activateMarker = (marker) => {
+    if (!marker) return false;
+    if (marker.classList.contains('chart-meme-hit')) {
+      const index = Number(marker.dataset.memeIndex);
+      if (!Number.isNaN(index)) openChartMeme(index);
+      return true;
+    }
+    if (marker.classList.contains('chart-corp-hit')) {
+      const index = Number(marker.dataset.corpIndex);
+      if (!Number.isNaN(index)) openLayerItem('corp', index);
+      return true;
+    }
+    if (marker.classList.contains('chart-tweet-hit')) {
+      const index = Number(marker.dataset.tweetIndex);
+      if (!Number.isNaN(index)) openLayerItem('tweet', index);
+      return true;
+    }
+    const index = Number(marker.dataset.index);
+    if (!Number.isNaN(index)) focusEvent(index);
+    return true;
+  };
+
   // suppress the click that follows a pan gesture
   viewport.addEventListener('click', (event) => {
-    if (Number(viewport.dataset.dragDistance) > 6 && event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-corp-hit, .chart-tweet-hit')) {
+    if (Number(viewport.dataset.dragDistance) > 6 && markerFromEvent(event)) {
       event.stopPropagation();
       event.preventDefault();
       viewport.dataset.dragDistance = '0';
@@ -2517,10 +2587,16 @@ function bindChartTerminal() {
     focusEvent(nearest);
   });
 
-  // Klick an eine beliebige Stelle im Chart → Kurs dieses Tages zeigen
+  // Klick: zuerst Marker (Meme / Earnings / Tweet / Event) öffnen, sonst den
+  // Kurs dieses Tages in den Inspector legen.
   viewport.addEventListener('click', (event) => {
-    if (Number(viewport.dataset.dragDistance) > 6) return;
-    if (event.target.closest('.chart-point, .chart-point-hit, .chart-point-halo, .chart-meme-hit, .chart-meme-chip, .chart-corp-hit, .chart-tweet-hit')) return;
+    if (Number(viewport.dataset.dragDistance) > 6) {
+      viewport.dataset.dragDistance = '0';
+      return;
+    }
+    const marker = markerFromEvent(event);
+    if (activateMarker(marker)) return;
+    if (event.target.closest('.chart-meme-chip')) return;
     if (!terminalScale) return;
     const rect = viewport.getBoundingClientRect();
     const localX = event.clientX - rect.left;
@@ -2623,6 +2699,26 @@ function bindChartTerminal() {
     paintTerminal();
     paintStoryChart();
   });
+
+  // ANZEIGE-Schublade: alle sekundären Anzeige-Schalter sitzen hinter einem
+  // Knopf, damit die Topbar ruhig bleibt.
+  const controlsToggle = document.querySelector('#controls-toggle');
+  const viewControls = document.querySelector('#view-controls');
+  if (controlsToggle && viewControls) {
+    controlsToggle.addEventListener('click', () => {
+      const open = viewControls.hidden;
+      viewControls.hidden = !open;
+      controlsToggle.setAttribute('aria-expanded', String(open));
+      controlsToggle.classList.toggle('is-open', open);
+      const signal = controlsToggle.querySelector('.controls-toggle-signal');
+      if (signal) signal.textContent = open ? '▴' : '▾';
+      window.setTimeout(() => {
+        terminalPaintKey = '';
+        paintTerminal();
+        paintCallout();
+      }, 60);
+    });
+  }
 
   const modeToggle = document.querySelector('#chart-mode-toggle');
   modeToggle?.addEventListener('click', () => {
@@ -3184,13 +3280,17 @@ function initialise() {
 
   const { viewport } = terminalElements();
   raf(() => {
-    // start with the whole tape in frame, newest bar on the playhead
-    fitHistory();
+    // Startansicht: rechte Kante = neuester Punkt, aber stark hereingezoomt —
+    // höchstens ca. ein Monat Tape im Bild. FIT öffnet später die Historie.
+    applyDefaultZoom();
     applyActive(storyEvents.length - 1);
     scrollToEvent(storyEvents.length - 1);
     paintTerminal();
     paintStoryChart({ force: true });
     paintCallout();
+    // Layer-Panel startet eingeklappt — der Chart bekommt die volle Höhe,
+    // Klicks auf Marker oder CHART LAYERS öffnen es wieder.
+    setLayersCollapsed(true);
   });
 }
 

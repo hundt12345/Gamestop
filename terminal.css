@@ -83,8 +83,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25px;
-  min-height: 59px;
+  gap: 16px;
+  min-height: 52px;
   padding: 0 21px;
   border-bottom: 1px solid var(--line);
 }
@@ -146,9 +146,67 @@
   transition: color 160ms ease;
 }
 
+/* kompakte Pfeil-Navigation (älteres / neueres Ereignis) */
+.step-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.terminal-step {
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: background 140ms ease, color 140ms ease;
+}
+
 .terminal-step:hover,
 .terminal-step:focus-visible {
+  background: var(--acid);
+  color: var(--bg);
+}
+
+/* ANZEIGE-Schublade: sekundäre Schalter hinter einem Knopf */
+.controls-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font: 13px/1 var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.controls-toggle:hover,
+.controls-toggle.is-open {
+  border-color: var(--acid);
   color: var(--acid);
+}
+
+.view-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 13px;
+  padding: 11px 21px;
+  border-bottom: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.014);
+}
+
+.view-controls[hidden] {
+  display: none;
 }
 
 .analysis-toggle {
@@ -1004,7 +1062,8 @@ body.dock-collapsed .dock-toggle {
   }
 
   .terminal-range-row,
-  .terminal-topbar {
+  .terminal-topbar,
+  .view-controls {
     padding-inline: 13px;
   }
 
@@ -1660,7 +1719,14 @@ body.dock-collapsed .dock-toggle {
 }
 .legend-x { color: var(--ink); font-style: normal; font-weight: 700; }
 .layers-count { color: var(--dim); }
-.layers-shortcuts { display: inline-flex; gap: 7px; margin-left: auto; flex-wrap: wrap; }
+
+/* Direktsprünge liegen im Panel — die Kopfzeile bleibt einzeilig und ruhig */
+.layers-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 3px;
+}
 
 .layer-shortcut {
   padding: 6px 9px;
@@ -1679,7 +1745,7 @@ body.dock-collapsed .dock-toggle {
   display: grid;
   grid-template-columns: 168px minmax(0, 1fr) minmax(280px, 0.9fr);
   gap: 0;
-  max-height: 148px;
+  max-height: 158px;
   border-top: 1px solid var(--line-soft);
 }
 .layer-panel[hidden] { display: none; }
@@ -1688,6 +1754,7 @@ body.dock-collapsed .dock-toggle {
   display: flex; flex-direction: column; gap: 7px;
   padding: 10px 12px;
   border-right: 1px solid var(--line-soft);
+  overflow-y: auto;
 }
 .layer-toggle {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -1740,6 +1807,16 @@ body.dock-collapsed .dock-toggle {
   border-left: 1px solid var(--line-soft);
   overflow-y: auto;
 }
+
+/* kurzes Aufleuchten, wenn ein Marker geklickt wurde */
+.layer-detail.is-flash {
+  animation: layer-detail-flash 850ms ease;
+}
+
+@keyframes layer-detail-flash {
+  from { background: rgba(255, 92, 49, 0.18); }
+  to { background: transparent; }
+}
 .layer-detail-hint { margin: 0; color: var(--dim); font-size: 14px; line-height: 1.5; }
 .layer-detail-hint b { color: var(--muted); }
 .layer-detail-head {
@@ -1790,13 +1867,13 @@ body.dock-collapsed .dock-toggle {
 .meme-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 
 @media (max-width: 980px) {
-  .layers-legend, .layers-count { display: none; }
+  .layers-count { display: none; }
   .layer-panel { grid-template-columns: 150px minmax(0, 1fr); max-height: 190px; }
   .layer-detail { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line-soft); }
 }
 @media (max-width: 700px) {
-  .layers-shortcuts { display: none; }
   .layer-panel { grid-template-columns: minmax(0, 1fr); max-height: 260px; overflow-y: auto; }
-  .layer-controls { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .layer-controls { border-right: 0; border-bottom: 1px solid var(--line-soft); overflow-y: visible; }
+  .layers-shortcuts { flex-direction: row; flex-wrap: wrap; }
   .layer-list { overflow-x: auto; }
 }
