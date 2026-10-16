@@ -787,7 +787,12 @@ const CODES = [
   { code: '69', label: '69', hint: 'Toggle the lore levels ($483 / $69 / $20)', action: 'lore' },
   { code: 'ta', label: 'TA', hint: 'Open or close the TA desk', action: 'ta' },
   { code: 'rc', label: 'RC', hint: 'Toggle the RC tweet layer', action: 'tweets' },
-  { code: 'tendieman', label: 'TENDIEMAN', hint: 'Play the sea shanty in the dock', action: 'meme', value: 'meme-tendieman' },
+  { code: 'tendieman', label: 'TENDIEMAN', hint: 'Open the fullscreen Tendieman mode', action: 'tendieman' },
+  { code: 'shanty', label: 'SHANTY', hint: 'Play the sea shanty in the dock', action: 'meme', value: 'meme-tendieman' },
+  { code: 'drs', label: 'DRS', hint: 'Jump to the latest DRS disclosure', action: 'drs' },
+  { code: 'si', label: 'SI', hint: 'Toggle the short interest pane', action: 'pane', value: 'si' },
+  { code: 'ftd', label: 'FTD', hint: 'Toggle the fails-to-deliver pane', action: 'pane', value: 'ftd' },
+  { code: 'flows', label: 'FLOWS', hint: 'Toggle the market structure strip', action: 'flows' },
   { code: 'cat', label: 'CAT', hint: 'Play “I am not a cat”', action: 'meme', value: 'meme-cat' },
   { code: 'moon', label: 'MOON', hint: 'Rockets. Nothing else.', action: 'moon' }
 ];
@@ -1311,6 +1316,8 @@ function taActive() {
 // active event changes — panning alone just moves the existing canvas.
 let terminalPaintKey = '';
 let storyPaintKey = '';
+let flowsPaintKey = '';
+let flowsGeometry = null;
 
 let followPageScrollUntil = 0;
 
@@ -2890,7 +2897,581 @@ function bindChartLayers() {
   renderLayerDetail();
 }
 
-/* -------------------------------------------- signals / TA desk / codes -- */
+/* ------------------------------------------- market structure / flows --- */
+
+// Zwei offizielle Serien liegen unter dem Chart:
+//   • Short Interest — FINRA, zweimal pro Monat (Settlement 15. und letzter
+//     Handelstag). Datei: flow-data.js, erzeugt von
+//     scripts/fetch-market-structure.mjs über die GitHub Action.
+//   • Fails to Deliver — SEC (CNS-Fehldaten), Halbmonatsdateien.
+// Beide werden unverändert übernommen. Fehlt flow-data.js, greift eine kleine,
+// dokumentierte Ankerliste — die Oberfläche sagt dann ausdrücklich, dass sie
+// unvollständig ist.
+
+const FLOWS = typeof window !== 'undefined' ? window.GME_FLOWS : null;
+
+const FALLBACK_FLOWS = {
+  fallback: true,
+  updated: '2026-10-16',
+  shortInterest: [
+    { date: '2026-04-15', short: 61907606, averageVolume: 11600000, daysToCover: 5.34 },
+    { date: '2026-09-15', short: 39069126, averageVolume: 10600000, daysToCover: 3.69 },
+    { date: '2026-09-30', short: 42673721, averageVolume: 10727887, daysToCover: 3.98 }
+  ],
+  ftd: [
+    { date: '2021-01-15', shares: 892653, price: 35.5 },
+    { date: '2021-01-19', shares: 1498576, price: 39.36 },
+    { date: '2021-01-21', shares: 1438994, price: 43.03 },
+    { date: '2021-01-26', shares: 2099572, price: 147.98 },
+    { date: '2021-01-27', shares: 1972862, price: 347.51 },
+    { date: '2026-03-31', shares: 24739, price: 22.31 }
+  ]
+};
+
+function parseShortInterestRows(payload) {
+  const rows = [];
+  if (!payload?.rows) return rows;
+  String(payload.rows).trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, short, previous, averageVolume, daysToCover] = parts;
+    const value = Number(short);
+    if (!date || !Number.isFinite(value)) return;
+    rows.push({
+      date,
+      short: value,
+      previous: Number(previous) || null,
+      averageVolume: Number(averageVolume) || null,
+      daysToCover: Number(daysToCover) || null
+    });
+  });
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function parseFtdRows(payload) {
+  const rows = [];
+  if (!payload?.rows) return rows;
+  String(payload.rows).trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, shares, price] = parts;
+    const value = Number(shares);
+    if (!date || !Number.isFinite(value)) return;
+    rows.push({ date, shares: value, price: Number(price) || null });
+  });
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+const shortInterestRows = FLOWS?.shortInterest ? parseShortInterestRows(FLOWS.shortInterest) : [];
+const ftdRows = FLOWS?.ftd ? parseFtdRows(FLOWS.ftd) : [];
+
+const flowState = {
+  fallback: !FLOWS?.shortInterest?.rows && !FLOWS?.ftd?.rows,
+  updated: FLOWS?.updated ?? FALLBACK_FLOWS.updated,
+  shortInterest: shortInterestRows.length ? shortInterestRows : FALLBACK_FLOWS.shortInterest,
+  ftd: ftdRows.length ? ftdRows : FALLBACK_FLOWS.ftd,
+  sources: FLOWS?.sources ?? {
+    shortInterest: 'FINRA equity short interest (anchor values only — run the refresh workflow)',
+    ftd: 'SEC fails-to-deliver (anchor values only — run the refresh workflow)'
+  },
+  // Drei Bahnen: registrierte Aktien (DRS), Short Interest, Fails to Deliver.
+  panes: { drs: true, si: true, ftd: true },
+  readout: null
+};
+
+// DRS: die Zahlen, die GameStop selbst in 10-Q/10-K veröffentlicht — je
+// Quartal eine Zeile, Datum = Stichtag aus dem Filing. Alles split-bereinigt
+// (die Filings von 2021/22 nennen Pre-Split-Zahlen, hier steht der
+// 4:1-bereinigte Wert).
+const DRS_DISCLOSURES = [
+  { iso: '2021-10-30', shares: 20.8e6, outstanding: 305403124, label: 'Q3 2021 10-Q', note: 'first disclosure: 5.2M shares pre the 4:1 split, split-adjusted here', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-01-29', shares: 35.6e6, outstanding: 305356992, label: 'Q4 2021 10-K', note: '8.9M pre-split', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000132638022000021/gme-20220129.htm' },
+  { iso: '2022-04-30', shares: 50.8e6, outstanding: 304516136, label: 'Q1 2022 10-Q', note: '12.7M pre-split — DRS goes mainstream', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-07-30', shares: 71.3e6, outstanding: 304529721, label: 'Q2 2022 10-Q', note: 'the quarter of the 4:1 split dividend', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-10-29', shares: 71.8e6, outstanding: 304548070, label: 'Q3 2022 10-Q', note: 'first plateau just under 72M', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-03-22', shares: 76.0e6, outstanding: 304675439, holders: 197058, label: 'Q4 2022 10-K', note: '76M shares and 197,058 record holders — 24.9% of the company', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000132638023000010/gme-20230128.htm' },
+  { iso: '2023-06-01', shares: 76.6e6, outstanding: 304751243, label: 'Q1 2023 10-Q', note: 'the all-time peak of the DRS series', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-08-31', shares: 75.4e6, outstanding: 305241294, label: 'Q2 2023 10-Q', note: 'first decline after two years of growth', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-11-30', shares: 75.4e6, outstanding: 305514315, label: 'Q3 2023 10-Q', note: 'flat, still around 25% of all shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-03-20', shares: 75.3e6, outstanding: 305873200, label: 'Q4 2023 10-K', note: 'the last quarter before the share count jumps', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-06-05', shares: 74.6e6, outstanding: 351217517, label: 'Q1 2024 10-Q', note: 'the ATM offering dilutes the percentage to 21.2%', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000132638024000030/gme-20240504.htm' },
+  { iso: '2024-09-04', shares: 72.8e6, outstanding: 426509592, label: 'Q2 2024 10-Q', note: 'the second ATM takes the share count to 426.5M — DRS share falls to 17.1%', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-12-04', shares: 71.0e6, outstanding: 446800365, label: 'Q3 2024 10-Q', note: '15.9% of the company', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-03-19', shares: 69.5e6, outstanding: 447083981, holders: 190074, label: 'Q4 2024 10-K', note: '190,074 record holders; the register shrinks while the balance sheet grows', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000162828025014731/gme-20250201.htm' },
+  { iso: '2025-06-05', shares: 68.1e6, outstanding: 447336306, label: 'Q1 2025 10-Q', note: '15.2% — and the same quarter the Bitcoin treasury is announced', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-09-05', shares: 66.7e6, outstanding: 448000000, label: 'Q2 2025 10-Q', note: 'reported as roughly 15% of outstanding shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-12-05', shares: 67.0e6, outstanding: 448000000, label: 'Q3 2025 10-Q', note: 'a small bounce back; the filing reports about 67M registered shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2026-03-18', shares: 66.2e6, outstanding: 448400000, label: 'Q4 2025 10-K', note: '66.2M registered (≈3.3M of them inside the DSPP). No later 10-Q is in this archive yet — we keep the series sourced, not guessed.', url: 'https://www.shacknews.com/article/148451/gamestop-gme-q4-2025-drs-66-million' }
+];
+
+const DRS_PEAK = DRS_DISCLOSURES.reduce((best, entry) => (entry.shares > best.shares ? entry : best), DRS_DISCLOSURES[0]);
+const DRS_LATEST = DRS_DISCLOSURES[DRS_DISCLOSURES.length - 1];
+
+function drsPercent(entry) {
+  if (!entry?.outstanding) return null;
+  return (entry.shares / entry.outstanding) * 100;
+}
+
+// Kennzahlen für Strip, TA-Desk und Codes — alles aus den beiden Serien.
+function flowStats() {
+  const si = flowState.shortInterest;
+  const ftd = flowState.ftd;
+  const latestSi = si[si.length - 1] ?? null;
+  const previousSi = si[si.length - 2] ?? null;
+  const window = si.slice(-12);
+  const averageSi = window.length ? window.reduce((sum, row) => sum + row.short, 0) / window.length : null;
+  const peakFtd = ftd.reduce((best, row) => (!best || row.shares > best.shares ? row : best), null);
+  const recentFtd = ftd.slice(-12);
+  const latestFtd = ftd[ftd.length - 1] ?? null;
+  return {
+    latestSi,
+    previousSi,
+    averageSi,
+    siChange: latestSi && previousSi ? (latestSi.short / previousSi.short - 1) * 100 : null,
+    ftdPeak: peakFtd,
+    ftdLatest: latestFtd,
+    ftdRecentTotal: recentFtd.reduce((sum, row) => sum + row.shares, 0),
+    ftdRecentPeak: recentFtd.reduce((best, row) => (row.shares > best.shares ? row : best), latestFtd),
+    drsLatest: DRS_LATEST,
+    drsPeak: DRS_PEAK,
+    drsChange: (DRS_LATEST.shares - DRS_PEAK.shares) / DRS_PEAK.shares * 100
+  };
+}
+
+/* -------------------------------------------------- tendieman full screen - */
+
+// Vollbild-Tendieman: die eigenen Zeilen des Archivs, jede an einen echten
+// Handelstag des Tapes gehängt. Kein Mitschnitt, kein fremder Text — der
+// Refrain verlinkt auf das Original-Video.
+const TENDIEMAN_LINES = [
+  { text: 'A retail store on a quiet street…', data: '2019 · $4 a share, nobody watching' },
+  { text: '…then a letter, and a board seat.', data: 'NOV 2020 · RC buys in, the thesis gets loud' },
+  { text: 'The message board starts counting.', data: '13 JAN 2021 · $31.40 · +57% in one session' },
+  { text: 'Soon may the tendieman come…', data: '26 JAN 2021 · $147.98 · +92.7%' },
+  { text: '…to bring us tendies and rum.', data: '27 JAN 2021 · the squeeze prints $483 intraday' },
+  { text: 'The buy button goes dark.', data: '28 JAN 2021 · access becomes the story' },
+  { text: 'So we learned to hold the line.', data: '2021 · the year of diamond hands and receipts' },
+  { text: 'Split the share, double the ledger.', data: '22 JUL 2022 · one share becomes four' },
+  { text: 'Quiet quarters, actual profit.', data: 'MAR 2023 · first quarterly profit in two years' },
+  { text: 'A cat returns from the deep.', data: '13 MAY 2024 · Roaring Kitty posts, the tape jumps 74%' },
+  { text: 'Cash, then Bitcoin, then a bid.', data: '2025–2026 · treasury, $9B, a $56B offer for eBay' },
+  { text: 'One warrant for every ten.', data: 'OCT 2026 · $32 strike, expires 30 October' },
+  { text: 'The record stays open.', data: `${formatDay(marketMeta.end)} · ${formatPrice(activeDailyBars().at(-1)?.close ?? 0)} on the tape` }
+];
+
+const TENDIEMAN_DURATION = 104000; // ms for the full loop
+const lyricState = { active: false, index: 0, startedAt: 0, rafId: null, pausedAt: 0 };
+
+function tickTendieman() {
+  if (!lyricState.active) {
+    lyricState.rafId = null;
+    return;
+  }
+  const elapsed = Date.now() - lyricState.startedAt;
+  const progress = clamp(elapsed / TENDIEMAN_DURATION, 0, 1);
+  const index = Math.min(TENDIEMAN_LINES.length - 1, Math.floor(progress * TENDIEMAN_LINES.length));
+  if (index !== lyricState.index) setTendiemanIndex(index);
+  const fill = document.querySelector('#tendieman-progress-fill');
+  if (fill) fill.style.width = `${progress * 100}%`;
+  if (progress >= 1) {
+    closeTendieman();
+    return;
+  }
+  lyricState.rafId = raf(tickTendieman);
+}
+
+function setTendiemanIndex(index) {
+  lyricState.index = clamp(index, 0, TENDIEMAN_LINES.length - 1);
+  const list = document.querySelector('#tendieman-lines');
+  if (!list) return;
+  list.querySelectorAll('.tendieman-line').forEach((node, position) => {
+    node.classList.toggle('is-active', position === lyricState.index);
+    node.classList.toggle('is-past', position < lyricState.index);
+  });
+  const counter = document.querySelector('#tendieman-counter');
+  if (counter) counter.textContent = `${String(lyricState.index + 1).padStart(2, '0')} / ${String(TENDIEMAN_LINES.length).padStart(2, '0')}`;
+  const active = list.querySelector('.tendieman-line.is-active');
+  active?.scrollIntoView?.({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
+}
+
+function openTendieman({ autoplay = true } = {}) {
+  const overlay = document.querySelector('#tendieman');
+  if (!overlay) return;
+  if (!reducedMotion() && document.body.classList.contains('dock-collapsed')) {
+    document.querySelector('#dock-toggle')?.click();
+  }
+  overlay.hidden = false;
+  document.body.classList.add('tendieman-open');
+  lyricState.active = true;
+  lyricState.index = -1;
+  setTendiemanIndex(0);
+  if (autoplay) {
+    lyricState.startedAt = Date.now();
+    if (!lyricState.rafId) lyricState.rafId = raf(tickTendieman);
+  }
+  document.querySelector('#tendieman-close')?.focus?.();
+  showToast('♪ TENDIEMAN — 13 lines, one loop, ESC closes', 'code');
+}
+
+function closeTendieman() {
+  const overlay = document.querySelector('#tendieman');
+  if (overlay) overlay.hidden = true;
+  document.body.classList.remove('tendieman-open');
+  lyricState.active = false;
+  if (lyricState.rafId && typeof window.cancelAnimationFrame === 'function') window.cancelAnimationFrame(lyricState.rafId);
+  lyricState.rafId = null;
+}
+
+function toggleTendiemanPause() {
+  if (!lyricState.active) return;
+  if (lyricState.rafId) {
+    if (typeof window.cancelAnimationFrame === 'function') window.cancelAnimationFrame(lyricState.rafId);
+    lyricState.rafId = null;
+    lyricState.pausedAt = Date.now() - lyricState.startedAt;
+    const label = document.querySelector('#tendieman-state');
+    if (label) label.textContent = 'PAUSED';
+    return;
+  }
+  lyricState.startedAt = Date.now() - lyricState.pausedAt;
+  lyricState.rafId = raf(tickTendieman);
+  const label = document.querySelector('#tendieman-state');
+  if (label) label.textContent = 'PLAYING';
+}
+
+function renderTendieman() {
+  const list = document.querySelector('#tendieman-lines');
+  if (!list) return;
+  list.innerHTML = TENDIEMAN_LINES.map((line, index) => `
+    <li class="tendieman-line" data-line-index="${index}">
+      <p class="tendieman-text">${escapeHtml(line.text)}</p>
+      <span class="tendieman-data">${escapeHtml(line.data)}</span>
+    </li>
+  `).join('');
+  list.querySelectorAll('.tendieman-line').forEach((node) => {
+    node.addEventListener('click', () => {
+      lyricState.startedAt = Date.now() - (Number(node.dataset.lineIndex) / TENDIEMAN_LINES.length) * TENDIEMAN_DURATION;
+      setTendiemanIndex(Number(node.dataset.lineIndex));
+    });
+  });
+}
+
+/* --------------------------------------------------------- flows strip --- */
+
+// Der Strip liegt unter der Kursfläche und scrollt mit ihr: dieselbe Skala,
+// dieselben Balken. Geklickt wird nur gelesen — Zahlen stehen im Kopf des
+// Strips, Details öffnen sich im Chart-Layer.
+function flowsPanes() {
+  const drs = flowState.panes.drs ? DRS_DISCLOSURES.length : 0;
+  return { drs, si: flowState.panes.si ? flowState.shortInterest.length : 0, ftd: flowState.panes.ftd ? flowState.ftd.length : 0 };
+}
+
+function paintFlows({ force = false } = {}) {
+  const svg = document.querySelector('#flows-canvas');
+  const track = document.querySelector('#flows-track');
+  if (!svg || !track) return;
+  if (document.body.classList.contains('flows-off')) return;
+
+  const metrics = terminalMetrics();
+  const bars = seriesFor(chartState.resolution);
+  const { firstVisible, lastVisible, from, to } = visibleRange(metrics);
+  const height = 152;
+  const key = [
+    chartState.resolution, chartState.ppb.toFixed(3), from, to,
+    priceMode.mode, `p-${flowState.panes.drs}${flowState.panes.si}${flowState.panes.ftd}`,
+    flowState.readout ? `${flowState.readout.kind}-${flowState.readout.index}` : '-'
+  ].join('|');
+  if (!force && key === flowsPaintKey) return;
+  flowsPaintKey = key;
+
+  const width = trackWidth(metrics);
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.style.width = `${width}px`;
+  svg.style.height = `${height}px`;
+  svg.replaceChildren();
+
+  const x = (index) => (index - from + 0.5) * chartState.ppb;
+  const panes = [];
+  if (flowState.panes.drs) panes.push({ id: 'drs', label: 'DRS', sub: 'shares registered with the transfer agent', height: 46 });
+  if (flowState.panes.si) panes.push({ id: 'si', label: 'SHORT INTEREST', sub: 'FINRA, twice-monthly settlement', height: 52 });
+  if (flowState.panes.ftd) panes.push({ id: 'ftd', label: 'FAILS TO DELIVER', sub: 'SEC CNS, log scale', height: 42 });
+
+  let cursorY = 8;
+  const grid = svgElement('g', { 'aria-hidden': 'true' });
+  panes.forEach((pane) => {
+    pane.top = cursorY;
+    pane.bottom = cursorY + pane.height;
+    cursorY = pane.bottom + 8;
+    grid.append(svgElement('line', {
+      class: 'flows-baseline', x1: 0, x2: width, y1: pane.bottom, y2: pane.bottom
+    }));
+  });
+  svg.append(grid);
+
+  const groups = {};
+  const labelItems = [];
+
+  /* ---------------------------------------------------------------- DRS -- */
+  if (flowState.panes.drs) {
+    const pane = panes.find((entry) => entry.id === 'drs');
+    const group = svgElement('g', { class: 'flows-drs' });
+    const values = DRS_DISCLOSURES.map((entry) => entry.shares);
+    const min = Math.min(...values) * 0.94;
+    const max = Math.max(...values) * 1.04;
+    const y = (value) => pane.bottom - ((value - min) / (max - min)) * pane.height;
+    const points = [];
+    DRS_DISCLOSURES.forEach((entry, index) => {
+      const barIndex = barIndexForDate(bars, entry.iso);
+      const px = x(barIndex);
+      const py = y(entry.shares);
+      points.push({ entry, index, px, py, barIndex });
+    });
+    points.forEach((point, position) => {
+      const previous = points[position - 1];
+      group.append(svgElement('line', {
+        class: 'flows-drs-line',
+        x1: previous ? previous.px : point.px - 8,
+        y1: previous ? previous.py : point.py,
+        x2: point.px,
+        y2: point.py
+      }));
+    });
+    const areaPath = [
+      `M${points[0].px.toFixed(2)},${pane.bottom}`,
+      ...points.map((point) => `L${point.px.toFixed(2)},${point.py.toFixed(2)}`),
+      `L${points[points.length - 1].px.toFixed(2)},${pane.bottom}`,
+      'Z'
+    ].join(' ');
+    group.append(svgElement('path', { class: 'flows-drs-area', d: areaPath }));
+    points.forEach((point, position) => {
+      const isPeak = point.entry.iso === DRS_PEAK.iso;
+      const isLast = position === points.length - 1;
+      const isActive = flowState.readout?.kind === 'drs' && flowState.readout.index === position;
+      const dot = svgElement('circle', {
+        class: `flows-drs-dot${isPeak ? ' is-peak' : ''}${isLast ? ' is-latest' : ''}${isActive ? ' is-active' : ''}`,
+        cx: point.px, cy: point.py, r: isPeak || isLast ? 4.4 : 3,
+        'data-drs-index': position
+      });
+      dot.append(svgElement('title', {}, `${formatDay(point.entry.iso)} · ${formatCompact(point.entry.shares)} registered · ${drsPercent(point.entry).toFixed(1)}% of ${formatCompact(point.entry.outstanding)} shares`));
+      group.append(dot);
+      if (isPeak || isLast) {
+        labelItems.push({ pane, x: point.px, y: point.py, text: `${formatCompact(point.entry.shares)} · ${drsPercent(point.entry).toFixed(1)}%`, tone: isPeak ? 'peak' : 'latest' });
+      }
+    });
+    group.append(svgElement('rect', {
+      class: 'flows-hit', x: 0, y: pane.top, width, height: pane.height, 'data-flow-pane': 'drs'
+    }));
+    svg.append(group);
+    groups.drs = { pane, points };
+  }
+
+  /* ----------------------------------------------------- short interest -- */
+  if (flowState.panes.si) {
+    const pane = panes.find((entry) => entry.id === 'si');
+    const group = svgElement('g', { class: 'flows-si' });
+    const rows = flowState.shortInterest;
+    const max = Math.max(...rows.map((row) => row.short));
+    const y = (value) => pane.bottom - (value / max) * pane.height;
+    const average = rows.slice(-12).reduce((sum, row) => sum + row.short, 0) / Math.min(12, rows.length);
+    rows.forEach((row, index) => {
+      const barIndex = barIndexForDate(bars, row.date);
+      const px = x(barIndex);
+      const previous = rows[index - 1];
+      const rising = previous ? row.short >= previous.short : false;
+      const isActive = flowState.readout?.kind === 'si' && flowState.readout.index === index;
+      const barWidth = clamp(chartState.ppb * 0.7, 1.2, 22);
+      const rect = svgElement('rect', {
+        class: `flows-si-bar${rising ? ' is-rising' : ' is-falling'}${isActive ? ' is-active' : ''}`,
+        x: px - barWidth / 2,
+        y: y(row.short),
+        width: barWidth,
+        height: Math.max(1, pane.bottom - y(row.short)),
+        'data-si-index': index
+      });
+      rect.append(svgElement('title', {}, `${formatDay(row.date)} · ${formatCompact(row.short)} shares short${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} days to cover` : ''}`));
+      group.append(rect);
+    });
+    if (average) {
+      group.append(svgElement('line', {
+        class: 'flows-si-average', x1: 0, x2: width, y1: y(average), y2: y(average)
+      }));
+      labelItems.push({ pane: { ...pane, top: y(average) }, x: 8, y: y(average) - 5, text: `12-REPORT AVG ${formatCompact(average)}`, tone: 'average' });
+    }
+    group.append(svgElement('rect', { class: 'flows-hit', x: 0, y: pane.top, width, height: pane.height, 'data-flow-pane': 'si' }));
+    svg.append(group);
+    groups.si = { pane, rows };
+  }
+
+  /* ------------------------------------------------- fails to deliver --- */
+  if (flowState.panes.ftd) {
+    const pane = panes.find((entry) => entry.id === 'ftd');
+    const group = svgElement('g', { class: 'flows-ftd' });
+    const rows = flowState.ftd;
+    const shares = rows.map((row) => Math.max(1000, row.shares));
+    const minLog = Math.log10(Math.min(...shares));
+    const maxLog = Math.log10(Math.max(...shares));
+    const y = (value) => pane.bottom - ((Math.log10(Math.max(1000, value)) - minLog) / Math.max(0.0001, maxLog - minLog)) * pane.height;
+    rows.forEach((row, index) => {
+      const barIndex = barIndexForDate(bars, row.date);
+      const px = x(barIndex);
+      const barWidth = clamp(chartState.ppb * 0.7, 1.2, 22);
+      const isActive = flowState.readout?.kind === 'ftd' && flowState.readout.index === index;
+      const rect = svgElement('rect', {
+        class: `flows-ftd-bar${isActive ? ' is-active' : ''}`,
+        x: px - barWidth / 2,
+        y: y(row.shares),
+        width: barWidth,
+        height: Math.max(1, pane.bottom - y(row.shares)),
+        'data-ftd-index': index
+      });
+      rect.append(svgElement('title', {}, `${formatDay(row.date)} · ${formatCompact(row.shares)} shares failed to deliver${row.price ? ` · $${row.price.toFixed(2)} prior close` : ''}`));
+      group.append(rect);
+    });
+    const peak = rows.reduce((best, row) => (row.shares > best.shares ? row : best), rows[0]);
+    labelItems.push({ pane, x: x(barIndexForDate(bars, peak.date)), y: pane.top + 4, text: `PEAK ${formatCompact(peak.shares)} · ${formatDay(peak.date).toUpperCase()}`, tone: 'peak' });
+    group.append(svgElement('rect', { class: 'flows-hit', x: 0, y: pane.top, width, height: pane.height, 'data-flow-pane': 'ftd' }));
+    svg.append(group);
+    groups.ftd = { pane, rows };
+  }
+
+  // Beschriftung: Bahnname links, Werte über den Daten.
+  panes.forEach((pane) => {
+    grid.append(svgElement('text', {
+      class: 'flows-pane-label', x: 8, y: pane.top + 11
+    }, pane.label));
+  });
+  labelItems.forEach((item) => {
+    grid.append(svgElement('text', {
+      class: `flows-value-label ${item.tone}`,
+      x: clamp(item.x + 6, 60, width - 60),
+      y: clamp(item.y, item.pane.top + 11, item.pane.bottom - 3)
+    }, item.text));
+  });
+
+  svg.append(grid);
+  flowsGeometry = groups;
+}
+
+// Trefferfläche → Bahn + nächster Datenpunkt. Lesen, nicht handeln.
+function bindFlowsInteraction() {
+  const body = document.querySelector('#flows-body');
+  const svg = document.querySelector('#flows-canvas');
+  if (!body || !svg) return;
+
+  const resolve = (event) => {
+    const target = event.target.closest?.('[data-si-index], [data-ftd-index], [data-drs-index]');
+    if (target) {
+      if (target.dataset.siIndex !== undefined) return { kind: 'si', index: Number(target.dataset.siIndex) };
+      if (target.dataset.ftdIndex !== undefined) return { kind: 'ftd', index: Number(target.dataset.ftdIndex) };
+      return { kind: 'drs', index: Number(target.dataset.drsIndex) };
+    }
+    return null;
+  };
+
+  const readout = (hit) => {
+    if (!hit) return;
+    flowState.readout = hit;
+    renderFlowReadout();
+    flowsPaintKey = '';
+    paintFlows();
+  };
+
+  svg.addEventListener('mousemove', (event) => readout(resolve(event)));
+  body.addEventListener('mouseleave', () => {
+    if (flowState.readout?.pinned) return;
+    flowState.readout = null;
+    renderFlowReadout();
+    flowsPaintKey = '';
+    paintFlows();
+  });
+  svg.addEventListener('click', (event) => {
+    const hit = resolve(event);
+    if (!hit) return;
+    flowState.readout = { ...hit, pinned: true };
+    renderFlowReadout();
+    if (hit.kind === 'drs') {
+      const entry = DRS_DISCLOSURES[hit.index];
+      if (entry) {
+        jumpToIso(entry.iso);
+        showToast(`DRS · ${formatDay(entry.iso)} · ${formatCompact(entry.shares)} SHARES · ${drsPercent(entry).toFixed(2)}% OF OUTSTANDING`);
+      }
+    } else {
+      const row = hit.kind === 'si' ? flowState.shortInterest[hit.index] : flowState.ftd[hit.index];
+      if (row) {
+        jumpToIso(row.date);
+        showToast(hit.kind === 'si'
+          ? `SHORT INTEREST · ${formatDay(row.date)} · ${formatCompact(row.short)} SHARES${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} DAYS TO COVER` : ''}`
+          : `FAILS TO DELIVER · ${formatDay(row.date)} · ${formatCompact(row.shares)} SHARES`);
+      }
+    }
+    flowsPaintKey = '';
+    paintFlows();
+  });
+}
+
+function renderFlowReadout() {
+  const box = document.querySelector('#flows-readout');
+  if (!box) return;
+  const hit = flowState.readout;
+  if (!hit) {
+    box.textContent = flowState.fallback
+      ? 'anchor values only — run .github/workflows/refresh-market-structure.yml for the full series'
+      : `hover or click a bar · sources: FINRA short interest, SEC fails-to-deliver · updated ${flowState.updated}`;
+    box.classList.remove('is-active');
+    return;
+  }
+  box.classList.add('is-active');
+  if (hit.kind === 'drs') {
+    const entry = DRS_DISCLOSURES[hit.index];
+    box.innerHTML = `<b>${formatDay(entry.iso)}</b> · ${formatCompact(entry.shares)} registered (${drsPercent(entry).toFixed(2)}% of ${formatCompact(entry.outstanding)})${entry.holders ? ` · ${entry.holders.toLocaleString('en-US')} record holders` : ''} · ${escapeHtml(entry.label)}`;
+    return;
+  }
+  if (hit.kind === 'si') {
+    const row = flowState.shortInterest[hit.index];
+    const change = row.previous ? (row.short / row.previous - 1) * 100 : null;
+    box.innerHTML = `<b>${formatDay(row.date)}</b> · ${formatCompact(row.short)} shares short${change === null ? '' : ` · ${formatPercent(change)} vs previous settlement`}${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} days to cover` : ''} · FINRA`;
+    return;
+  }
+  const row = flowState.ftd[hit.index];
+  box.innerHTML = `<b>${formatDay(row.date)}</b> · ${formatCompact(row.shares)} shares failed to deliver${row.price ? ` · $${row.price.toFixed(2)} prior close` : ''} · SEC CNS`;
+}
+
+// Der Strip folgt exakt dem Chart-Scroll: ein Transform, kein zweiter Scroller.
+function syncFlowsScroll() {
+  const { viewport } = terminalElements();
+  const track = document.querySelector('#flows-track');
+  if (viewport && track) track.style.transform = `translateX(${-viewport.scrollLeft}px)`;
+}
+
+function setFlowsEnabled(on) {
+  document.body.classList.toggle('flows-off', !on);
+  const toggle = document.querySelector('#flows-toggle');
+  toggle?.setAttribute('aria-pressed', String(on));
+  const state = document.querySelector('#flows-toggle-state');
+  if (state) state.textContent = on ? 'ON' : 'OFF';
+  if (on) {
+    flowsPaintKey = '';
+    paintFlows({ force: true });
+    syncFlowsScroll();
+  }
+  showToast(on ? 'MARKET STRUCTURE STRIP ON' : 'MARKET STRUCTURE STRIP OFF');
+}
+
+function setFlowPane(pane, on) {
+  flowState.panes[pane] = on;
+  document.querySelectorAll(`[data-flow-pane-toggle="${pane}"]`).forEach((button) => {
+    button.setAttribute('aria-pressed', String(on));
+    button.classList.toggle('is-on', on);
+  });
+  flowsPaintKey = '';
+  paintFlows({ force: true });
+  showToast(`${pane.toUpperCase()} PANE ${on ? 'ON' : 'OFF'}`);
+}
+
+/* ---------------------------------------------------------------- codes --- */
+
+
 
 // Ein Toast statt Alarm: jede Aktion antwortet kurz und lesbar, ohne den
 // Chart zu verdecken. prefers-reduced-motion wird respektiert.
@@ -3025,6 +3606,19 @@ function runCode(entry) {
     case 'moon':
       document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       launchRockets();
+      break;
+    case 'flows':
+      setFlowsEnabled(document.body.classList.contains('flows-off'));
+      break;
+    case 'pane':
+      setFlowPane(entry.value, !flowState.panes[entry.value]);
+      break;
+    case 'tendieman':
+      openTendieman();
+      break;
+    case 'drs':
+      jumpToIso(DRS_LATEST.iso);
+      setFlowPane('drs', true);
       break;
     default:
       break;
