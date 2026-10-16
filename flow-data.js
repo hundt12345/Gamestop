@@ -10,6 +10,12 @@ window.GME_FLOWS = {
     shortInterest: 'FINRA equity short interest files (cdn.finra.org/equity/otcmarket/biweekly)',
     ftd: 'SEC fails-to-deliver data (sec.gov/data-research/sec-markets-data/fails-deliver-data)'
   },
+  notes: [
+    'short interest — one row per FINRA settlement date (15th and last business day)',
+    'fails to deliver — SEC CNS aggregate balance per settlement date: cumulative, not daily new fails.',
+    'SEC states fails to deliver are not evidence of naked short selling; a missing date is below the reporting threshold.',
+    'rows dated before the first live fetch were seeded once from the same official series as republished by public mirrors (2021 and 2025/26 clusters)'
+  ],
   shortInterest: {
     unit: 'shares',
     settlement: '15th and last business day of each month (FINRA)',
@@ -18,13 +24,9 @@ window.GME_FLOWS = {
 2026-09-30 42673721 39069126 10727887 3.98
 `
   },
-  // Curated official history, seeded once from the SEC CNS series as published
-  // by the SEC half-month files (republished by stocknear, fintel and the 2021
-  // r/wallstreetbets thread for the January 2021 mania rows). The rows are the
-  // aggregate balance per settlement date — cumulative, not daily new fails.
   ftd: {
     unit: 'shares',
-    settlement: 'settlement date, SEC CNS fails-to-deliver balance (cumulative per date)',
+    settlement: 'settlement date, SEC CNS fails-to-deliver (half-month files)',
     rows: `
 2021-01-15 892653 -
 2021-01-19 1498576 -
