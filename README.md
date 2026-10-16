@@ -44,6 +44,9 @@ Der Server bindet auf `0.0.0.0` und verwendet automatisch `process.env.PORT`, da
 - Automatisch: `.github/workflows/refresh-market-data.yml` läuft monatlich, bei Workflow-Änderungen und auf Knopfdruck (`workflow_dispatch`) und committet die neue Fassung.
 - Fällt `market-data.js` aus, baut das Frontend eine grobe Ersatzlinie aus den dokumentierten Schlusskursen, damit der Chart nie leer bleibt.
 
+`flow-data.js` enthält die Marktstruktur-Serien (FINRA Short Interest, SEC Fails to Deliver) und wird
+ausschließlich von `scripts/fetch-market-structure.mjs` geschrieben — nicht per Hand bearbeiten.
+
 ## Neu: der Tape-Stand von 2025/26, TA-Desk und Zahlenschloss
 
 Die Chronik endet nicht mehr im März 2025. Aufgenommen sind jetzt die Ereignisse, die das Tape seitdem bewegt haben:
@@ -63,8 +66,50 @@ Jede dieser Zeilen ist im Archiv als Chart-Layer markiert (`₿` Bitcoin, `⇄` 
 - **Community Reads** stehen direkt daneben: Superstonk (TA-Feed + DD-Wiki), **James Roland / @JRoland_ („The $GME Meltup Guy“, memestockwatch.com)**, GMEDD, Roaring Kitty und SEC EDGAR — jeweils mit Link und einem Satz, was die Quelle liefert. Keine Empfehlung, keine Kursziele.
 - **Zahlenschloss (`★ MEME NUMBERS`)**: eine echte Regel-Engine über das gedruckte Tape. Sie taggt jede Sitzung, die eine Kult-Zahl gedruckt hat — `$483.00` (das exakte All-Time-High vom 28.01.2021, genau **einmal** im Tape), Schlusskurse auf `x.69` (20×) und `x.42` (15×), glatte Dollarbeträge ab $20 (28×) und Schlüsse auf $4.20/$24.20/$42.00 (5×) — insgesamt **69 Treffer**. Sterne sitzen auf dem jeweiligen Schlusskurs, die Detailkarte nennt die Regel im Klartext und die Treffer-Position.
 - **HYPE-INDEX**: ein Stimmungsbarometer aus vier gerechneten Bestandteilen (Volumen vs. 60-Tage-Schnitt, Perzentil der realisierten Volatilität, Anteil ≥4-%-Tage der letzten 20 Sitzungen, Abstand zum 52-Wochen-Hoch) mit Labels von `QUIET` bis `UNHINGED`. Ausdrücklich eine Stimmung, keine Prognose.
-- **Versteckte Codes**: einfach tippen, ohne in ein Feld zu schreiben — `741`, `483`, `0042`, `BTC`, `EBAY`, `WS` springen zu den passenden Tagen, `420` schaltet das Zahlenschloss, `69` die Lore-Level, `TA` den Desk, `RC` die Tweet-Ebene, `TENDIEMAN` und `CAT` spielen die Memes im Dock, `MOON` lässt Raketen steigen. `?` oder der Knopf `⌨ CODES` öffnet die Liste; die Hero-Zeile verrät, dass es sie gibt.
+- **Versteckte Codes**: einfach tippen, ohne in ein Feld zu schreiben — `741`, `483`, `0042`, `BTC`, `EBAY`, `WS` springen zu den passenden Tagen, `420` schaltet das Zahlenschloss, `69` die Lore-Level, `TA` den Desk, `RC` die Tweet-Ebene, `DRS` springt zur neuesten Register-Zahl, `SI` / `FTD` / `FLOWS` schalten die Marktstruktur-Bahnen, `TENDIEMAN` öffnet den **Vollbild-Modus**, `SHANTY` und `CAT` spielen die Clips im Dock, `MOON` lässt Raketen steigen. `?` oder der Knopf `⌨ CODES` öffnet die Liste; die Hero-Zeile verrät, dass es sie gibt.
 - **Legende in der Subbar**: ein Zeichen pro Marker-Typ (Event, Meme, Corporate, Tweet, Meme Number) — damit ist auf einen Blick klar, was auf dem Tape liegt. Rechts daneben sitzt der klickbare Hype-Chip.
+
+## Unter dem Chart: DRS, Short Interest, Fails to Deliver
+
+Direkt unter der Kursfläche liegt der **Marktstruktur-Strip**. Er zeigt keinen zweiten Chart, sondern einen
+**Spiegel derselben Ansicht** (ein Klon der Kurs-SVG, halbtransparent) mit drei offiziellen Serien in eigenen
+Bahnen darüber — ein Scroll, ein Zoom, keine zusätzliche Bedienung:
+
+- **DRS / registrierte Aktien** — genau die Zahlen, die GameStop selbst in seinen 10-Q/10-K nennt. Die Serie
+  beginnt beim ersten Disclosure (30.10.2021, 5,2 Mio. Aktien vor dem Split) und läuft bis zum 10-K vom
+  18.03.2026 (66,2 Mio., davon rund 3,3 Mio. im DSPP). Angezeigt wird das, was in den Filings steht:
+  Stichtag, Anzahl, Anteil am Grundkapital, bei zwei Filings auch die Zahl der **Record Holder**
+  (197.058 im März 2023, 190.074 im März 2025). Spitze war der 01.06.2023 mit 76,6 Mio. — der Chart zeigt
+  deshalb auch den Abstieg, nicht nur die Erfolgsgeschichte. Alle Werte sind split-bereinigt.
+- **Short Interest** — die FINRA-Dateien, ein Balken je Settlement-Stichtag (15. und letzter Handelstag),
+  Farbe nach Richtung (steigend orange, fallend blau), dazu der **12-Report-Schnitt** als gestrichelte Linie.
+  Neuester Stand: 30.09.2026 mit 42.673.721 Aktien kurz, 3,98 Tage zum Eindecken.
+- **Fails to Deliver** — die SEC-CNS-Reihe auf **logarithmischer Skala**, weil zwischen 6 und 2.099.572
+  Aktien liegt. Die Serie erzählt die Episoden: Januar 2021 (Peak 2.099.572 am 26.01.), dann lange Ruhe,
+  der größte Ausschlag seit dem Split am 04.12.2025 mit 2.068.490 Aktien und der leise Alltag 2026
+  (31.03.2026: 24.739).
+
+Jeder Balken antwortet auf Hover, Klick springt zum Settlement-Tag im Chart und zeigt die Zahl als Toast. Über
+den Bahnen stehen Umschalter (`DRS`, `SHORT INTEREST`, `FAILS TO DELIVER`), `MARKET STRUCTURE ON/OFF` in der
+`ANZEIGE`-Leiste bzw. `HIDE STRIP` im Strip selbst klappt die ganze Ebene weg — der Chart bekommt dann wieder
+die volle Seite. Auf schmalen Displays wird aus dem Strip eine Textstaffel statt einer Zeichenfläche.
+
+**Daten & Grenzen.** Die Kurse kommen wie gehabt aus `market-data.js`; die Serien liegen in **`flow-data.js`**.
+Aktualisiert wird die Datei von `scripts/fetch-market-structure.mjs` über
+`.github/workflows/refresh-market-structure.yml` (zweimal im Monat + auf Knopfdruck). Der Fetcher lädt die
+FINRA-CSVs direkt und verweigert die Arbeit nicht, wenn eine Quelle blockt: er **mischt** neue Zeilen in die
+bestehende Datei, statt sie zu ersetzen, und die vor dem ersten Live-Lauf eingetragenen Zeilen (Januar 2021,
+Dezember 2025, Februar/März 2026) stammen aus derselben offiziellen Reihe, wie sie öffentlich nachlesbar ist.
+Zur Einordnung, weil das oft falsch erzählt wird: Ein Fails-to-Deliver-Wert ist der **aggregierte Bestand je
+Settlement-Tag** (kumulativ, nicht „neue Fails des Tages“), ein fehlender Tag heißt nur „unter der Meldegrenze“,
+und die SEC schreibt selbst, dass Fails **kein Beweis für Naked Short Selling** sind. Alle Zahlen sind zitiert,
+nicht interpretiert.
+
+**TENDIEMAN MODE (Vollbild)** hängt sich an denselben Datenstrang: 13 Zeilen des Archivs, jede an einen echten
+Handelstag des Tapes gehängt — vom „mall retailer“ 2019 über „the squeeze prints $483 intraday“ bis zum
+Warrant-Tag im Oktober 2026. Klick auf eine Zeile springt in der Zeit, `ESC` schließt, die Leertaste pausiert,
+ein Klick neben das Panel schließt ebenfalls. Kein Mitschnitt und kein fremder Ton: der Link führt nur zur
+Suche nach dem Original.
 
 ## Im Entwurf enthalten
 
@@ -99,4 +144,4 @@ The public interface, tooltips, accessibility labels and dynamic event details a
 
 Embedded playback depends on the original uploader and regional/provider restrictions. Use the Original or Archive / context link if an embed is unavailable. MEDIA OFF also stops clip-rail players and prevents restarting them until media is enabled.
 
-Run `npm install` and `npm test` for the DOM regression tests. The first covers all meme shortcuts, dock visibility, selected labels and clip media-off behavior; the second pins the 2026 data layer (16 anchor moments, Bitcoin/M&A/warrant chart layers, `meme-ebay`), the number-radar rules (the $483.00 print must be tagged exactly once) and the keyboard codes (radar toggle, lore toggle, `MOON`, `TENDIEMAN`). Neither test validates external video availability or real browser layout.
+Run `npm install` and `npm test` for the DOM regression tests. The first covers all meme shortcuts, dock visibility, selected labels and clip media-off behavior; the second pins the 2026 data layer (16 anchor moments, Bitcoin/M&A/warrant chart layers, `meme-ebay`), the number-radar rules (the $483.00 print must be tagged exactly once) and the keyboard codes (radar toggle, lore toggle, `MOON`, `TENDIEMAN` as the fullscreen mode, `SHANTY` as the dock clip); the third pins the market-structure strip: `flow-data.js` must load (18 DRS disclosures, 40+ fails-to-deliver rows, the 26 Jan 2021 peak as the FTD anchor), the strip must sit *after* the chart terminal and mirror its viewBox, all three lanes must draw real values (66.2M / 14.8% / days-to-cover / 2.1M peak), pane toggles and the on/off switch must work and `TENDIEMAN` must fill the screen and close on ESC. No test validates external video availability, regulator endpoints or real browser layout.

@@ -2250,3 +2250,449 @@ kbd {
 }
 
 body.dock-collapsed .signal-toast { bottom: 22px; }
+
+/* ---------------------------------------------------------------------------
+   2026 MARKET STRUCTURE STRIP — drei offizielle Serien UNTER der Kursfläche.
+   Der Strip zeigt einen Klon der Kurs-SVG (ein Scroll, ein Zoom), darüber
+   liegen drei Bahnen: DRS, Short Interest (FINRA), Fails to Deliver (SEC).
+   Alles hier ist Deko + Lesbarkeit; die Zahlen kommen aus flow-data.js.
+--------------------------------------------------------------------------- */
+
+.flows-strip {
+  position: relative;
+  margin: 14px 0 0;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(155, 206, 255, 0.035), transparent 30%),
+    var(--surface);
+}
+
+.flows-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.flows-kicker {
+  color: var(--dim);
+  font: 12px/1.2 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.flows-title h2 {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font: 600 clamp(22px, 2.6vw, 34px) / 1.06 var(--display);
+  letter-spacing: -0.01em;
+}
+
+.flows-title h2 em {
+  color: var(--acid);
+  font-style: italic;
+}
+
+.flows-pane-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.flow-pane-toggle,
+.flow-strip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--dim);
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.flow-pane-toggle b,
+.flow-strip-toggle b {
+  font-weight: 700;
+  color: var(--dim);
+}
+
+.flow-pane-toggle.is-on {
+  border-color: var(--acid);
+  color: var(--acid);
+  background: rgba(216, 241, 62, 0.06);
+}
+
+.flow-pane-toggle.is-on b { color: var(--ink); }
+.flow-pane-toggle:hover,
+.flow-strip-toggle:hover { color: var(--ink); border-color: var(--line); }
+
+.flows-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.flows-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 20px 15px;
+  border-right: 1px solid var(--line-soft);
+}
+
+.flows-stat:last-child { border-right: 0; }
+
+.flows-stat-label {
+  color: var(--dim);
+  font: 11px/1.2 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.flows-stat strong {
+  color: var(--ink);
+  font: 600 clamp(20px, 2.2vw, 28px) / 1.05 var(--display);
+}
+
+.flows-stat-sub {
+  color: var(--muted);
+  font: 12px/1.4 var(--mono);
+}
+
+.flows-stat-foot {
+  color: var(--dim);
+  font: 11px/1.4 var(--mono);
+}
+
+.flows-body {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.flows-body.is-dragging { cursor: grabbing; }
+
+.flows-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.flows-clone-canvas,
+.flows-clone-canvas * {
+  pointer-events: none !important;
+}
+
+.flows-clone-canvas {
+  display: block;
+  opacity: 0.34;
+  filter: saturate(0.55);
+}
+
+.flows-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.flows-canvas [data-si-index],
+.flows-canvas [data-ftd-index],
+.flows-canvas [data-drs-index] {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.flows-lane {
+  fill: rgba(255, 255, 255, 0.02);
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+
+/* DRS — registrierte Aktien, eine Linie je Filing */
+.flows-drs-area { fill: rgba(216, 241, 62, 0.1); }
+.flows-drs-line { stroke: var(--acid); stroke-width: 2; }
+.flows-drs-dot { fill: var(--surface); stroke: var(--acid); stroke-width: 1.6; }
+.flows-drs-dot.is-peak { fill: var(--acid); }
+.flows-drs-dot.is-latest { fill: var(--ink); stroke: var(--ink); }
+.flows-drs-dot.is-active { stroke: var(--orange); fill: var(--orange); }
+.flows-dot-label {
+  fill: var(--acid);
+  font: 700 10px var(--mono);
+  letter-spacing: 0.08em;
+}
+.flows-dot-label.is-latest { fill: var(--ink); }
+.flows-dot-label.is-peak { fill: var(--orange); }
+
+/* Short Interest — FINRA, zweimal im Monat */
+.flows-si-bar { fill: rgba(155, 206, 255, 0.55); }
+.flows-si-bar.is-rising { fill: var(--orange); }
+.flows-si-bar.is-falling { fill: rgba(155, 206, 255, 0.7); }
+.flows-si-bar.is-active { fill: var(--acid); }
+.flows-si-average {
+  stroke: rgba(237, 241, 221, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+.flows-average-label {
+  fill: var(--dim);
+  font: 700 10px var(--mono);
+  letter-spacing: 0.08em;
+}
+
+/* Fails to Deliver — SEC, logarithmisch */
+.flows-ftd-bar { fill: rgba(255, 92, 49, 0.6); }
+.flows-ftd-bar.is-active { fill: var(--acid); }
+
+.flows-rail {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(240px, 42%);
+  pointer-events: none;
+}
+
+.flows-rail-block {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 12px 8px 14px;
+  border-left: 2px solid var(--acid);
+  background: linear-gradient(90deg, rgba(9, 11, 9, 0.94), rgba(9, 11, 9, 0.66) 62%, transparent);
+}
+
+.flows-rail-block.is-si { border-left-color: var(--blue); }
+.flows-rail-block.is-ftd { border-left-color: var(--orange); }
+
+.flows-rail-label {
+  color: var(--dim);
+  font: 700 10px/1.2 var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.flows-rail-value {
+  color: var(--ink);
+  font: 600 15px/1.1 var(--display);
+}
+
+.flows-rail-sub {
+  color: var(--muted);
+  font: 11px/1.2 var(--mono);
+}
+
+.flows-readout {
+  min-height: 38px;
+  padding: 11px 20px 12px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--dim);
+  font: 12px/1.5 var(--mono);
+}
+
+.flows-readout b { color: var(--ink); }
+.flows-readout.is-active { color: var(--muted); }
+
+.flows-note {
+  margin: 0;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--dim);
+  font: 12px/1.6 var(--mono);
+}
+
+.flows-note b,
+.flows-note em { color: var(--muted); font-style: normal; }
+
+body.flows-off .flows-strip { display: none; }
+
+.flows-signal { color: var(--acid); }
+
+@media (max-width: 900px) {
+  .flows-stats { grid-template-columns: minmax(0, 1fr); }
+  .flows-stat { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .flows-body { min-height: 0; height: auto !important; }
+  .flows-track,
+  .flows-canvas { display: none; }
+  .flows-rail {
+    position: static;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 0 0 8px;
+  }
+  .flows-rail-block {
+    position: static !important;
+    height: auto !important;
+    border-left-width: 2px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+/* -------------------------------------------------- TENDIEMAN MODE (Vollbild) */
+
+.tendieman {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 48px);
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(216, 241, 62, 0.09), transparent 55%),
+    rgba(6, 7, 6, 0.97);
+  backdrop-filter: blur(3px);
+}
+
+.tendieman[hidden] { display: none; }
+
+.tendieman-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(760px, 100%);
+  max-height: 100%;
+}
+
+.tendieman-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tendieman-kicker {
+  color: var(--acid);
+  font: 700 12px/1 var(--mono);
+  letter-spacing: 0.16em;
+}
+
+.tendieman-state {
+  color: var(--dim);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.14em;
+}
+
+.tendieman-close {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tendieman-close:hover { color: var(--acid); border-color: var(--acid); }
+
+.tendieman-lines {
+  margin: 0;
+  padding: 0 4px 0 0;
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--acid) transparent;
+}
+
+.tendieman-line {
+  padding: 10px 0 10px 16px;
+  border-left: 2px solid transparent;
+  opacity: 0.34;
+  cursor: pointer;
+  transition: opacity 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.tendieman-line.is-past { opacity: 0.18; }
+
+.tendieman-line.is-active {
+  opacity: 1;
+  border-left-color: var(--acid);
+  transform: translateX(4px);
+}
+
+.tendieman-text {
+  margin: 0;
+  color: var(--ink);
+  font: 600 clamp(20px, 3.4vw, 32px) / 1.18 var(--display);
+}
+
+.tendieman-data {
+  display: block;
+  margin-top: 5px;
+  color: var(--dim);
+  font: 12px/1.4 var(--mono);
+  letter-spacing: 0.05em;
+}
+
+.tendieman-line.is-active .tendieman-data { color: var(--acid); }
+
+.tendieman-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.tendieman-counter {
+  color: var(--muted);
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.12em;
+}
+
+.tendieman-progress {
+  flex: 1 1 auto;
+  height: 2px;
+  background: var(--line-soft);
+}
+
+.tendieman-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--acid);
+}
+
+.tendieman-play {
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.tendieman-play:hover { color: var(--acid); border-color: var(--acid); }
+
+.tendieman-source {
+  color: var(--dim);
+  font: 11px/1 var(--mono);
+  text-decoration: none;
+}
+
+.tendieman-source:hover { color: var(--acid); }
+
+body.tendieman-open { overflow: hidden; }
+
+.layer-shortcut.is-mode {
+  border-color: rgba(216, 241, 62, 0.42);
+  color: var(--acid);
+}

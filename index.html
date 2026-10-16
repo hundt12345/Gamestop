@@ -112,6 +112,11 @@
             <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="Load GIFs and videos; turning this off keeps the player text-only">
               <span class="media-toggle-signal" aria-hidden="true">◉</span> MEDIA <b id="media-toggle-state">ON</b>
             </button>
+            <button type="button" class="mode-toggle flows-mode-toggle" id="flows-toggle" aria-pressed="true" title="Official series under the chart: registered shares (DRS), FINRA short interest and SEC fails to deliver">
+              <span class="flows-signal" aria-hidden="true">▦</span>
+              <span class="mode-word">MARKET STRUCTURE</span>
+              <b id="flows-toggle-state">ON</b>
+            </button>
             <button type="button" class="codes-toggle" id="codes-toggle" aria-expanded="false" title="Hidden codes — type them anywhere on the page">
               <span aria-hidden="true">⌨</span> CODES <b>?</b>
             </button>
@@ -166,7 +171,8 @@
                 <button type="button" class="layer-toggle is-on" id="tweet-toggle" aria-pressed="true">𝕏 RC TWEETS <b id="tweet-toggle-state">ON</b></button>
                 <button type="button" class="layer-toggle is-on" id="number-toggle" aria-pressed="true" title="Sessions that printed a cult number — computed from this tape">★ MEME NUMBERS <b id="number-toggle-state">ON</b></button>
                 <div class="layers-shortcuts" role="group" aria-label="Play memes directly">
-                  <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ TENDIEMAN</button>
+                  <button type="button" class="layer-shortcut is-mode" data-open-tendieman title="Fullscreen Tendieman mode — the archive as a shanty, ESC closes">♪ TENDIEMAN MODE</button>
+                  <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ SHANTY (DOCK)</button>
                   <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 CAT MEMES</button>
                   <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 NOT A CAT</button>
                 </div>
@@ -326,6 +332,64 @@
           </div>
 
         </div>
+
+        <!-- MARKTSTRUKTUR: die offiziellen Serien liegen UNTER der Kursfläche.
+             Gezeigt wird ein Spiegel derselben Chart-Ansicht (Klon der Kurs-SVG)
+             mit drei Bahnen darüber: DRS (Computershare, aus den 10-Q/10-K),
+             Short Interest (FINRA) und Fails to Deliver (SEC). Ein Scroll, ein
+             Zoom, keine zweite Bedienung. -->
+        <section class="flows-strip" id="flows-strip" aria-label="Official market structure under the chart: registered shares, FINRA short interest and SEC fails to deliver">
+          <div class="flows-head">
+            <div class="flows-title">
+              <span class="flows-kicker">03 / MARKET STRUCTURE · OFFICIAL NUMBERS</span>
+              <h2>The register, the shorts, <em>the fails.</em></h2>
+            </div>
+            <div class="flows-pane-controls" role="group" aria-label="Series under the chart">
+              <button type="button" class="flow-pane-toggle is-on" data-flow-pane-toggle="drs" aria-pressed="true">DRS<b>REGISTERED</b></button>
+              <button type="button" class="flow-pane-toggle is-on" data-flow-pane-toggle="si" aria-pressed="true">SHORT INTEREST<b>FINRA</b></button>
+              <button type="button" class="flow-pane-toggle is-on" data-flow-pane-toggle="ftd" aria-pressed="true">FAILS TO DELIVER<b>SEC</b></button>
+              <button type="button" class="flow-strip-toggle" id="flows-strip-toggle" aria-pressed="true" title="Hide the strip and give the chart the full page">HIDE STRIP</button>
+            </div>
+          </div>
+
+          <div class="flows-stats" id="flows-stats" aria-live="polite"></div>
+
+          <div class="flows-body" id="flows-body">
+            <div class="flows-track" id="flows-track">
+              <!-- Der Klon der Kurs-SVG wird hier eingesetzt; darüber liegt die Serien-Ebene.
+                   Beide hängen an derselben Spur, damit ein Transform beides bewegt. -->
+              <svg class="flows-canvas" id="flows-canvas" aria-label="Registered shares, short interest and fails to deliver, aligned to the chart above"></svg>
+            </div>
+            <div class="flows-rail" id="flows-rail" aria-hidden="true">
+              <div class="flows-rail-block is-drs" hidden>
+                <span class="flows-rail-label">DRS / TRANSFER AGENT</span>
+                <span class="flows-rail-value">—</span>
+                <span class="flows-rail-sub">—</span>
+              </div>
+              <div class="flows-rail-block is-si" hidden>
+                <span class="flows-rail-label">SHORT INTEREST / FINRA</span>
+                <span class="flows-rail-value">—</span>
+                <span class="flows-rail-sub">—</span>
+              </div>
+              <div class="flows-rail-block is-ftd" hidden>
+                <span class="flows-rail-label">FAILS TO DELIVER / SEC</span>
+                <span class="flows-rail-value">—</span>
+                <span class="flows-rail-sub">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flows-readout" id="flows-readout" aria-live="polite">—</div>
+
+          <p class="flows-note">
+            Sources, quoted not interpreted: <b>DRS</b> — the registered-share counts GameStop publishes in its own
+            10-Q/10-K filings (split-adjusted; Cede &amp; Co keeps the rest). <b>Short interest</b> — FINRA equity
+            short interest files, one row per settlement date (15th and last business day). <b>Fails to deliver</b> —
+            the SEC's CNS series: the aggregate balance per settlement date, <em>cumulative</em>, not daily new fails.
+            The SEC states explicitly that fails are not evidence of naked short selling, and a missing date simply
+            means the balance stayed below the reporting threshold. Nothing here is advice.
+          </p>
+        </section>
 
         <div class="hero-bottomline">
           <p><span class="tiny-arrow">↘</span> newest on the right. Read back through the record.</p>
@@ -709,6 +773,25 @@
     </footer>
 
     <script src="market-data.js" defer></script>
+    <!-- TENDIEMAN MODE: Vollbild-Zeilen des Archivs, jede an einen echten
+         Handelstag gehängt. Kein Mitschnitt, kein fremder Ton. -->
+    <div class="tendieman" id="tendieman" role="dialog" aria-modal="true" aria-label="Tendieman mode — the archive as a shanty" hidden>
+      <div class="tendieman-inner">
+        <div class="tendieman-head">
+          <span class="tendieman-kicker">♪ TENDIEMAN MODE</span>
+          <span class="tendieman-state" id="tendieman-state">PLAYING</span>
+          <button type="button" class="tendieman-close" id="tendieman-close" aria-label="Close Tendieman mode (Escape)">×</button>
+        </div>
+        <ol class="tendieman-lines" id="tendieman-lines"></ol>
+        <div class="tendieman-foot">
+          <span class="tendieman-counter" id="tendieman-counter">01 / 13</span>
+          <div class="tendieman-progress" aria-hidden="true"><span id="tendieman-progress-fill"></span></div>
+          <button type="button" class="tendieman-play" id="tendieman-play">PAUSE</button>
+          <a class="tendieman-source" href="https://www.youtube.com/results?search_query=tendieman+sea+shanty" target="_blank" rel="noreferrer">find the original ↗</a>
+        </div>
+      </div>
+    </div>
+
     <!-- Offizielle Marktstruktur-Daten (FINRA Short Interest, SEC Fails-to-Deliver).
          Wird von .github/workflows/refresh-market-structure.yml aktualisiert. -->
     <script src="flow-data.js"></script>
