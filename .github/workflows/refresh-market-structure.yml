@@ -1,0 +1,48 @@
+name: Refresh market structure data
+
+# Keeps flow-data.js on the current FINRA short interest and SEC
+# fails-to-deliver series. Runs on demand, monthly (a day after the last
+# settlement date of each month), and whenever the fetcher changes.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 7 2,17 * *'
+  push:
+    paths:
+      - '.github/workflows/refresh-market-structure.yml'
+      - 'scripts/fetch-market-structure.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-market-structure-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch short interest + fails-to-deliver
+        run: node scripts/fetch-market-structure.mjs
+
+      - name: Commit when the series changed
+        run: |
+          git config user.name "gamestop-event-tape[bot]"
+          git config user.email "gamestop-event-tape[bot]@users.noreply.github.com"
+          git add flow-data.js
+          if git diff --cached --quiet; then
+            echo "flow-data.js already up to date"
+          else
+            git commit -m "chore: refresh FINRA short interest + SEC fails-to-deliver"
+            git push
+          fi

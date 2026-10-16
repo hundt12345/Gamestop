@@ -212,9 +212,34 @@ const eventMedia = {
     { kind: 'VIDEO', title: 'Return / reaction loop', source: 'YouTube / source search', url: 'https://www.youtube.com/results?search_query=Roaring+Kitty+return+May+2024', mark: '▶' }
   ],
   'event-tail': [
-    { kind: 'DOC', title: 'Warrants + filings', source: 'SEC EDGAR / current trail', url: 'https://investor.gamestop.com/financial-information/sec-filings', mark: '8-K' },
+    { kind: 'DOC', title: 'Warrants + filings', source: 'GameStop IR / SEC filings', url: 'https://investor.gamestop.com/financial-information/sec-filings', mark: '8-K' },
     { kind: 'DOC', title: 'Earnings / long tail', source: 'GameStop quarterly results', url: 'https://investor.gamestop.com/financial-information/quarterly-results', mark: '10-K' },
-    { kind: 'VIDEO', title: 'Keep the archive open', source: 'YouTube / source search', url: 'https://www.youtube.com/results?search_query=GameStop+latest+earnings+filings', mark: '▶' }
+    { kind: 'DOC', title: 'Warrant terms (GME WS)', source: 'NYSE / NYSE listing', url: 'https://www.nyse.com/quote/XNYS:GME.WS', mark: 'WS' }
+  ],
+  'event-pivot': [
+    { kind: 'DOC', title: 'Investment policy update', source: 'GameStop IR / news releases', url: 'https://investor.gamestop.com/news-releases', mark: '8-K' },
+    { kind: 'DOC', title: 'Convertible notes trail', source: 'SEC EDGAR / CIK 1326380', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', mark: 'EDGAR' },
+    { kind: 'VIDEO', title: 'Bitcoin treasury, explained', source: 'YouTube / source search', url: 'https://www.youtube.com/results?search_query=GameStop+bitcoin+treasury+2025', mark: '▶' }
+  ],
+  'event-bitcoin': [
+    { kind: 'DOC', title: '“GameStop announces purchase of Bitcoin”', source: 'GameStop IR, 28.05.2025', url: 'https://investor.gamestop.com/news-releases/news-details/2025/GameStop-Announces-Purchase-of-Bitcoin/default.aspx', mark: '12.5' },
+    { kind: 'DOC', title: 'The $2.25B follow-up raise', source: 'CoinDesk, 11.06.2025', url: 'https://www.coindesk.com/business/2025/06/11/gamestop-raising-another-175b-for-potential-bitcoin-purchases', mark: '₿' },
+    { kind: 'VIDEO', title: '4,710 BTC in context', source: 'YouTube / source search', url: 'https://www.youtube.com/results?search_query=GameStop+4710+bitcoin', mark: '▶' }
+  ],
+  'event-warchest': [
+    { kind: 'DOC', title: 'Q4 FY2025 results', source: 'GameStop IR / quarterly results', url: 'https://investor.gamestop.com/financial-information/quarterly-results', mark: '10-K' },
+    { kind: 'DOC', title: '$9.01B in cash and securities', source: '24/7 Wall St., 25.03.2026', url: 'https://247wallst.com/investing/2026/03/25/gamestop-ceo-silent-on-mega-deal-as-it-crushes-earnings-stockpiles-cash/', mark: '$9B' },
+    { kind: 'DOC', title: 'Bitcoin as a covered call', source: 'CoinDesk / 10-K, 26.03.2026', url: 'https://www.coindesk.com/business/2026/03/26/gamestop-turned-its-usd368-million-bitcoin-stash-into-an-options-income-play', mark: '₿' }
+  ],
+  'event-ebay': [
+    { kind: 'DOC', title: 'eBay rejects the proposal', source: 'Variety / eBay press release', url: 'https://variety.com/2026/digital/news/ebay-rejects-gamestop-merger-proposal-1236745743/', mark: 'NO' },
+    { kind: 'DOC', title: 'The retreat to a partnership', source: 'Bloomberg via LA Times, 11.08.2026', url: 'https://www.latimes.com/business/story/2026-08-11/why-gamestops-bold-56-billion-play-for-ebay-is-suddenly-in-doubt', mark: '56B' },
+    { kind: 'DOC', title: 'Stake + filings', source: 'SEC EDGAR / CIK 1326380', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', mark: '13D' }
+  ],
+  'event-buyback': [
+    { kind: 'DOC', title: 'Record net income of $389.6M', source: 'GameStop IR / Yahoo Finance', url: 'https://finance.yahoo.com/markets/stocks/articles/gamestop-q1-2026-earnings-record-115457004.html', mark: 'Q1' },
+    { kind: 'DOC', title: 'The $2B repurchase authorisation', source: 'GameStop IR / quarterly results', url: 'https://investor.gamestop.com/financial-information/quarterly-results', mark: '$2B' },
+    { kind: 'VIDEO', title: 'The buyback, explained', source: 'YouTube / source search', url: 'https://www.youtube.com/results?search_query=GameStop+2+billion+buyback+2026', mark: '▶' }
   ]
 };
 
@@ -229,7 +254,12 @@ const storyEvents = [
   { id: 'event-split', date: 'JUL 2022', iso: '2022-07-22', title: 'A split dividend, a new denominator', label: 'SPLIT / STRUCTURE', tag: 'read the release' },
   { id: 'event-profit', date: 'MAR 2023', iso: '2023-03-22', title: 'Profit changes the texture', label: 'EARNINGS / BUSINESS', tag: 'numbers over narrative' },
   { id: 'event-return', date: 'MAY 2024', iso: '2024-05-13', title: 'The return of Roaring Kitty', label: 'RETURN / VOLATILITY', tag: 'the avatar is back' },
-  { id: 'event-tail', date: 'OCT 2026', iso: null, title: 'Warrants, filings, the long tail', label: 'FILINGS / LONG TAIL', tag: 'archive still updating' }
+  { id: 'event-pivot', date: 'MAR 2025', iso: '2025-03-25', title: 'The treasury pivot', label: 'TREASURY / BITCOIN', tag: 'the balance sheet turns' },
+  { id: 'event-bitcoin', date: 'MAY 2025', iso: '2025-05-28', title: 'Four thousand seven hundred ten', label: 'BITCOIN / 4,710', tag: 'cash finds a new home' },
+  { id: 'event-warchest', date: 'MAR 2026', iso: '2026-03-24', title: 'Nine billion in the drawer', label: 'WAR CHEST / 10-K', tag: 'and a Bitcoin footnote' },
+  { id: 'event-ebay', date: 'MAY 2026', iso: '2026-05-12', title: 'The $56 billion wildcard', label: 'M&A / EBAY', tag: 'a retailer bids for a marketplace' },
+  { id: 'event-buyback', date: 'JUN 2026', iso: '2026-06-02', title: 'Record profit, record firepower', label: 'EARNINGS / BUYBACK', tag: 'raising turns into spending' },
+  { id: 'event-tail', date: 'OCT 2026', iso: null, title: 'Warrants, insiders, an open record', label: 'LONG TAIL / OPEN', tag: 'archive still updating' }
 ].map((event) => ({ ...event, media: eventMedia[event.id] ?? [] }));
 
 // the final anchor always points at the newest bar in the tape
@@ -541,6 +571,33 @@ const memeMoments = [
     id: 'meme-spartans', iso: '2021-01-31', label: '300 / GAMESTONKS',
     frames: [{ quote: '300 GAMESTOP GAMESTONKS', caption: 'Flashgitz’s animated 300 parody. Published January 31; anchored to the nearest trading session. Mature humor.' }],
     media: [{ ...video('cJd3LO6u1vY', 'Flashgitz', '300 GameStop GameStonks (mature humor)'), archive: 'https://knowyourmeme.com/videos/261203-wallstreetbets-gamestop-short-squeeze' }]
+  },
+  {
+    id: 'meme-btc', iso: '2025-05-28', label: '4,710 ₿',
+    frames: [
+      { quote: 'FOUR THOUSAND SEVEN HUNDRED TEN.', caption: 'the balance sheet buys internet money with internet money.' },
+      { quote: 'CASH → ₿ → …?', caption: 'the question runs for the next twelve months.' },
+      { quote: 'TREASURY RESERVE ASSET', caption: 'a video game shop becomes a crypto story.' }
+    ],
+    media: []
+  },
+  {
+    id: 'meme-ebay', iso: '2026-05-12', label: 'THE $56B BID',
+    frames: [
+      { quote: 'WE’LL TAKE THE MARKETPLACE.', caption: 'a ~$10B retailer bids $56B for eBay.' },
+      { quote: '“NEITHER CREDIBLE NOR ATTRACTIVE.”', caption: 'eBay’s board, 12 May 2026.' },
+      { quote: 'ONE WAY OR ANOTHER.', caption: 'the bidder keeps buying the stock instead.' }
+    ],
+    media: []
+  },
+  {
+    id: 'meme-warrants', iso: '2026-09-09', label: 'FREE LOTTERY TICKETS',
+    frames: [
+      { quote: '1 WARRANT PER 10 SHARES.', caption: 'a dividend that only pays if the stock reaches $32.' },
+      { quote: 'GME WS.', caption: 'listed, tradable, expiring 30 October 2026.' },
+      { quote: 'INSIDERS KEEP BUYING.', caption: 'the tape ends on accumulation, not a climax.' }
+    ],
+    media: []
   }
 ];
 
@@ -568,12 +625,33 @@ const corporateEvents = [
   { iso: '2024-09-10', type: 'earnings', title: 'Q2 2024 Earnings', detail: 'An unexpected quarterly profit arrives alongside a new ATM program for up to 20 million shares.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
   { iso: '2024-12-10', type: 'earnings', title: 'Q3 2024 Earnings', detail: 'Another profitable quarter and a growing cash balance prompt questions about capital allocation.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
   { iso: '2025-03-25', type: 'earnings', title: 'Q4 2024 Earnings', detail: 'Annual results beat earnings-per-share expectations, followed by debate about a cryptocurrency treasury strategy.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2025-03-27', type: 'offering', title: 'Convertible notes for BTC treasury', detail: 'GameStop announces convertible notes, with proceeds intended in part for Bitcoin purchases.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' }
+  { iso: '2025-03-26', type: 'bitcoin', title: 'Bitcoin becomes a treasury asset', detail: 'The board approves Bitcoin as a treasury reserve asset and the company announces a convertible note offering — the start of the balance-sheet story that runs through 2026.', url: 'https://investor.gamestop.com/news-releases', source: 'GameStop IR / News releases' },
+  { iso: '2025-05-28', type: 'bitcoin', title: '4,710 BTC acquired', detail: 'GameStop confirms the purchase of 4,710 Bitcoin for roughly $500 million, funded by the $1.5B convertible notes completed in April 2025.', url: 'https://investor.gamestop.com/news-releases/news-details/2025/GameStop-Announces-Purchase-of-Bitcoin/default.aspx', source: 'GameStop IR / News release 28.05.2025' },
+  { iso: '2025-06-10', type: 'earnings', title: 'Q1 2025 Earnings', detail: 'Revenue of $732.4M and net income of $45M: the cost-cutting era shows up as profit, not growth.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-06-11', type: 'offering', title: 'Convertible notes: $2.25B', detail: 'A $1.75B zero-coupon convertible offering is upsized to $2.25B (plus a $450M option), conversion price around $28.91, due 2032.', url: 'https://www.coindesk.com/business/2025/06/11/gamestop-raising-another-175b-for-potential-bitcoin-purchases', source: 'CoinDesk / Company disclosure 11.06.2025' },
+  { iso: '2025-09-09', type: 'earnings', title: 'Q2 2025 Earnings', detail: 'Revenue rises to $972.2M and EPS beats at $0.25 — the collectibles shift starts to carry the top line.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-12-09', type: 'earnings', title: 'Q3 2025 Earnings', detail: 'Revenue of $821.0M with EPS around $0.24. Roughly $4.2B of zero-coupon converts have now been issued during the fiscal year.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2026-01-23', type: 'bitcoin', title: '4,709 BTC moved to Coinbase Prime', detail: 'On-chain analysts flag the transfer of nearly the entire position (about $420M). The market reads it as an exit; the 10-K later explains it differently.', url: 'https://finance.yahoo.com/news/gamestop-transfers-420m-bitcoin-coinbase-095700064.html', source: 'Yahoo Finance / CryptoQuant, 25.01.2026' },
+  { iso: '2026-03-24', type: 'earnings', title: 'Q4 2025: the war chest', detail: 'EPS of $0.49 against a $0.37 consensus. Full-year net income of $418.4M, $597.3M free cash flow and $9.01B in cash and marketable securities (a year earlier: $4.77B).', url: 'https://247wallst.com/investing/2026/03/25/gamestop-ceo-silent-on-mega-deal-as-it-crushes-earnings-stockpiles-cash/', source: '24/7 Wall St. / GameStop Q4 FY2025, 25.03.2026' },
+  { iso: '2026-03-26', type: 'bitcoin', title: '10-K: Bitcoin as covered calls', detail: 'The 10-K discloses that 4,709 BTC were pledged to Coinbase Credit for an over-the-counter covered-call strategy with strikes near $105K–110K. The coins are derecognised and booked as a $368.3M receivable.', url: 'https://www.coindesk.com/business/2026/03/26/gamestop-turned-its-usd368-million-bitcoin-stash-into-an-options-income-play', source: 'CoinDesk / GameStop 10-K, 26.03.2026' },
+  { iso: '2026-05-03', type: 'deal', title: 'A $56B bid for eBay', detail: 'A non-binding proposal for all eBay shares at $125, half cash and half GME stock — around $55.5B in equity value, with a TD Securities commitment for up to $20B of debt financing.', url: 'https://variety.com/2026/digital/news/ebay-rejects-gamestop-merger-proposal-1236745743/', source: 'Variety / eBay filing, 12.05.2026' },
+  { iso: '2026-05-12', type: 'deal', title: 'eBay says no', detail: 'eBay’s board rejects the proposal as “neither credible nor attractive”, citing financing uncertainty, leverage and GameStop’s governance. GameStop keeps buying the stock.', url: 'https://variety.com/2026/digital/news/ebay-rejects-gamestop-merger-proposal-1236745743/', source: 'Variety / eBay press release, 12.05.2026' },
+  { iso: '2026-06-02', type: 'earnings', title: 'Record quarter + $2B buyback', detail: 'Net income of $389.6M — the largest quarterly profit in company history — on $835.3M of revenue. Collectibles are 41.8% of sales. The board authorises a $2B repurchase programme through June 2029.', url: 'https://finance.yahoo.com/markets/stocks/articles/gamestop-q1-2026-earnings-record-115457004.html', source: 'GameStop IR / Yahoo Finance, 03.06.2026' },
+  { iso: '2026-06-24', type: 'other', title: 'Cohen drops the $35B award', detail: 'The CEO withdraws a performance package that could have paid as much as $35B, saying leadership should focus on operating performance and the eBay proposal.', url: 'https://finance.yahoo.com/markets/stocks/articles/gamestop-ceo-ryan-cohen-drops-125431586.html', source: 'Yahoo Finance / Bloomberg, 24.06.2026' },
+  { iso: '2026-08-10', type: 'deal', title: 'The eBay retreat', detail: 'Bloomberg reports Cohen is weighing pulling the $56B bid in favour of a partnership or joint venture that would give eBay access to roughly 1,600 US stores. GameStop holds 9.75% of eBay.', url: 'https://www.latimes.com/business/story/2026-08-11/why-gamestops-bold-56-billion-play-for-ebay-is-suddenly-in-doubt', source: 'Bloomberg via LA Times, 11.08.2026' },
+  { iso: '2026-09-08', type: 'earnings', title: 'Q2 2026 Earnings', detail: 'EPS of $0.27 beats, revenue falls to $790.2M as the prior-year Switch 2 launch, store closures and the France divestiture drop out. Collectibles: 45.1% of net sales, up 57%.', url: 'https://247wallst.com/investing/2026/09/22/the-clock-is-ticking-on-gamestops-ebay-acquisition-play-as-warrants-near-expiration/', source: 'GameStop IR / 24/7 Wall St., 22.09.2026' },
+  { iso: '2026-09-09', type: 'warrant', title: 'A warrant dividend: 1 per 10 shares', detail: 'A special dividend of roughly 59 million warrants, one for every ten shares, each exercisable at $32.00 until 30 October 2026 — up to about $1.9B if fully exercised.', url: 'https://finance.yahoo.com/news/dear-gamestop-stock-fans-mark-142619036.html', source: 'GameStop IR / Yahoo Finance, 07.10.2026' },
+  { iso: '2026-09-11', type: 'other', title: 'Closed stores reopen', detail: '“Your local GameStop is back.” Select previously closed stores reopen nationwide from 11 September — the shrinking story briefly runs in reverse.', url: 'https://x.com/gamestop/status/2098086425459868055', source: 'GameStop on X, 10.09.2026' },
+  { iso: '2026-10-07', type: 'warrant', title: 'GME WS starts trading', detail: 'The warrants are distributed to holders of record (3 October) and listed on the NYSE under the ticker GME WS. The clock on 30 October starts ticking.', url: 'https://finance.yahoo.com/news/dear-gamestop-stock-fans-mark-142619036.html', source: 'GameStop IR / Yahoo Finance, 07.10.2026' },
+  { iso: '2026-10-13', type: 'other', title: 'Insider buying keeps running', detail: 'Another 844,130 shares bought by Ryan Cohen are disclosed, after 700,000 on 2 October at $24.41 and 1,150,680 on 21 September at $22.94. Three directors bought as well.', url: 'https://www.investing.com/news/insider-trading-news/gamestop-ceo-ryan-cohen-buys-171m-in-company-stock-93CH-4945934', source: 'SEC Form 4 via Investing.com, 13.10.2026' }
 ];
 
 const CORP_TYPE = {
   earnings: { label: 'EARNINGS', glyph: 'E', word: 'Quarterly results' },
-  offering: { label: 'OFFERING', glyph: '$', word: 'Share offering / ATM' },
+  offering: { label: 'OFFERING', glyph: '$', word: 'Share offering / convertible notes' },
+  bitcoin: { label: 'BITCOIN', glyph: '₿', word: 'Treasury / digital assets' },
+  deal: { label: 'M&A', glyph: '⇄', word: 'Acquisition / eBay' },
+  warrant: { label: 'WARRANT', glyph: 'W', word: 'Warrant dividend' },
   other: { label: 'CORPORATE', glyph: '!', word: 'Corporate event' }
 };
 
@@ -593,6 +671,131 @@ const rcTweets = [
 ];
 
 const RC_X_URL = 'https://x.com/ryancohen';
+
+/* ------------------------------------------- TA desk / community reads --- */
+
+// Der TA-Desk rechnet nur mit dem eigenen Tape (market-data.js) und verlinkt
+// dorthin, wo die Community selbst analysiert. Jede Karte nennt, was sie
+// liefert — die Auswahl ist redaktionell, keine Empfehlung.
+const COMMUNITY_READS = [
+  {
+    kind: 'FORUM / TA',
+    name: 'Superstonk — technical analysis feed',
+    who: 'r/Superstonk',
+    note: 'The running TA threads: wedges, pennants, “liquidity triggers”, support zones. Written by holders, updated daily — read the counterarguments in the comments.',
+    url: 'https://www.reddit.com/r/Superstonk/search/?q=technical+analysis&restrict_sr=1&sort=new&t=year'
+  },
+  {
+    kind: 'X / MELT-UP',
+    name: 'James Roland — “The $GME Meltup Guy”',
+    who: '@JRoland_',
+    note: 'Posts melt-up formations, liquidity triggers and market-structure reads for GME. Charts and paid tools live at memestockwatch.com.',
+    url: 'https://x.com/JRoland_',
+    extra: { label: 'memestockwatch.com ↗', url: 'https://memestockwatch.com/' }
+  },
+  {
+    kind: 'RESEARCH',
+    name: 'GMEDD — research + chatter archive',
+    who: 'gmedd.com',
+    note: 'Long-form research, a data room and an archive of the tweets and posts that moved the tape. Useful for dating a rumour.',
+    url: 'https://www.gmedd.com/'
+  },
+  {
+    kind: 'ARCHIVE / DD',
+    name: 'Superstonk DD index',
+    who: 'r/Superstonk wiki',
+    note: 'The wiki that explains the vocabulary — DRS, the swap basket debate, what “book” vs “plan” means — and collects the long-form theses.',
+    url: 'https://www.reddit.com/r/Superstonk/wiki/index/'
+  },
+  {
+    kind: 'ORIGINAL',
+    name: 'Roaring Kitty',
+    who: '@TheRoaringKitty',
+    note: 'The original channel. When this account posts, the tape usually answers within minutes — that is the whole reason it is in this list.',
+    url: 'https://x.com/TheRoaringKitty'
+  },
+  {
+    kind: 'PRIMARY',
+    name: 'SEC EDGAR — GameStop filings',
+    who: 'CIK 1326380',
+    note: '10-Ks, 10-Qs, 8-Ks, Form 4s and the 13D trail. Every claim in this archive is meant to be checkable here.',
+    url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude'
+  }
+];
+
+// Anker für die VWAPs: der Squeeze-Peak 2021, das Comeback 2024 und der
+// Bilanz-Tag 2026 — „wo der durchschnittliche Käufer dieser Epoche sitzt“.
+const TA_ANCHORS = [
+  { iso: '2021-01-27', label: 'VWAP SINCE JAN 2021 PEAK', tone: 'red' },
+  { iso: '2024-05-14', label: 'VWAP SINCE RK RETURN', tone: 'blue' },
+  { iso: '2026-03-24', label: 'VWAP SINCE 2026 WAR-CHEST PRINT', tone: '' }
+];
+
+// Kult-Level, die in der Community zitiert werden — als LORE markiert,
+// damit sie nicht mit gerechneten Marken verwechselt werden.
+const TA_LORE_LEVELS = [
+  { price: 483, label: 'LORE / $483 JAN-2021 PRINT', tone: 'red' },
+  { price: 69, label: 'LORE / $69', tone: '' },
+  { price: 20, label: 'LORE / $20 ZONE', tone: 'blue' }
+];
+
+// Das Zahlenschloss: jede Regel wird gegen das echte Tape geprüft, es gibt
+// keine erfundenen Treffer. Gezählt wird im gerade angezeigten Kursmodus.
+const RADAR_CODES = [
+  {
+    id: 'top',
+    name: 'THE EXACT TOP',
+    note: 'The highest price ever printed in this tape: $483.00 — the intraday high of 28 January 2021.',
+    match: (bar) => Math.round(bar.high * 100) === 48300
+  },
+  {
+    id: 'nice',
+    name: 'NICE.',
+    note: 'A close at x.69 — the community’s most reliable non-signal.',
+    match: (bar) => centsOf(bar.close) === '69'
+  },
+  {
+    id: 'deep',
+    name: 'DEEP VALUE 042',
+    note: 'A close at x.42 — the number from DFV’s screenshots.',
+    match: (bar) => centsOf(bar.close) === '42'
+  },
+  {
+    id: 'four20',
+    name: 'FOUR-TWENTY, WITH INTEREST',
+    note: 'A close at $4.20, $24.20 or $42.00. Yes, more than once.',
+    match: (bar) => [420, 2420, 4200].includes(Math.round(bar.close * 100))
+  },
+  {
+    id: 'whole',
+    name: 'ROUND NUMBER',
+    note: 'A flat dollar amount of $20 or more — the tape printing a round number.',
+    match: (bar) => Math.round(bar.close * 100) % 100 === 0 && bar.close >= 20
+  }
+];
+
+// Versteckte Codes: tippen, ohne in ein Feld zu schreiben. Die Liste steht im
+// Codes-Panel (Knopf „⌨ CODES“ oder Taste ?).
+const CODES = [
+  { code: '741', label: '741', hint: 'Jump to the squeeze peak (27 Jan 2021)', action: 'jump', value: '2021-01-27' },
+  { code: '483', label: '483', hint: 'Jump to the exact all-time-high print', action: 'jump', value: '2021-01-28' },
+  { code: '0042', label: '0042', hint: 'Jump to the Roaring Kitty comeback', action: 'jump', value: '2024-05-14' },
+  { code: 'btc', label: 'BTC', hint: 'Jump to the 4,710-Bitcoin day', action: 'jump', value: '2025-05-28' },
+  { code: 'ebay', label: 'EBAY', hint: 'Jump to eBay’s rejection', action: 'jump', value: '2026-05-12' },
+  { code: 'ws', label: 'WS', hint: 'Jump to the warrant-dividend day', action: 'jump', value: '2026-10-07' },
+  { code: '420', label: '420', hint: 'Toggle the number radar', action: 'radar' },
+  { code: '69', label: '69', hint: 'Toggle the lore levels ($483 / $69 / $20)', action: 'lore' },
+  { code: 'ta', label: 'TA', hint: 'Open or close the TA desk', action: 'ta' },
+  { code: 'rc', label: 'RC', hint: 'Toggle the RC tweet layer', action: 'tweets' },
+  { code: 'tendieman', label: 'TENDIEMAN', hint: 'Open the fullscreen Tendieman mode', action: 'tendieman' },
+  { code: 'shanty', label: 'SHANTY', hint: 'Play the sea shanty in the dock', action: 'meme', value: 'meme-tendieman' },
+  { code: 'drs', label: 'DRS', hint: 'Jump to the latest DRS disclosure', action: 'drs' },
+  { code: 'si', label: 'SI', hint: 'Toggle the short interest pane', action: 'pane', value: 'si' },
+  { code: 'ftd', label: 'FTD', hint: 'Toggle the fails-to-deliver pane', action: 'pane', value: 'ftd' },
+  { code: 'flows', label: 'FLOWS', hint: 'Toggle the market structure strip', action: 'flows' },
+  { code: 'cat', label: 'CAT', hint: 'Play “I am not a cat”', action: 'meme', value: 'meme-cat' },
+  { code: 'moon', label: 'MOON', hint: 'Rockets. Nothing else.', action: 'moon' }
+];
 
 /* --------------------------------------------------------- media helpers --- */
 
@@ -694,19 +897,265 @@ function layerIndices(kind, resolution) {
   const key = `${kind}|${seriesCacheKey(resolution)}`;
   if (!layerIndexCache.has(key)) {
     const series = seriesFor(resolution);
-    const items = kind === 'corp' ? corporateEvents : rcTweets;
+    const items = layerItems(kind);
     layerIndexCache.set(key, items.map((item) => barIndexForDate(series, item.iso)));
   }
   return layerIndexCache.get(key);
+}
+
+// Regel-Wortlaut für die Detailkarte — nachvollziehbar statt Blackbox.
+function radarRule(id) {
+  const rules = {
+    top: 'high === $483.00',
+    nice: 'close cents === 69',
+    deep: 'close cents === 42',
+    four20: 'close ∈ {$4.20, $24.20, $42.00}',
+    whole: 'close % $1 === 0 and close ≥ $20'
+  };
+  return rules[id] ?? '—';
+}
+
+function layerItems(kind) {
+  if (kind === 'corp') return corporateEvents;
+  if (kind === 'tweet') return rcTweets;
+  if (kind === 'number') return radarList();
+  return [];
 }
 
 // Zustand des einklappbaren Chart-Layers (Events + RC-Tweets)
 const layerState = {
   corp: true,
   tweets: true,
-  corpFilter: 'all', // all | earnings | offering | other
-  active: null // { kind: 'corp' | 'tweet', index }
+  numbers: true,
+  corpFilter: 'all', // all | earnings | offering | bitcoin | deal | warrant | other
+  active: null // { kind: 'corp' | 'tweet' | 'number', index }
 };
+
+/* ------------------------------------------------- TA desk / analytics --- */
+
+// Alles hier wird aus market-data.js gerechnet — kein fremder Feed, keine
+// Meinung. Die Kennzahlen folgen dem angezeigten Kursmodus (split-bereinigt
+// oder as traded), damit Chart und Tabelle nie auseinanderlaufen.
+
+const taState = { lore: true };
+
+function centsOf(value) {
+  return String(Math.round(Math.abs(value) * 100) % 100).padStart(2, '0');
+}
+
+function average(values) {
+  const clean = values.filter((value) => Number.isFinite(value));
+  if (!clean.length) return null;
+  return clean.reduce((sum, value) => sum + value, 0) / clean.length;
+}
+
+function smaSeries(bars, period) {
+  const out = new Array(bars.length).fill(null);
+  let sum = 0;
+  for (let index = 0; index < bars.length; index += 1) {
+    sum += bars[index].close;
+    if (index >= period) sum -= bars[index - period].close;
+    if (index >= period - 1) out[index] = sum / period;
+  }
+  return out;
+}
+
+// Wilder-RSI auf Tagesschluss — der Klassiker, den auch die Community nutzt.
+function rsi(closes, period = 14) {
+  if (closes.length <= period) return null;
+  let gain = 0;
+  let loss = 0;
+  for (let index = 1; index <= period; index += 1) {
+    const delta = closes[index] - closes[index - 1];
+    if (delta >= 0) gain += delta;
+    else loss -= delta;
+  }
+  let avgGain = gain / period;
+  let avgLoss = loss / period;
+  for (let index = period + 1; index < closes.length; index += 1) {
+    const delta = closes[index] - closes[index - 1];
+    avgGain = (avgGain * (period - 1) + Math.max(0, delta)) / period;
+    avgLoss = (avgLoss * (period - 1) + Math.max(0, -delta)) / period;
+  }
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - 100 / (1 + rs);
+}
+
+function realizedVol(closes, period = 20) {
+  if (closes.length <= period) return null;
+  const slice = closes.slice(-(period + 1));
+  const returns = [];
+  for (let index = 1; index < slice.length; index += 1) returns.push(Math.log(slice[index] / slice[index - 1]));
+  const mean = average(returns);
+  const variance = average(returns.map((value) => (value - mean) ** 2));
+  return Math.sqrt(variance) * Math.sqrt(252) * 100;
+}
+
+// Anchored VWAP: „wo der durchschnittliche Käufer dieser Epoche sitzt“.
+function anchoredVwap(bars, iso) {
+  let priceVolume = 0;
+  let volume = 0;
+  let sessions = 0;
+  bars.forEach((bar) => {
+    if (bar.date < iso) return;
+    const typical = (bar.high + bar.low + bar.close) / 3;
+    priceVolume += typical * (bar.volume || 1);
+    volume += bar.volume || 1;
+    sessions += 1;
+  });
+  if (!volume || sessions < 3) return null;
+  return { price: priceVolume / volume, sessions };
+}
+
+// Volumen-Regale: die Kurszonen, in denen im letzten Jahr am meisten
+// gehandelt wurde. Das ist Support/Resistance ohne Bauchgefühl.
+function volumeShelves(bars, lookback = 260, bucketCount = 26, keep = 3) {
+  const window = bars.slice(-lookback);
+  if (window.length < 40) return [];
+  const low = Math.min(...window.map((bar) => bar.low));
+  const high = Math.max(...window.map((bar) => bar.high));
+  if (!(high > low)) return [];
+  const minLog = Math.log(Math.max(0.3, low));
+  const maxLog = Math.log(high);
+  const buckets = new Array(bucketCount).fill(0);
+  window.forEach((bar) => {
+    const typical = (bar.high + bar.low + bar.close) / 3;
+    const ratio = (Math.log(Math.max(0.3, typical)) - minLog) / (maxLog - minLog);
+    const index = clamp(Math.floor(ratio * bucketCount), 0, bucketCount - 1);
+    buckets[index] += bar.volume || 0;
+  });
+  const total = buckets.reduce((sum, value) => sum + value, 0) || 1;
+  return buckets
+    .map((volume, index) => {
+      const ratio = (index + 0.5) / bucketCount;
+      return { price: Math.exp(minLog + ratio * (maxLog - minLog)), share: volume / total };
+    })
+    .sort((a, b) => b.share - a.share)
+    .slice(0, keep)
+    .sort((a, b) => b.price - a.price);
+}
+
+// Das Zahlenschloss: nur Regeln, die gegen das echte Tape laufen — geprüft
+// wird immer das gedruckte („as traded“) Tape, denn Kult-Zahlen sind die
+// Zahlen, die damals wirklich auf dem Ticker standen. Im split-bereinigten
+// Modus sitzen die Sterne auf demselben Handelstag, nur der Kurs ist skaliert.
+let radarListCache = null;
+function radarList() {
+  if (radarListCache) return radarListCache;
+  const hits = [];
+  asTradedBars.forEach((bar, index) => {
+    const code = RADAR_CODES.find((entry) => entry.match(bar));
+    if (code) hits.push({ iso: bar.date, close: bar.close, high: bar.high, volume: bar.volume, printedIndex: index, code });
+  });
+  radarListCache = hits;
+  return hits;
+}
+
+const analyticsCache = new Map();
+function tapeAnalytics() {
+  const key = priceMode.mode;
+  if (analyticsCache.has(key)) return analyticsCache.get(key);
+  const bars = activeDailyBars();
+  const closes = bars.map((bar) => bar.close);
+  const sma50Raw = smaSeries(bars, 50);
+  const sma200Raw = smaSeries(bars, 200);
+  const sma50 = new Map();
+  const sma200 = new Map();
+  bars.forEach((bar, index) => {
+    if (sma50Raw[index] !== null) sma50.set(bar.date, sma50Raw[index]);
+    if (sma200Raw[index] !== null) sma200.set(bar.date, sma200Raw[index]);
+  });
+  const window52 = bars.slice(-252);
+  const high52 = window52.length ? Math.max(...window52.map((bar) => bar.high)) : null;
+  const low52 = window52.length ? Math.min(...window52.map((bar) => bar.low)) : null;
+  const last = bars[bars.length - 1];
+  const model = {
+    bars,
+    last,
+    sma50,
+    sma200,
+    lastSma50: sma50Raw[sma50Raw.length - 1],
+    lastSma200: sma200Raw[sma200Raw.length - 1],
+    rsi14: rsi(closes, 14),
+    rsi14Week: null,
+    realizedVol20: realizedVol(closes, 20),
+    high52,
+    low52,
+    volume5: average(bars.slice(-5).map((bar) => bar.volume)),
+    volume60: average(bars.slice(-60).map((bar) => bar.volume)),
+    highs: bars.reduce((best, bar) => (bar.high > best.high ? bar : best), bars[0]),
+    shelves: volumeShelves(bars),
+    anchors: TA_ANCHORS.map((anchor) => ({ ...anchor, vwap: anchoredVwap(bars, anchor.iso) }))
+      .filter((anchor) => anchor.vwap)
+  };
+  if (model.volume60) model.volumeRatio = model.volume5 / model.volume60;
+  analyticsCache.set(key, model);
+  return model;
+}
+
+// Hype-Index: vier ehrliche Bestandteile, ein Witz-Ergebnis. Keine Prognose.
+const hypeCache = new Map();
+function hypeIndex() {
+  const key = priceMode.mode;
+  if (hypeCache.has(key)) return hypeCache.get(key);
+  const bars = activeDailyBars();
+  const recent = bars.slice(-20);
+  const volScores = bars.map((bar, index) => (index < 20 ? 0 : Math.abs(bar.close / bars[index - 1].close - 1)));
+  const current20 = average(volScores.slice(-20)) ?? 0;
+  const percentile = volScores.filter((value) => value > 0 && value <= current20).length / Math.max(1, volScores.filter((value) => value > 0).length);
+  const analytics = tapeAnalytics();
+  const volumeRatio = analytics.volumeRatio ?? 1;
+  const bigMoves = recent.length
+    ? recent.filter((bar, index) => {
+        const previous = bars[bars.length - recent.length + index - 1];
+        if (!previous) return false;
+        return Math.abs(bar.close / previous.close - 1) >= 0.04;
+      }).length / recent.length
+    : 0;
+  const last = bars[bars.length - 1];
+  const fromHigh = analytics.high52 ? Math.max(0, 1 - last.close / analytics.high52) : 0;
+  const parts = [
+    { name: 'VOLUME VS 60D', score: clamp((volumeRatio - 0.7) / 1.3 * 10, 0, 10), readout: `${volumeRatio.toFixed(2)}×` },
+    { name: 'REALIZED VOL', score: clamp(percentile * 10, 0, 10), readout: `${(analytics.realizedVol20 ?? 0).toFixed(0)}% ann.` },
+    { name: 'BIG MOVES / 20D', score: clamp(bigMoves * 20, 0, 10), readout: `${Math.round(bigMoves * 20)}% of sessions ≥4%` },
+    { name: 'PROXIMITY TO 52W HIGH', score: clamp((1 - fromHigh) * 10, 0, 10), readout: `−${(fromHigh * 100).toFixed(1)}%` }
+  ];
+  const score = parts.reduce((sum, part) => sum + part.score, 0) / parts.length;
+  const label = score >= 8.5 ? 'UNHINGED' : score >= 6.5 ? 'JACKED' : score >= 4.5 ? 'COILED' : score >= 2.5 ? 'STIRRING' : 'QUIET';
+  const result = { score, label, parts };
+  hypeCache.set(key, result);
+  return result;
+}
+
+// Was auf dem Chart liegt, wenn der TA-Desk an ist.
+const taModelCache = new Map();
+function taModel() {
+  const key = `${priceMode.mode}|${taState.lore ? 'lore' : 'nolore'}`;
+  if (taModelCache.has(key)) return taModelCache.get(key);
+  const analytics = tapeAnalytics();
+  const levels = [];
+  if (analytics.high52) {
+    levels.push({ kind: 'ta-resistance', price: analytics.high52, label: `52W HIGH / ${formatAxisPrice(analytics.high52)}`, tone: 'red' });
+  }
+  if (analytics.low52) {
+    levels.push({ kind: 'ta-support', price: analytics.low52, label: `52W LOW / ${formatAxisPrice(analytics.low52)}`, tone: 'blue' });
+  }
+  analytics.shelves.forEach((shelf, index) => {
+    levels.push({
+      kind: 'ta-shelf',
+      price: shelf.price,
+      label: index === 0 ? `VOLUME SHELF / ${formatAxisPrice(shelf.price)}` : '',
+      tone: ''
+    });
+  });
+  if (taState.lore) {
+    TA_LORE_LEVELS.forEach((level) => levels.push({ kind: 'ta-lore', price: level.price, label: level.label, tone: level.tone }));
+  }
+  const model = { analytics, levels, anchors: analytics.anchors };
+  taModelCache.set(key, model);
+  return model;
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -771,6 +1220,17 @@ function scrollCardIntoView(id) {
 function clamp(value, min, max) {
   if (max < min) return min;
   return Math.min(max, Math.max(min, value));
+}
+
+// Vierstrahliger Stern für das Zahlenschloss („sparkle“).
+function starPath(cx, cy, outer, inner) {
+  const points = [];
+  for (let step = 0; step < 8; step += 1) {
+    const angle = (Math.PI / 4) * step - Math.PI / 2;
+    const radius = step % 2 === 0 ? outer : inner;
+    points.push(`${(cx + radius * Math.cos(angle)).toFixed(2)},${(cy + radius * Math.sin(angle)).toFixed(2)}`);
+  }
+  return `M${points.join('L')}Z`;
 }
 
 function svgElement(name, attributes = {}, text = '') {
@@ -848,6 +1308,10 @@ function memesEnabled() {
   return !document.body.classList.contains('memes-off');
 }
 
+function taActive() {
+  return document.body.classList.contains('ta-active');
+}
+
 // the terminal canvas only has to be re-drawn when its window, zoom or the
 // active event changes — panning alone just moves the existing canvas.
 let terminalPaintKey = '';
@@ -861,7 +1325,7 @@ function drawSeries(svg, options) {
   const {
     bars, from, to, ppb, height, priceTop, priceBottom, volumeTop, volumeBottom,
     domainFrom, domainTo, events, activeIndex, splits, ta, axisInCanvas, interactive, gradientId,
-    priceMode: mode = 'asTraded', inspect = null, memes = null, corp = null, tweets = null, activeLayer = null
+    priceMode: mode = 'asTraded', inspect = null, memes = null, corp = null, tweets = null, numbers = null, activeLayer = null
   } = options;
 
   svg.replaceChildren();
@@ -1045,78 +1509,75 @@ function drawSeries(svg, options) {
   });
   svg.append(markerGroup);
 
-  if (ta && events.length >= 8) {
+  /* ------------------------------------------------- TA desk overlay --- */
+  // Gezeichnet wird nur, was aus dem eigenen Tape gerechnet ist: SMA 50/200,
+  // 52-Wochen-Grenzen, Volumen-Regale und Anchored VWAPs. Die Kult-Level
+  // ($483 / $69 / $20) sind als LORE beschriftet und bleiben damit klar
+  // unterscheidbar von gerechneten Marken.
+  if (ta) {
     const overlay = svgElement('g', { class: 'technical-overlay', 'aria-hidden': 'true' });
-    const at = (index, price) => ({ x: x(index), y: y(price) });
-    const barIndex = events.map((event) => event.barIndex);
-    const lastBar = barIndex[barIndex.length - 1];
+    const labelPlacements = [];
     const minVisible = Math.exp(minLog);
     const maxVisible = Math.exp(maxLog);
 
-    // TA-Level sind in "as traded"-Kursen notiert — im bereinigten Modus werden
-    // Vorkurs-Split-Marken durch den Split-Faktor ihres Anker-Datums geteilt.
-    const taAdj = (price, anchorIndex) => {
-      if (mode !== 'adjusted') return price;
-      const anchor = bars[anchorIndex];
-      if (!anchor) return price;
-      return price / splitFactorBefore(anchor.date);
-    };
+    // Nur im tatsächlich sichtbaren Fenster beschriften — der Canvas reicht
+    // links und rechts über den Viewport hinaus.
+    const bandLeft = x(clamp(domainFrom, from, to)) + 6;
+    const bandRight = x(clamp(domainTo, from, to)) - 6;
 
-    const line = (kind, from_, to_) => svgElement('line', {
-      class: kind, x1: from_.x, y1: from_.y, x2: to_.x, y2: to_.y
-    });
-
-    // levels only make sense while they are actually on screen
-    const drawLevel = (kind, price, x1, x2, text, tone, anchorIndex = barIndex[4]) => {
-      if (price < minVisible * 1.02 || price > maxVisible * 0.985) return;
-      const anchor = at(anchorIndex, price);
-      const labelY = price > maxVisible * 0.9 ? anchor.y + 18 : anchor.y - 8;
-      placeLabel(text, clamp(anchor.x + 10, 6, width - 6), labelY, tone);
-      overlay.append(line(kind, { x: x1, y: anchor.y }, { x: x2, y: anchor.y }));
-    };
-
-    const placeLabel = (text, x, labelY, tone = '') => {
+    const placeLabel = (text, labelX, labelY, tone = '') => {
+      const labelWidth = text.length * 7.2;
+      const clampedX = clamp(labelX, bandLeft, Math.max(bandLeft, bandRight - labelWidth));
       const boxes = labelBoxes.concat(labelPlacements);
-      const width_ = text.length * 7.2;
       const collides = boxes.some((box) => {
         const boxWidth = box.width ?? 0;
-        return Math.abs(box.y - labelY) < 14 && Math.abs(box.x - x) < (boxWidth + width_) / 2 + 12;
+        return Math.abs(box.y - labelY) < 14 && Math.abs(box.x - clampedX) < (boxWidth + labelWidth) / 2 + 12;
       });
       if (collides || labelY < priceTop + 14 || labelY > priceBottom - 4) return;
-      labelPlacements.push({ x, y: labelY, width: width_ });
-      overlay.append(svgElement('text', { class: `ta-label${tone ? ` ${tone}` : ''}`, x, y: labelY }, text));
+      labelPlacements.push({ x: clampedX, y: labelY, width: labelWidth });
+      overlay.append(svgElement('text', { class: `ta-label${tone ? ` ${tone}` : ''}`, x: clampedX, y: labelY }, text));
     };
 
-    const labelPlacements = [];
-    const triangleTop = { from: at(barIndex[1], taAdj(27, barIndex[1])), to: at(barIndex[3], taAdj(150, barIndex[3])) };
-    const triangleBase = { from: at(barIndex[1], taAdj(11, barIndex[1])), to: at(barIndex[3], taAdj(62, barIndex[3])) };
-    if (triangleTop.from.y > priceTop && triangleBase.to.y < priceBottom) {
-      overlay.append(
-        line('ta-channel', triangleTop.from, triangleTop.to),
-        line('ta-channel support', triangleBase.from, triangleBase.to),
-        (() => {
-          placeLabel('TRIANGLE / COMMUNITY', triangleTop.from.x + 10, triangleTop.from.y - 8);
-          return svgElement('g');
-        })()
-      );
-    }
+    // 1. gleitende Durchschnitte als echte Linien über den sichtbaren Bereich
+    const drawMovingAverage = (map, className, name, tone) => {
+      const points = [];
+      for (let index = from; index <= to; index += 1) {
+        const bar = bars[index];
+        if (!bar) continue;
+        const value = map.get(bar.date);
+        if (value === undefined) continue;
+        const pointY = y(value);
+        if (pointY < priceTop - 60 || pointY > priceBottom + 60) continue;
+        points.push(`${x(index).toFixed(2)},${pointY.toFixed(2)}`);
+      }
+      if (points.length < 4) return;
+      overlay.append(svgElement('polyline', { class: className, points: points.join(' ') }));
+      const [lastX, lastY] = points[points.length - 1].split(',').map(Number);
+      placeLabel(name, clamp(lastX - name.length * 7.4, 6, width - name.length * 7.4 - 4), lastY - 8, tone);
+    };
+    drawMovingAverage(ta.analytics.sma200, 'ta-ma ta-ma-200', 'SMA 200', 'red');
+    drawMovingAverage(ta.analytics.sma50, 'ta-ma ta-ma-50', 'SMA 50', 'blue');
 
-    const wedgeTop = { from: at(barIndex[4], taAdj(150, barIndex[4])), to: at(barIndex[6], taAdj(330, barIndex[6])) };
-    const wedgeBase = { from: at(barIndex[4], taAdj(40, barIndex[4])), to: at(barIndex[6], taAdj(180, barIndex[6])) };
-    if (wedgeBase.from.y < priceBottom && wedgeTop.to.y > priceTop) {
-      overlay.append(
-        line('ta-channel', wedgeTop.from, wedgeTop.to),
-        line('ta-channel support', wedgeBase.from, wedgeBase.to),
-        (() => {
-          placeLabel('WEDGE / RE-TEST', wedgeBase.from.x + 12, wedgeBase.from.y + 16);
-          return svgElement('g');
-        })()
-      );
-    }
+    // 2. Horizontale Marken: 52-Wochen-Grenzen, Volumen-Regale, Lore-Level
+    ta.levels.forEach((level) => {
+      if (!Number.isFinite(level.price)) return;
+      if (level.price < minVisible * 1.01 || level.price > maxVisible * 0.995) return;
+      const lineY = y(level.price);
+      overlay.append(svgElement('line', { class: level.kind, x1: 0, x2: width, y1: lineY, y2: lineY }));
+      if (level.label) placeLabel(level.label, 8, lineY - 6, level.tone);
+    });
 
-    const resistance = taAdj(483, barIndex[4]);
-    drawLevel('ta-resistance', resistance, x(barIndex[4]), x(lastBar), `RESISTANCE / ${formatAxisPrice(resistance)}`, 'red');
-    drawLevel('ta-channel support', 20, x(barIndex[7]), x(lastBar), 'SUPPORT / 20 ZONE', 'blue', barIndex[7]);
+    // 3. Anchored VWAPs — „wo der Käufer dieser Epoche im Schnitt sitzt“
+    ta.anchors.forEach((anchor) => {
+      if (!anchor.vwap) return;
+      if (anchor.vwap.price < minVisible || anchor.vwap.price > maxVisible) return;
+      const lineY = y(anchor.vwap.price);
+      overlay.append(svgElement('line', {
+        class: `ta-vwap${anchor.tone ? ` ${anchor.tone}` : ''}`,
+        x1: 0, x2: width, y1: lineY, y2: lineY
+      }));
+      placeLabel(`${anchor.label} / ${formatAxisPrice(anchor.vwap.price)}`, width - 6 - anchor.label.length * 7.2, lineY + 15, anchor.tone);
+    });
 
     svg.append(overlay);
   }
@@ -1257,6 +1718,42 @@ function drawSeries(svg, options) {
     svg.append(tweetGroup);
   }
 
+  /* --------------------------------------------------- number radar ---- */
+  // Sterne hängen am Schlusskurs des Tages, an dem eine Kult-Zahl gedruckt
+  // wurde — keine Chips, damit das Tape nicht zugestellt wird.
+  if (numbers && numbers.length) {
+    const radarGroup = svgElement('g', { class: 'chart-radar' });
+    numbers.forEach((hit) => {
+      if (hit.barIndex < from - 2 || hit.barIndex > to + 2) return;
+      const bar = bars[hit.barIndex];
+      if (!bar) return;
+      const cx = x(hit.barIndex);
+      const cy = y(bar.close);
+      const isActive = activeLayer?.kind === 'number' && activeLayer.index === hit.index;
+      const group = svgElement('g', {
+        class: isActive ? 'chart-radar-star-group is-active' : 'chart-radar-star-group',
+        'data-number-index': hit.index
+      });
+      // Im FIT-Überblick bleiben die Sterne winzig, beim Hineinzoomen wachsen sie.
+      const starSize = clamp(ppb * 1.5, 1.9, isActive ? 7 : 5.4);
+      group.append(svgElement('path', { class: 'chart-radar-star', d: starPath(cx, cy, starSize, starSize * 0.42) }));
+      if (interactive) {
+        group.append(svgElement('circle', {
+          class: 'chart-number-hit',
+          cx,
+          cy,
+          r: 12,
+          'data-number-index': hit.index,
+          tabindex: 0,
+          role: 'button',
+          'aria-label': `${hit.code.name}, ${formatDay(hit.iso)}: ${formatPrice(hit.close)}`
+        }));
+      }
+      radarGroup.append(group);
+    });
+    svg.append(radarGroup);
+  }
+
   /* ----------------------------------------------- click crosshair ---- */
   if (inspect && Number.isFinite(inspect.barIndex) && inspect.barIndex >= from - 1 && inspect.barIndex <= to + 1) {
     const cross = svgElement('g', { class: 'chart-inspect-cross', 'aria-hidden': 'true' });
@@ -1355,6 +1852,9 @@ function paintTerminal({ force = false } = {}) {
   const tweets = layerState.tweets
     ? rcTweets.map((tweet, index) => ({ ...tweet, index, barIndex: layerIndices('tweet', chartState.resolution)[index] }))
     : [];
+  const numbers = layerState.numbers
+    ? radarList().map((hit, index) => ({ ...hit, index, barIndex: layerIndices('number', chartState.resolution)[index] }))
+    : [];
 
   const paintKey = [
     chartState.resolution,
@@ -1363,11 +1863,12 @@ function paintTerminal({ force = false } = {}) {
     to,
     height.toFixed(1),
     chartState.activeIndex,
-    document.body.classList.contains('ta-active') ? 'ta' : '-',
+    taActive() ? `ta-${taState.lore ? 'lore' : 'plain'}` : '-',
     priceMode.mode,
     memesEnabled() ? `memes-${memePlayerState.index}` : 'memes-off',
     `corp-${layerState.corp}-${layerState.corpFilter}`,
     `tweets-${layerState.tweets}`,
+    `numbers-${layerState.numbers}`,
     layerState.active ? `${layerState.active.kind}-${layerState.active.index}` : 'layer-',
     inspectState.barIndex ?? '-',
     inspectState.price ? inspectState.price.toFixed(3) : '-'
@@ -1396,7 +1897,7 @@ function paintTerminal({ force = false } = {}) {
     events,
     activeIndex: chartState.activeIndex,
     splits,
-    ta: document.body.classList.contains('ta-active'),
+    ta: taActive() ? taModel() : null,
     axisInCanvas: false,
     interactive: true,
     gradientId: 'chart-area-gradient-terminal',
@@ -1405,11 +1906,15 @@ function paintTerminal({ force = false } = {}) {
     memes,
     corp,
     tweets,
+    numbers,
     activeLayer: layerState.active
   });
 
   terminalScale = { yToPrice, priceTop, priceBottom };
   canvas.classList.toggle('is-dense', chartState.ppb < 2.2);
+  // Unter dem Chart hängen die offiziellen Serien an derselben Ansicht.
+  paintFlows();
+  syncFlowsScroll();
 
   if (yAxis) {
     yAxis.setAttribute('viewBox', `0 0 76 ${height}`);
@@ -1786,6 +2291,12 @@ function setPriceMode(mode) {
   terminalPaintKey = '';
   storyPaintKey = '';
   updatePriceModeUI();
+  // Kennzahlen, Zahlenschloss und Layer-Liste hängen am Kursmodus —
+  // nach dem Umschalten alles neu rechnen und die Liste neu aufbauen.
+  syncLayerControls();
+  buildLayerList();
+  renderLayerDetail();
+  if (taActive()) renderTaDesk();
   paintTerminal();
   paintStoryChart({ force: true });
   applyActive(chartState.activeIndex);
@@ -2192,7 +2703,7 @@ function renderLayerDetail() {
   if (!box) return;
   const active = layerState.active;
   if (!active) {
-    box.innerHTML = '<p class="layer-detail-hint">Click a <b>◆ diamond</b> (earnings / offerings), a <b>𝕏 chip</b> (RC tweet), or a list entry. Price, daily change and source appear here.</p>';
+    box.innerHTML = '<p class="layer-detail-hint">Click a <b>◆ diamond</b> (earnings / offerings / Bitcoin / eBay), a <b>𝕏 chip</b> (RC tweet), a <b>★ star</b> (meme number) or a list entry. Price, daily change and source appear here.</p>';
     return;
   }
   const { series, barIndex, bar } = layerBar(active.kind, active.index);
@@ -2200,6 +2711,20 @@ function renderLayerDetail() {
   const priceLine = bar
     ? `<span class="layer-detail-price">${formatPrice(bar.close)}</span><span class="inspect-delta ${Number.isFinite(change) && change < 0 ? 'is-down' : 'is-up'}">${formatPercent(change)}</span><span>${formatCompact(bar.volume)} SHARES</span>`
     : '';
+
+  if (active.kind === 'number') {
+    const hit = radarList()[active.index];
+    if (!hit) return;
+    const sameCode = radarList().filter((entry) => entry.code.id === hit.code.id);
+    const position = sameCode.findIndex((entry) => entry.iso === hit.iso) + 1;
+    const adjusted = priceMode.mode === 'adjusted' && splitFactorBefore(hit.iso) > 1;
+    box.innerHTML = `
+      <div class="layer-detail-head"><span class="layer-kind is-number">★ ${hit.code.name}</span><time>${formatDay(hit.iso)}</time><span class="layer-detail-prices">${priceLine}</span></div>
+      <h4 class="layer-detail-title">${formatPrice(hit.close)} close · ${hit.code.name}</h4>
+      <p class="layer-detail-text">${escapeHtml(hit.code.note)} Tagging rule: <code>${escapeHtml(radarRule(hit.code.id))}</code>. Hit ${position} of ${sameCode.length} for this rule. Prices are always read off the printed (as traded) tape${adjusted ? ' — the chart is currently split-adjusted, so the marker sits on the same session at ÷4 scale' : ''}.</p>
+      <p class="layer-detail-links"><a href="market-data.js" target="_blank" rel="noreferrer">Source: market-data.js ↗</a><span class="layer-detail-source">Computed from ${asTradedBars.length} printed EOD bars</span></p>`;
+    return;
+  }
 
   if (active.kind === 'corp') {
     const item = corporateEvents[active.index];
@@ -2217,7 +2742,7 @@ function renderLayerDetail() {
     <div class="layer-detail-head"><span class="layer-kind is-tweet">RC / 𝕏 TWEET</span><time>${formatDay(tweet.iso)}</time><span class="layer-detail-prices">${priceLine}</span></div>
     <blockquote class="layer-tweet-text">„${escapeHtml(tweet.text)}“</blockquote>
     <p class="layer-detail-text">${escapeHtml(tweet.note)}</p>
-    <p class="layer-detail-links"><a href="${RC_X_URL}" target="_blank" rel="noreferrer">Original: @ryancohen auf X ↗</a><a href="${tweet.url}" target="_blank" rel="noreferrer">Beleg: ${escapeHtml(tweet.source)} ↗</a></p>`;
+    <p class="layer-detail-links"><a href="${RC_X_URL}" target="_blank" rel="noreferrer">Original: @ryancohen on X ↗</a><a href="${tweet.url}" target="_blank" rel="noreferrer">Source: ${escapeHtml(tweet.source)} ↗</a></p>`;
 }
 
 function buildLayerList() {
@@ -2233,10 +2758,20 @@ function buildLayerList() {
   if (layerState.tweets) {
     rcTweets.forEach((tweet, index) => entries.push({ kind: 'tweet', index, iso: tweet.iso, item: tweet }));
   }
+  if (layerState.numbers) {
+    radarList().forEach((hit, index) => entries.push({ kind: 'number', index, iso: hit.iso, item: hit }));
+  }
   entries.sort((a, b) => a.iso.localeCompare(b.iso));
 
   list.innerHTML = entries.map((entry) => {
     const isActive = layerState.active?.kind === entry.kind && layerState.active?.index === entry.index;
+    if (entry.kind === 'number') {
+      return `<button type="button" class="layer-item is-number${isActive ? ' is-active' : ''}" data-layer-kind="number" data-layer-index="${entry.index}">
+        <span class="layer-item-date">${formatShortDay(entry.iso)}</span>
+        <span class="layer-item-kind">★ ${entry.item.code.name}</span>
+        <span class="layer-item-title">${formatPrice(entry.item.close)} close</span>
+      </button>`;
+    }
     if (entry.kind === 'corp') {
       const meta = CORP_TYPE[entry.item.type] ?? CORP_TYPE.other;
       return `<button type="button" class="layer-item is-corp${isActive ? ' is-active' : ''}" data-layer-kind="corp" data-layer-index="${entry.index}">
@@ -2270,11 +2805,12 @@ function setLayersCollapsed(collapsed) {
 }
 
 function openLayerItem(kind, index, { reveal = true } = {}) {
-  const items = kind === 'corp' ? corporateEvents : rcTweets;
+  const items = layerItems(kind);
   if (!items[index]) return;
   layerState.active = { kind, index };
   if (kind === 'corp') layerState.corp = true;
   if (kind === 'tweet') layerState.tweets = true;
+  if (kind === 'number') layerState.numbers = true;
   setLayersCollapsed(false);
   syncLayerControls();
   buildLayerList();
@@ -2307,11 +2843,16 @@ function syncLayerControls() {
   tweetToggle?.classList.toggle('is-on', layerState.tweets);
   const tweetState = document.querySelector('#tweet-toggle-state');
   if (tweetState) tweetState.textContent = layerState.tweets ? 'ON' : 'OFF';
+  const numberToggle = document.querySelector('#number-toggle');
+  numberToggle?.setAttribute('aria-pressed', String(layerState.numbers));
+  numberToggle?.classList.toggle('is-on', layerState.numbers);
+  const numberState = document.querySelector('#number-toggle-state');
+  if (numberState) numberState.textContent = layerState.numbers ? 'ON' : 'OFF';
   document.querySelectorAll('[data-corp-filter]').forEach((button) => {
     button.classList.toggle('is-active', button.dataset.corpFilter === layerState.corpFilter);
   });
   const count = document.querySelector('#layer-count');
-  if (count) count.textContent = `${corporateEvents.length} EVENTS · ${rcTweets.length} RC-TWEETS · ${memeMoments.length} MEMES`;
+  if (count) count.textContent = `${corporateEvents.length} EVENTS · ${rcTweets.length} RC-TWEETS · ${radarList().length} MEME NUMBERS · ${memeMoments.length} MEMES`;
 }
 
 function bindChartLayers() {
@@ -2326,6 +2867,10 @@ function bindChartLayers() {
   document.querySelector('#tweet-toggle')?.addEventListener('click', () => {
     layerState.tweets = !layerState.tweets;
     syncLayerControls(); buildLayerList(); terminalPaintKey = ''; paintTerminal();
+  });
+  document.querySelector('#number-toggle')?.addEventListener('click', () => {
+    layerState.numbers = !layerState.numbers;
+    setRadarOn(layerState.numbers);
   });
   document.querySelectorAll('[data-corp-filter]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -2351,6 +2896,1025 @@ function bindChartLayers() {
   syncLayerControls();
   buildLayerList();
   renderLayerDetail();
+}
+
+/* ------------------------------------------- market structure / flows --- */
+
+// Drei offizielle Serien, direkt unter der Kursfläche:
+//   • DRS / registrierte Aktien — die Zahlen, die GameStop in 10-Q/10-K nennt
+//   • Short Interest — FINRA, zweimal pro Monat (Settlement 15. und letzter
+//     Handelstag), Datei: flow-data.js aus scripts/fetch-market-structure.mjs
+//   • Fails to Deliver — SEC (CNS), Aggregat-Bestand je Settlement-Datum
+// Der Strip darunter zeigt dieselbe Kursansicht als Spiegel (Klon der
+// Chart-SVG), die Serien liegen als eigene Bahnen darüber. Ein Scrollbalken,
+// ein Zoom — keine zweite Bedienung.
+//
+// Fehlt flow-data.js (z. B. offline), greift eine dokumentierte Ankerliste,
+// und die Oberfläche sagt ausdrücklich, dass sie unvollständig ist.
+
+const FLOWS = typeof window !== 'undefined' ? window.GME_FLOWS : null;
+
+const FALLBACK_FLOWS = {
+  updated: '2026-10-16',
+  shortInterest: [
+    { date: '2026-02-27', short: 65600000, averageVolume: 4691392, daysToCover: 13.98 },
+    { date: '2026-04-15', short: 61907606, averageVolume: 11590000, daysToCover: 5.34 },
+    { date: '2026-09-15', short: 39069126, averageVolume: 9105968, daysToCover: 4.29 },
+    { date: '2026-09-30', short: 42673721, averageVolume: 10727887, daysToCover: 3.98 }
+  ],
+  ftd: [
+    { date: '2021-01-15', shares: 892653, price: null },
+    { date: '2021-01-19', shares: 1498576, price: null },
+    { date: '2021-01-21', shares: 1438994, price: null },
+    { date: '2021-01-26', shares: 2099572, price: null },
+    { date: '2021-01-27', shares: 1972862, price: null },
+    { date: '2025-12-04', shares: 2068490, price: 23.21 },
+    { date: '2026-03-31', shares: 24739, price: 23.04 }
+  ]
+};
+
+function parseShortInterestRows(payload) {
+  const rows = [];
+  if (!payload?.rows) return rows;
+  String(payload.rows).trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, short, previous, averageVolume, daysToCover] = parts;
+    const value = Number(short);
+    if (!date || !Number.isFinite(value)) return;
+    rows.push({
+      date,
+      short: value,
+      previous: Number(previous) || null,
+      averageVolume: Number(averageVolume) || null,
+      daysToCover: Number(daysToCover) || null
+    });
+  });
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function parseFtdRows(payload) {
+  const rows = [];
+  if (!payload?.rows) return rows;
+  String(payload.rows).trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, shares, price] = parts;
+    const value = Number(shares);
+    if (!date || !Number.isFinite(value)) return;
+    rows.push({ date, shares: value, price: Number(price) || null });
+  });
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+const shortInterestRows = FLOWS?.shortInterest ? parseShortInterestRows(FLOWS.shortInterest) : [];
+const ftdRows = FLOWS?.ftd ? parseFtdRows(FLOWS.ftd) : [];
+
+const flowState = {
+  enabled: true,
+  fallback: !shortInterestRows.length && !ftdRows.length,
+  updated: FLOWS?.updated ?? FALLBACK_FLOWS.updated,
+  shortInterest: shortInterestRows.length ? shortInterestRows : FALLBACK_FLOWS.shortInterest,
+  ftd: ftdRows.length ? ftdRows : FALLBACK_FLOWS.ftd,
+  panes: { drs: true, si: true, ftd: true },
+  readout: null
+};
+
+// DRS: die Zahlen, die GameStop selbst veröffentlicht — Datum = Stichtag aus
+// dem Filing. Alle Werte split-bereinigt (die Filings von 2021/22 nennen
+// Pre-Split-Zahlen, hier steht der 4:1-bereinigte Wert).
+const DRS_DISCLOSURES = [
+  { iso: '2021-10-30', shares: 20.8e6, outstanding: 305403124, label: 'Q3 2021 10-Q', note: 'first disclosure: 5.2M shares before the 4:1 split', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-01-29', shares: 35.6e6, outstanding: 305356992, label: 'Q4 2021 10-K', note: '8.9M shares before the split', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-04-30', shares: 50.8e6, outstanding: 304516136, label: 'Q1 2022 10-Q', note: '12.7M pre-split — DRS goes mainstream', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-07-30', shares: 71.3e6, outstanding: 304529721, label: 'Q2 2022 10-Q', note: 'the quarter of the 4:1 split dividend', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2022-10-29', shares: 71.8e6, outstanding: 304548070, label: 'Q3 2022 10-Q', note: 'first plateau just under 72M', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-03-22', shares: 76.0e6, outstanding: 304675439, holders: 197058, label: 'Q4 2022 10-K', note: '197,058 record holders and 76M shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-06-01', shares: 76.6e6, outstanding: 304751243, label: 'Q1 2023 10-Q', note: 'the peak of the DRS series', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-08-31', shares: 75.4e6, outstanding: 305241294, label: 'Q2 2023 10-Q', note: 'first decline after two years of growth', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2023-11-30', shares: 75.4e6, outstanding: 305514315, label: 'Q3 2023 10-Q', note: 'flat, still around a quarter of all shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-03-20', shares: 75.3e6, outstanding: 305873200, label: 'Q4 2023 10-K', note: 'the last quarter before the share count jumps', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-06-05', shares: 74.6e6, outstanding: 351217517, label: 'Q1 2024 10-Q', note: 'the ATM offering dilutes the register to 21.2%', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000132638024000030/gme-20240504.htm' },
+  { iso: '2024-09-04', shares: 72.8e6, outstanding: 426509592, label: 'Q2 2024 10-Q', note: 'share count at 426.5M — the DRS share falls to 17.1%', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2024-12-04', shares: 71.0e6, outstanding: 446800365, label: 'Q3 2024 10-Q', note: '15.9% of the company', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-03-19', shares: 69.5e6, outstanding: 447083981, holders: 190074, label: 'Q4 2024 10-K', note: '190,074 record holders; the register shrinks while the cash grows', url: 'https://www.sec.gov/Archives/edgar/data/1326380/000162828025014731/gme-20250201.htm' },
+  { iso: '2025-06-05', shares: 68.1e6, outstanding: 447336306, label: 'Q1 2025 10-Q', note: 'the same quarter the Bitcoin treasury lands', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-09-05', shares: 66.7e6, outstanding: 448000000, label: 'Q2 2025 10-Q', note: 'reported as roughly 15% of outstanding shares', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2025-12-05', shares: 67.0e6, outstanding: 448000000, label: 'Q3 2025 10-Q', note: 'a small bounce back to about 67M', url: 'https://www.drsgme.org/drs-reporting' },
+  { iso: '2026-03-18', shares: 66.2e6, outstanding: 448400000, label: 'Q4 2025 10-K', note: '66.2M registered, 3.3M of them inside the DSPP — no later 10-Q in this archive yet, so the series stops where the filings stop', url: 'https://www.shacknews.com/article/148451/gamestop-gme-q4-2025-drs-66-million' }
+];
+
+const DRS_PEAK = DRS_DISCLOSURES.reduce((best, entry) => (entry.shares > best.shares ? entry : best), DRS_DISCLOSURES[0]);
+const DRS_LATEST = DRS_DISCLOSURES[DRS_DISCLOSURES.length - 1];
+
+function drsPercent(entry) {
+  if (!entry?.outstanding) return null;
+  return (entry.shares / entry.outstanding) * 100;
+}
+
+function flowStats() {
+  const si = flowState.shortInterest;
+  const ftd = flowState.ftd;
+  const latestSi = si[si.length - 1] ?? null;
+  const previousSi = si[si.length - 2] ?? null;
+  const window = si.slice(-12);
+  const averageSi = window.length ? window.reduce((sum, row) => sum + row.short, 0) / window.length : null;
+  const peakFtd = ftd.reduce((best, row) => (!best || row.shares > best.shares ? row : best), null);
+  const latestFtd = ftd[ftd.length - 1] ?? null;
+  return {
+    latestSi,
+    previousSi,
+    averageSi,
+    siChange: latestSi && previousSi ? (latestSi.short / previousSi.short - 1) * 100 : null,
+    ftdPeak: peakFtd,
+    ftdLatest: latestFtd,
+    drsLatest: DRS_LATEST,
+    drsPeak: DRS_PEAK,
+    drsChange: (DRS_LATEST.shares - DRS_PEAK.shares) / DRS_PEAK.shares * 100
+  };
+}
+
+/* -------------------------------------------------- tendieman full screen - */
+
+// Vollbild-Tendieman: die eigenen Zeilen des Archivs, jede an einen echten
+// Handelstag des Tapes gehängt. Kein Mitschnitt, kein fremder Text.
+
+const TENDIEMAN_LINES = [
+  { text: 'A mall retailer, cheap as the carpet.', data: '2019 · $4 a share, nobody watching' },
+  { text: 'Then a letter, then a board seat.', data: 'NOV 2020 · RC buys in, the thesis gets loud' },
+  { text: 'The message board starts counting.', data: '13 JAN 2021 · $31.40 · +57% in one session' },
+  { text: 'Soon may the tendieman come…', data: '26 JAN 2021 · $147.98 · +92.7%' },
+  { text: '…to bring us tendies and rum.', data: '27 JAN 2021 · the squeeze prints $483 intraday' },
+  { text: 'The buy button goes dark.', data: '28 JAN 2021 · access becomes the story' },
+  { text: 'So we learned to hold the line.', data: '2021 · the year of diamond hands and receipts' },
+  { text: 'Split the share, keep the ledger.', data: '22 JUL 2022 · one share becomes four' },
+  { text: 'Quiet quarters, actual profit.', data: 'MAR 2023 · first quarterly profit in two years' },
+  { text: 'A cat returns from the deep.', data: '13 MAY 2024 · Roaring Kitty posts, the tape jumps 74%' },
+  { text: 'Cash, then Bitcoin, then a bid.', data: '2025–2026 · $9B on hand, an offer for eBay' },
+  { text: 'One warrant for every ten.', data: 'OCT 2026 · $32 strike, expiring 30 October' }
+];
+
+const TENDIEMAN_DURATION = 96000; // ms for one full pass
+const lyricState = { active: false, index: -1, startedAt: 0, rafId: null, pausedAt: 0 };
+
+function tendiemanLines() {
+  const last = activeDailyBars().at(-1);
+  return [
+    ...TENDIEMAN_LINES,
+    {
+      text: 'The record stays open.',
+      data: `${formatDay(marketMeta.end)} · ${formatPrice(last?.close ?? 0)} on the tape`
+    }
+  ];
+}
+
+function tickTendieman() {
+  if (!lyricState.active) {
+    lyricState.rafId = null;
+    return;
+  }
+  const total = tendiemanLines().length;
+  const progress = clamp((Date.now() - lyricState.startedAt) / TENDIEMAN_DURATION, 0, 1);
+  const index = Math.min(total - 1, Math.floor(progress * total));
+  if (index !== lyricState.index) setTendiemanIndex(index);
+  const fill = document.querySelector('#tendieman-progress-fill');
+  if (fill) fill.style.width = `${progress * 100}%`;
+  if (progress >= 1) {
+    closeTendieman();
+    return;
+  }
+  lyricState.rafId = raf(tickTendieman);
+}
+
+function setTendiemanIndex(index) {
+  const lines = tendiemanLines();
+  lyricState.index = clamp(index, 0, lines.length - 1);
+  const list = document.querySelector('#tendieman-lines');
+  if (!list) return;
+  list.querySelectorAll('.tendieman-line').forEach((node, position) => {
+    node.classList.toggle('is-active', position === lyricState.index);
+    node.classList.toggle('is-past', position < lyricState.index);
+  });
+  const counter = document.querySelector('#tendieman-counter');
+  if (counter) counter.textContent = `${String(lyricState.index + 1).padStart(2, '0')} / ${String(lines.length).padStart(2, '0')}`;
+  list.querySelector('.tendieman-line.is-active')?.scrollIntoView?.({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
+}
+
+function openTendieman({ autoplay = true } = {}) {
+  const overlay = document.querySelector('#tendieman');
+  if (!overlay) return;
+  overlay.hidden = false;
+  document.body.classList.add('tendieman-open');
+  lyricState.active = true;
+  lyricState.pausedAt = 0;
+  setTendiemanIndex(0);
+  if (autoplay) {
+    lyricState.startedAt = Date.now();
+    if (!lyricState.rafId) lyricState.rafId = raf(tickTendieman);
+  }
+  document.querySelector('#tendieman-close')?.focus?.();
+  showToast('♪ TENDIEMAN MODE — every line is dated, ESC closes', 'code');
+}
+
+function closeTendieman() {
+  const overlay = document.querySelector('#tendieman');
+  if (overlay) overlay.hidden = true;
+  document.body.classList.remove('tendieman-open');
+  lyricState.active = false;
+  if (lyricState.rafId && typeof window.cancelAnimationFrame === 'function') window.cancelAnimationFrame(lyricState.rafId);
+  lyricState.rafId = null;
+}
+
+function toggleTendiemanPause() {
+  if (!lyricState.active) return;
+  const label = document.querySelector('#tendieman-state');
+  const button = document.querySelector('#tendieman-play');
+  if (lyricState.rafId) {
+    if (typeof window.cancelAnimationFrame === 'function') window.cancelAnimationFrame(lyricState.rafId);
+    lyricState.rafId = null;
+    lyricState.pausedAt = Date.now() - lyricState.startedAt;
+    if (label) label.textContent = 'PAUSED';
+    if (button) button.textContent = 'PLAY';
+    return;
+  }
+  lyricState.startedAt = Date.now() - lyricState.pausedAt;
+  lyricState.rafId = raf(tickTendieman);
+  if (label) label.textContent = 'PLAYING';
+  if (button) button.textContent = 'PAUSE';
+}
+
+function renderTendieman() {
+  const list = document.querySelector('#tendieman-lines');
+  if (!list) return;
+  list.innerHTML = tendiemanLines().map((line, index) => `
+    <li class="tendieman-line" data-line-index="${index}">
+      <p class="tendieman-text">${escapeHtml(line.text)}</p>
+      <span class="tendieman-data">${escapeHtml(line.data)}</span>
+    </li>
+  `).join('');
+  list.querySelectorAll('.tendieman-line').forEach((node) => {
+    node.addEventListener('click', () => {
+      const total = tendiemanLines().length;
+      const index = Number(node.dataset.lineIndex);
+      if (!lyricState.active) openTendieman({ autoplay: false });
+      lyricState.startedAt = Date.now() - (index / total) * TENDIEMAN_DURATION;
+      lyricState.pausedAt = Date.now() - lyricState.startedAt;
+      if (!lyricState.rafId) lyricState.rafId = raf(tickTendieman);
+      setTendiemanIndex(index);
+    });
+  });
+}
+
+/* --------------------------------------------------------- flows strip --- */
+
+let flowsPaintKey = '';
+let flowsGeometry = null;
+
+function flowsTrack() {
+  return document.querySelector('#flows-track');
+}
+
+function flowsBars() {
+  return seriesFor(chartState.resolution);
+}
+
+// Der Strip zeigt dieselbe Kursfläche: ein Klon der Chart-SVG (Kurs, Volumen,
+// Kerzen, Marker) liegt in der Spur, darüber werden die Serien gezeichnet.
+function ensureFlowsClone() {
+  const track = flowsTrack();
+  const source = terminalElements().canvas;
+  if (!track || !source) return null;
+  const width = Number(source.getAttribute('width'));
+  const height = Number(source.getAttribute('height'));
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return null;
+  const signature = `${source.getAttribute('viewBox')}|${width}|${height}|${source.childElementCount}`;
+  const existing = track.querySelector('#flows-clone-canvas');
+  if (existing && existing.dataset.signature === signature) return existing;
+  const clone = source.cloneNode(true);
+  clone.id = 'flows-clone-canvas';
+  clone.classList.add('flows-clone-canvas');
+  clone.removeAttribute('role');
+  clone.setAttribute('aria-hidden', 'true');
+  clone.dataset.signature = signature;
+  clone.style.width = `${width}px`;
+  clone.style.height = `${height}px`;
+  if (existing) existing.replaceWith(clone);
+  else track.prepend(clone);
+  return clone;
+}
+
+function paintFlows({ force = false } = {}) {
+  const body = document.querySelector('#flows-body');
+  const track = flowsTrack();
+  const svg = document.querySelector('#flows-canvas');
+  if (!body || !track || !svg) return;
+  if (!flowState.enabled) return;
+
+  const clone = ensureFlowsClone();
+  if (!clone) return;
+
+  const metrics = terminalMetrics();
+  const bars = flowsBars();
+  const width = trackWidth(metrics);
+  const height = Number(clone.getAttribute('height')) || 360;
+  const source = terminalElements().canvas;
+  const leftPx = Number.parseFloat(source?.style?.left || '0') || 0;
+
+  const key = [
+    chartState.resolution, chartState.ppb.toFixed(3), Math.round(leftPx), width, height, priceMode.mode,
+    `${flowState.panes.drs ? 1 : 0}${flowState.panes.si ? 1 : 0}${flowState.panes.ftd ? 1 : 0}`,
+    flowState.readout ? `${flowState.readout.kind}-${flowState.readout.index}` : '-'
+  ].join('|');
+  if (!force && key === flowsPaintKey) return;
+  flowsPaintKey = key;
+
+  const active = [
+    flowState.panes.drs ? 'drs' : null,
+    flowState.panes.si ? 'si' : null,
+    flowState.panes.ftd ? 'ftd' : null
+  ].filter(Boolean);
+  const gap = 10;
+  const laneHeight = Math.max(34, (height - 18 - gap * Math.max(1, active.length)) / Math.max(1, active.length));
+
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.style.width = `${width}px`;
+  svg.style.height = `${height}px`;
+  svg.replaceChildren();
+  // Der Strip ist so hoch wie die Kursfläche darüber (mobil übernimmt das CSS).
+  body.style.height = `${height}px`;
+
+  // Der Chart zeichnet ein Fenster (ViewBox from..to) und schiebt die SVG mit
+  // left = from * ppb in die Spur. In Spuren-Koordinaten sitzt Balken i damit
+  // immer bei (i + 0.5) * ppb — genau das nutzt auch diese Ebene.
+  const x = (index) => (index + 0.5) * chartState.ppb;
+  const groups = {};
+  const panes = {};
+  active.forEach((id, position) => {
+    const top = 12 + position * (laneHeight + gap);
+    panes[id] = { id, top, bottom: top + laneHeight, height: laneHeight };
+  });
+
+  const grid = svgElement('g', { class: 'flows-grid', 'aria-hidden': 'true' });
+  Object.values(panes).forEach((pane) => {
+    grid.append(svgElement('rect', { class: 'flows-lane', x: 0, y: pane.top, width, height: pane.height }));
+  });
+  svg.append(grid);
+
+  /* ---------------------------------------------------------------- DRS -- */
+  if (panes.drs) {
+    const pane = panes.drs;
+    const group = svgElement('g', { class: 'flows-drs' });
+    const values = DRS_DISCLOSURES.map((entry) => entry.shares);
+    const min = Math.min(...values) * 0.93;
+    const max = Math.max(...values) * 1.05;
+    const y = (value) => pane.bottom - ((value - min) / (max - min)) * pane.height;
+    const points = DRS_DISCLOSURES.map((entry, index) => {
+      const barIndex = barIndexForDate(bars, entry.iso);
+      return { entry, index, px: x(barIndex), py: y(entry.shares) };
+    });
+    const areaPath = [
+      `M${points[0].px.toFixed(1)},${pane.bottom}`,
+      ...points.map((point) => `L${point.px.toFixed(1)},${point.py.toFixed(1)}`),
+      `L${points[points.length - 1].px.toFixed(1)},${pane.bottom}`,
+      'Z'
+    ].join(' ');
+    group.append(svgElement('path', { class: 'flows-drs-area', d: areaPath }));
+    points.forEach((point, position) => {
+      const previous = points[position - 1];
+      if (!previous) return;
+      group.append(svgElement('line', {
+        class: 'flows-drs-line', x1: previous.px, y1: previous.py, x2: point.px, y2: point.py
+      }));
+    });
+    points.forEach((point, position) => {
+      const isPeak = point.entry.iso === DRS_PEAK.iso;
+      const isLatest = position === points.length - 1;
+      const isActive = flowState.readout?.kind === 'drs' && flowState.readout.index === position;
+      const dot = svgElement('circle', {
+        class: `flows-drs-dot${isPeak ? ' is-peak' : ''}${isLatest ? ' is-latest' : ''}${isActive ? ' is-active' : ''}`,
+        cx: point.px, cy: point.py, r: isPeak || isLatest ? 5 : 3.4,
+        'data-drs-index': position
+      });
+      dot.append(svgElement('title', {}, `${formatDay(point.entry.iso)} — ${formatCompact(point.entry.shares)} registered · ${drsPercent(point.entry).toFixed(2)}% of ${formatCompact(point.entry.outstanding)}`));
+      group.append(dot);
+      if (isPeak || isLatest) {
+        group.append(svgElement('text', {
+          class: `flows-dot-label${isPeak ? ' is-peak' : ' is-latest'}`,
+          x: clamp(point.px + 8, 60, width - 20),
+          y: clamp(point.py - 6, pane.top + 13, pane.bottom - 4)
+        }, `${formatCompact(point.entry.shares)} · ${drsPercent(point.entry).toFixed(1)}%`));
+      }
+    });
+    svg.append(group);
+    groups.drs = { pane, points };
+  }
+
+  /* ----------------------------------------------------- short interest -- */
+  if (panes.si) {
+    const pane = panes.si;
+    const group = svgElement('g', { class: 'flows-si' });
+    const rows = flowState.shortInterest;
+    const max = Math.max(...rows.map((row) => row.short));
+    const y = (value) => pane.bottom - (value / max) * pane.height;
+    const average = rows.slice(-12).reduce((sum, row) => sum + row.short, 0) / Math.min(12, rows.length);
+    const barWidth = clamp(chartState.ppb * 0.62, 1.4, 26);
+    rows.forEach((row, index) => {
+      const barIndex = barIndexForDate(bars, row.date);
+      const px = x(barIndex);
+      const previous = rows[index - 1];
+      const rising = previous ? row.short >= previous.short : true;
+      const isActive = flowState.readout?.kind === 'si' && flowState.readout.index === index;
+      const rect = svgElement('rect', {
+        class: `flows-si-bar${rising ? ' is-rising' : ' is-falling'}${isActive ? ' is-active' : ''}`,
+        x: px - barWidth / 2,
+        y: y(row.short),
+        width: barWidth,
+        height: Math.max(1.5, pane.bottom - y(row.short)),
+        'data-si-index': index
+      });
+      rect.append(svgElement('title', {}, `${formatDay(row.date)} — ${formatCompact(row.short)} shares short${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} days to cover` : ''}`));
+      group.append(rect);
+    });
+    group.append(svgElement('line', {
+      class: 'flows-si-average', x1: 0, x2: width, y1: y(average), y2: y(average)
+    }));
+    group.append(svgElement('text', {
+      class: 'flows-average-label', x: 8, y: clamp(y(average) - 6, pane.top + 13, pane.bottom - 4)
+    }, `12-REPORT AVG ${formatCompact(average)}`));
+    svg.append(group);
+    groups.si = { pane, rows };
+  }
+
+  /* ------------------------------------------------- fails to deliver --- */
+  if (panes.ftd) {
+    const pane = panes.ftd;
+    const group = svgElement('g', { class: 'flows-ftd' });
+    const rows = flowState.ftd;
+    const floor = 1000;
+    const values = rows.map((row) => Math.max(floor, row.shares));
+    const minLog = Math.log10(Math.min(...values));
+    const maxLog = Math.log10(Math.max(...values));
+    const span = Math.max(0.5, maxLog - minLog);
+    const y = (value) => pane.bottom - ((Math.log10(Math.max(floor, value)) - minLog) / span) * pane.height;
+    const barWidth = clamp(chartState.ppb * 0.62, 1.4, 26);
+    rows.forEach((row, index) => {
+      const barIndex = barIndexForDate(bars, row.date);
+      const px = x(barIndex);
+      const isActive = flowState.readout?.kind === 'ftd' && flowState.readout.index === index;
+      const rect = svgElement('rect', {
+        class: `flows-ftd-bar${isActive ? ' is-active' : ''}`,
+        x: px - barWidth / 2,
+        y: y(row.shares),
+        width: barWidth,
+        height: Math.max(1.5, pane.bottom - y(row.shares)),
+        'data-ftd-index': index
+      });
+      rect.append(svgElement('title', {}, `${formatDay(row.date)} — ${formatCompact(row.shares)} shares failed to deliver${row.price ? ` ($${row.price.toFixed(2)} previous close)` : ''}`));
+      group.append(rect);
+    });
+    const peak = rows.reduce((best, row) => (row.shares > best.shares ? row : best), rows[0]);
+    const peakX = x(barIndexForDate(bars, peak.date));
+    group.append(svgElement('text', {
+      class: 'flows-dot-label is-peak',
+      x: clamp(peakX + 8, 60, width - 40),
+      y: pane.top + 13
+    }, `PEAK ${formatCompact(peak.shares)} · ${formatDay(peak.date).toUpperCase()}`));
+    svg.append(group);
+    groups.ftd = { pane, rows };
+  }
+
+  flowsGeometry = groups;
+  renderFlowsRail(panes);
+  renderFlowReadout();
+}
+
+// Klebende Bahn-Beschriftung: bleibt beim Scrollen links stehen.
+function renderFlowsRail(panes) {
+  const rail = document.querySelector('#flows-rail');
+  if (!rail) return;
+  const stats = flowStats();
+  const drsBlock = rail.querySelector('.flows-rail-block.is-drs');
+  if (drsBlock) {
+    drsBlock.hidden = !panes.drs;
+    if (panes.drs) {
+      drsBlock.style.top = `${panes.drs.top}px`;
+      drsBlock.style.height = `${panes.drs.height}px`;
+      drsBlock.querySelector('.flows-rail-value').textContent = `${formatCompact(stats.drsLatest.shares)} SHARES`;
+      drsBlock.querySelector('.flows-rail-sub').textContent = `${drsPercent(stats.drsLatest).toFixed(1)}% · ${stats.drsLatest.label}`;
+    }
+  }
+  const siBlock = rail.querySelector('.flows-rail-block.is-si');
+  if (siBlock) {
+    siBlock.hidden = !panes.si;
+    if (panes.si) {
+      siBlock.style.top = `${panes.si.top}px`;
+      siBlock.style.height = `${panes.si.height}px`;
+      siBlock.querySelector('.flows-rail-value').textContent = `${formatCompact(stats.latestSi.short)} SHARES`;
+      siBlock.querySelector('.flows-rail-sub').textContent = stats.latestSi.daysToCover
+        ? `${stats.latestSi.daysToCover.toFixed(2)} DAYS TO COVER`
+        : 'FINRA';
+    }
+  }
+  const ftdBlock = rail.querySelector('.flows-rail-block.is-ftd');
+  if (ftdBlock) {
+    ftdBlock.hidden = !panes.ftd;
+    if (panes.ftd) {
+      ftdBlock.style.top = `${panes.ftd.top}px`;
+      ftdBlock.style.height = `${panes.ftd.height}px`;
+      ftdBlock.querySelector('.flows-rail-value').textContent = `${formatCompact(stats.ftdLatest.shares)} SHARES`;
+      ftdBlock.querySelector('.flows-rail-sub').textContent = `LAST ${formatDay(stats.ftdLatest.date).toUpperCase()}`;
+    }
+  }
+}
+
+function renderFlowReadout() {
+  const box = document.querySelector('#flows-readout');
+  if (!box) return;
+  const hit = flowState.readout;
+  if (!hit) {
+    box.classList.remove('is-active');
+    box.innerHTML = flowState.fallback
+      ? 'anchor values only — no flow-data.js in this checkout, so the regulator series are incomplete'
+      : `hover or click a bar to read it · FINRA short interest + SEC fails to deliver · updated ${escapeHtml(String(flowState.updated))}`;
+    return;
+  }
+  box.classList.add('is-active');
+  if (hit.kind === 'drs') {
+    const entry = DRS_DISCLOSURES[hit.index];
+    box.innerHTML = `<b>${formatDay(entry.iso)}</b> · ${formatCompact(entry.shares)} registered (${drsPercent(entry).toFixed(2)}% of ${formatCompact(entry.outstanding)})${entry.holders ? ` · ${entry.holders.toLocaleString('en-US')} record holders` : ''} · ${escapeHtml(entry.label)} — ${escapeHtml(entry.note)}`;
+    return;
+  }
+  if (hit.kind === 'si') {
+    const row = flowState.shortInterest[hit.index];
+    const change = row.previous ? (row.short / row.previous - 1) * 100 : null;
+    box.innerHTML = `<b>${formatDay(row.date)}</b> · ${formatCompact(row.short)} shares short${change === null ? '' : ` · ${formatPercent(change)} vs previous settlement`}${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} days to cover` : ''}${row.averageVolume ? ` · ${formatCompact(row.averageVolume)} shares/day` : ''} · FINRA`;
+    return;
+  }
+  const row = flowState.ftd[hit.index];
+  box.innerHTML = `<b>${formatDay(row.date)}</b> · ${formatCompact(row.shares)} shares failed to deliver${row.price ? ` · $${row.price.toFixed(2)} previous close` : ''} · SEC CNS`;
+}
+
+function renderFlowsStats() {
+  const box = document.querySelector('#flows-stats');
+  if (!box) return;
+  const stats = flowStats();
+  const cards = [
+    {
+      label: 'DRS / TRANSFER AGENT',
+      value: `${drsPercent(stats.drsLatest).toFixed(1)}%`,
+      sub: `${formatCompact(stats.drsLatest.shares)} of ${formatCompact(stats.drsLatest.outstanding)} shares · ${formatDay(stats.drsLatest.iso)}`,
+      foot: `peak ${formatCompact(stats.drsPeak.shares)} in ${formatDay(stats.drsPeak.iso).slice(-4)} · ${formatPercent(stats.drsChange)} since`
+    },
+    {
+      label: 'SHORT INTEREST / FINRA',
+      value: `${formatCompact(stats.latestSi.short)}`,
+      sub: `shares short · settled ${formatDay(stats.latestSi.date)}${stats.siChange === null ? '' : ` · ${formatPercent(stats.siChange)} vs previous`}`,
+      foot: `12-report average ${formatCompact(stats.averageSi)}${stats.latestSi.daysToCover ? ` · ${stats.latestSi.daysToCover.toFixed(2)} days to cover` : ''}`
+    },
+    {
+      label: 'FAILS TO DELIVER / SEC',
+      value: `${formatCompact(stats.ftdLatest.shares)}`,
+      sub: `shares on ${formatDay(stats.ftdLatest.date)} · peak ${formatCompact(stats.ftdPeak.shares)} on ${formatDay(stats.ftdPeak.date)}`,
+      foot: 'aggregate balance per settlement date — not daily new fails'
+    }
+  ];
+  box.innerHTML = cards.map((card) => `
+    <div class="flows-stat">
+      <span class="flows-stat-label">${card.label}</span>
+      <strong>${card.value}</strong>
+      <span class="flows-stat-sub">${card.sub}</span>
+      <span class="flows-stat-foot">${card.foot}</span>
+    </div>
+  `).join('');
+}
+
+// Der Strip hängt am Scroll des Charts: ein Transform, kein zweiter Scrollbalken.
+function syncFlowsScroll() {
+  const track = flowsTrack();
+  const { viewport } = terminalElements();
+  if (!track || !viewport) return;
+  track.style.transform = `translateX(${-viewport.scrollLeft}px)`;
+}
+
+function setFlowsEnabled(on) {
+  flowState.enabled = on;
+  document.body.classList.toggle('flows-off', !on);
+  const toggle = document.querySelector('#flows-toggle');
+  toggle?.setAttribute('aria-pressed', String(on));
+  const state = document.querySelector('#flows-toggle-state');
+  if (state) state.textContent = on ? 'ON' : 'OFF';
+  if (on) {
+    flowsPaintKey = '';
+    paintFlows({ force: true });
+    syncFlowsScroll();
+  }
+  showToast(on ? 'MARKET STRUCTURE STRIP ON' : 'MARKET STRUCTURE STRIP OFF', 'code');
+}
+
+function setFlowPane(pane, on) {
+  if (!(pane in flowState.panes)) return;
+  flowState.panes[pane] = on;
+  document.querySelectorAll(`[data-flow-pane-toggle="${pane}"]`).forEach((button) => {
+    button.setAttribute('aria-pressed', String(on));
+    button.classList.toggle('is-on', on);
+  });
+  flowsPaintKey = '';
+  paintFlows({ force: true });
+  showToast(`${pane.toUpperCase()} PANE ${on ? 'ON' : 'OFF'}`, 'code');
+}
+
+function bindFlowsInteraction() {
+  const body = document.querySelector('#flows-body');
+  const svg = document.querySelector('#flows-canvas');
+  const { viewport } = terminalElements();
+  if (!body || !svg || !viewport) return;
+
+  const resolve = (event) => {
+    const target = event.target?.closest?.('[data-si-index], [data-ftd-index], [data-drs-index]');
+    if (!target) return null;
+    if (target.dataset.siIndex !== undefined) return { kind: 'si', index: Number(target.dataset.siIndex) };
+    if (target.dataset.ftdIndex !== undefined) return { kind: 'ftd', index: Number(target.dataset.ftdIndex) };
+    return { kind: 'drs', index: Number(target.dataset.drsIndex) };
+  };
+
+  const setReadout = (hit, pinned = false) => {
+    if (!hit) return;
+    flowState.readout = { ...hit, pinned };
+    flowsPaintKey = '';
+    paintFlows();
+  };
+
+  svg.addEventListener('mousemove', (event) => {
+    if (flowState.readout?.pinned) return;
+    setReadout(resolve(event));
+  });
+  svg.addEventListener('mouseleave', () => {
+    if (flowState.readout?.pinned) return;
+    flowState.readout = null;
+    flowsPaintKey = '';
+    paintFlows();
+  });
+  svg.addEventListener('click', (event) => {
+    const hit = resolve(event);
+    if (!hit) return;
+    setReadout(hit, true);
+    if (hit.kind === 'drs') {
+      const entry = DRS_DISCLOSURES[hit.index];
+      jumpToIso(entry.iso);
+      showToast(`DRS · ${formatDay(entry.iso)} · ${formatCompact(entry.shares)} SHARES · ${drsPercent(entry).toFixed(2)}% OF OUTSTANDING`, 'code');
+    } else if (hit.kind === 'si') {
+      const row = flowState.shortInterest[hit.index];
+      jumpToIso(row.date);
+      showToast(`SHORT INTEREST · ${formatDay(row.date)} · ${formatCompact(row.short)} SHARES${row.daysToCover ? ` · ${row.daysToCover.toFixed(2)} DAYS TO COVER` : ''}`, 'code');
+    } else {
+      const row = flowState.ftd[hit.index];
+      jumpToIso(row.date);
+      showToast(`FAILS TO DELIVER · ${formatDay(row.date)} · ${formatCompact(row.shares)} SHARES`, 'code');
+    }
+  });
+
+  // Mausrad über dem Strip scrollt den Chart darüber — und damit beides.
+  body.addEventListener('wheel', (event) => {
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    if (!delta) return;
+    event.preventDefault();
+    viewport.scrollLeft += delta;
+    syncFlowsScroll();
+  }, { passive: false });
+
+  let dragging = false;
+  let startX = 0;
+  let startScroll = 0;
+  body.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('.flows-rail')) return;
+    dragging = true;
+    startX = event.clientX;
+    startScroll = viewport.scrollLeft;
+    body.classList.add('is-dragging');
+    body.setPointerCapture?.(event.pointerId);
+  });
+  body.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    viewport.scrollLeft = startScroll - (event.clientX - startX);
+    syncFlowsScroll();
+  });
+  const endDrag = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    body.classList.remove('is-dragging');
+    body.releasePointerCapture?.(event.pointerId);
+  };
+  body.addEventListener('pointerup', endDrag);
+  body.addEventListener('pointercancel', endDrag);
+
+  document.querySelectorAll('[data-flow-pane-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const pane = button.dataset.flowPaneToggle;
+      setFlowPane(pane, !flowState.panes[pane]);
+    });
+  });
+
+  document.querySelector('#flows-toggle')?.addEventListener('click', () => setFlowsEnabled(!flowState.enabled));
+  document.querySelector('#flows-strip-toggle')?.addEventListener('click', () => setFlowsEnabled(!flowState.enabled));
+
+  window.addEventListener('resize', () => {
+    flowsPaintKey = '';
+    paintFlows({ force: true });
+    syncFlowsScroll();
+  });
+}
+
+/* ---------------------------------------------------------------- codes --- */
+
+
+
+// Ein Toast statt Alarm: jede Aktion antwortet kurz und lesbar, ohne den
+// Chart zu verdecken. prefers-reduced-motion wird respektiert.
+let toastTimer = null;
+function showToast(message, tone = '') {
+  const toast = document.querySelector('#signal-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.className = `signal-toast${tone ? ` is-${tone}` : ''}`;
+  toast.hidden = false;
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => { toast.hidden = true; }, 2600);
+}
+
+function reducedMotion() {
+  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function launchRockets() {
+  const layer = document.querySelector('#rocket-layer');
+  if (!layer) return;
+  if (reducedMotion()) {
+    showToast('🚀 (reduced motion is on — no rocket rain)', 'moon');
+    return;
+  }
+  layer.replaceChildren();
+  layer.hidden = false;
+  const glyphs = ['🚀', '🚀', '🌕', '💎', '🙌'];
+  for (let index = 0; index < 26; index += 1) {
+    const rocket = document.createElement('span');
+    rocket.className = 'rocket';
+    rocket.textContent = glyphs[index % glyphs.length];
+    rocket.style.left = `${(index * 3.9 + (index % 5) * 2.4).toFixed(2)}%`;
+    rocket.style.animationDelay = `${(index % 9) * 0.22}s`;
+    rocket.style.animationDuration = `${3.4 + (index % 5) * 0.5}s`;
+    rocket.style.fontSize = `${18 + (index % 4) * 9}px`;
+    layer.append(rocket);
+  }
+  window.setTimeout(() => {
+    layer.hidden = true;
+    layer.replaceChildren();
+  }, 6200);
+}
+
+// Zahlenschloss ein-/ausschalten — ein Schalter für Chart und Liste.
+function setRadarOn(on) {
+  layerState.numbers = on;
+  syncLayerControls();
+  buildLayerList();
+  terminalPaintKey = '';
+  storyPaintKey = '';
+  paintTerminal();
+  paintStoryChart();
+  showToast(on ? `★ NUMBER RADAR ON · ${radarList().length} cult prints on the tape` : '★ NUMBER RADAR OFF', on ? 'radar' : '');
+}
+
+function setLoreOn(on) {
+  taState.lore = on;
+  terminalPaintKey = '';
+  storyPaintKey = '';
+  paintTerminal();
+  paintStoryChart();
+  showToast(on ? 'LORE LEVELS ON · $483 / $69 / $20' : 'LORE LEVELS OFF');
+}
+
+// TA-Desk: gleicher Knopf wie bisher, aber mit gerechneten Zahlen,
+// Marken-Legende und Community-Quellen im Panel darunter.
+function setTaDesk(on) {
+  document.body.classList.toggle('ta-active', on);
+  const toggle = document.querySelector('#ta-toggle');
+  toggle?.setAttribute('aria-pressed', String(on));
+  const label = toggle?.querySelector('b');
+  if (label) label.textContent = on ? 'ON' : 'OFF';
+  const panel = document.querySelector('#analysis-panel');
+  if (panel) panel.setAttribute('aria-hidden', String(!on));
+  if (on) renderTaDesk();
+  terminalPaintKey = '';
+  storyPaintKey = '';
+  paintTerminal();
+  paintStoryChart();
+}
+
+function setTweetLayer(on) {
+  layerState.tweets = on;
+  syncLayerControls();
+  buildLayerList();
+  terminalPaintKey = '';
+  paintTerminal();
+  showToast(on ? '𝕏 RC TWITTER LAYER ON' : '𝕏 RC TWITTER LAYER OFF');
+}
+
+function jumpToIso(iso, note = '') {
+  const series = seriesFor(chartState.resolution);
+  const barIndex = barIndexForDate(series, iso);
+  followPageScrollUntil = Date.now() + 900;
+  scrollMemeIntoView(barIndex);
+  const nearest = storyEvents.reduce((best, event, index) => {
+    const distance = Math.abs(eventIndices(chartState.resolution)[index] - barIndex);
+    return distance < best.distance ? { index, distance } : best;
+  }, { index: 0, distance: Infinity });
+  if (nearest.distance < 12) applyActive(nearest.index, { pop: true });
+  showToast(note || `JUMP · ${formatDay(series[barIndex]?.date ?? iso)}`);
+}
+
+function runCode(entry) {
+  showToast(`CODE ${entry.label} · ${entry.hint}`, 'code');
+  switch (entry.action) {
+    case 'jump':
+      jumpToIso(entry.value);
+      break;
+    case 'radar':
+      setRadarOn(!layerState.numbers);
+      break;
+    case 'lore':
+      setLoreOn(!taState.lore);
+      break;
+    case 'ta':
+      setTaDesk(!taActive());
+      break;
+    case 'tweets':
+      setTweetLayer(!layerState.tweets);
+      break;
+    case 'meme': {
+      const index = memeMoments.findIndex((moment) => moment.id === entry.value);
+      if (index >= 0) {
+        document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        followPageScrollUntil = Date.now() + 1200;
+        openChartMeme(index);
+      }
+      break;
+    }
+    case 'moon':
+      document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      launchRockets();
+      break;
+    case 'flows':
+      setFlowsEnabled(document.body.classList.contains('flows-off'));
+      break;
+    case 'pane':
+      setFlowPane(entry.value, !flowState.panes[entry.value]);
+      break;
+    case 'tendieman':
+      openTendieman();
+      break;
+    case 'drs':
+      jumpToIso(DRS_LATEST.iso);
+      setFlowPane('drs', true);
+      break;
+    default:
+      break;
+  }
+}
+
+const codeState = { buffer: '', timer: null };
+
+function codesPanelOpen() {
+  const panel = document.querySelector('#codes-panel');
+  return Boolean(panel && !panel.hidden);
+}
+
+function setCodesPanel(open) {
+  const panel = document.querySelector('#codes-panel');
+  if (!panel) return;
+  panel.hidden = !open;
+  document.querySelector('#codes-toggle')?.setAttribute('aria-expanded', String(open));
+}
+
+function renderCodesPanel() {
+  const list = document.querySelector('#codes-list');
+  if (!list) return;
+  list.innerHTML = CODES.map((entry) => `
+    <li class="code-row">
+      <kbd>${escapeHtml(entry.label)}</kbd>
+      <span>${escapeHtml(entry.hint)}</span>
+    </li>
+  `).join('');
+}
+
+// Die Quellen-Liste des TA-Desks steht an einer Stelle im JS — Text und Link
+// bleiben so zusammen und werden nicht im HTML dupliziert.
+function renderCommunityReads() {
+  const box = document.querySelector('#ta-reads');
+  if (!box) return;
+  box.innerHTML = COMMUNITY_READS.map((read) => `
+    <a class="ta-read" href="${read.url}" target="_blank" rel="noreferrer">
+      <span class="ta-read-kind">${escapeHtml(read.kind)}</span>
+      <strong>${escapeHtml(read.name)}</strong>
+      <span class="ta-read-who">${escapeHtml(read.who)}</span>
+      <span class="ta-read-note">${escapeHtml(read.note)}</span>
+      ${read.extra ? `<span class="ta-read-extra">${escapeHtml(read.extra.label)}</span>` : ''}
+    </a>
+  `).join('');
+}
+
+function bindCodes() {
+  renderCodesPanel();
+  renderCommunityReads();
+  document.querySelector('#codes-toggle')?.addEventListener('click', () => setCodesPanel(!codesPanelOpen()));
+  document.querySelector('#codes-close')?.addEventListener('click', () => setCodesPanel(false));
+  document.querySelector('#hero-codes-button')?.addEventListener('click', () => {
+    document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setCodesPanel(true);
+  });
+  document.querySelectorAll('[data-open-ta]').forEach((link) => {
+    link.addEventListener('click', () => {
+      setTaDesk(true);
+      window.setTimeout(() => setLayersCollapsed(true), 40);
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const target = event.target;
+    if (target && (target.matches?.('input, textarea, select') || target.isContentEditable)) return;
+    if (event.key === '?') {
+      event.preventDefault();
+      setCodesPanel(!codesPanelOpen());
+      return;
+    }
+    if (event.key === 'Escape' && codesPanelOpen()) {
+      setCodesPanel(false);
+      return;
+    }
+    if (event.repeat) return;
+    const key = String(event.key || '').toLowerCase();
+    if (!/^[a-z0-9]$/.test(key)) return;
+    codeState.buffer = `${codeState.buffer}${key}`.slice(-14);
+    window.clearTimeout(codeState.timer);
+    codeState.timer = window.setTimeout(() => { codeState.buffer = ''; }, 1500);
+    // Exakte Übereinstimmung: „delta“ darf nicht den TA-Desk öffnen.
+    const match = CODES.find((entry) => codeState.buffer === entry.code);
+    if (match) {
+      codeState.buffer = '';
+      runCode(match);
+    }
+  });
+}
+
+// Kennzahlen + Quellen für den TA-Desk. Alles kommt aus tapeAnalytics().
+function renderTaDesk() {
+  const indicators = document.querySelector('#ta-indicators');
+  const ruler = document.querySelector('#ta-rule-line');
+  const hypeBox = document.querySelector('#ta-hype');
+  if (!indicators) return;
+  const analytics = tapeAnalytics();
+  const hype = hypeIndex();
+  const last = analytics.last;
+  const change = relativeChange(analytics.bars, analytics.bars.length - 1);
+  const fromHigh = analytics.high52 ? (last.close / analytics.high52 - 1) * 100 : null;
+  const fromTop = analytics.highs ? (last.close / analytics.highs.high - 1) * 100 : null;
+  const vs50 = Number.isFinite(analytics.lastSma50) ? (last.close / analytics.lastSma50 - 1) * 100 : null;
+  const vs200 = Number.isFinite(analytics.lastSma200) ? (last.close / analytics.lastSma200 - 1) * 100 : null;
+  const row = (label, value, tone = '') => `
+    <div class="ta-stat">
+      <span class="ta-stat-label">${label}</span>
+      <b class="ta-stat-value${tone ? ` is-${tone}` : ''}">${value}</b>
+    </div>`;
+  indicators.innerHTML = [
+    row('LAST CLOSE', `${formatPrice(last.close)} <small>${formatPercent(change)}</small>`),
+    row('SMA 50 / DISTANCE', `${formatAxisPrice(analytics.lastSma50)} <small>${formatPercent(vs50)}</small>`),
+    row('SMA 200 / DISTANCE', `${formatAxisPrice(analytics.lastSma200)} <small>${formatPercent(vs200)}</small>`),
+    row('RSI (14, daily)', analytics.rsi14 === null ? '—' : analytics.rsi14.toFixed(1)),
+    row('52W HIGH / LOW', `${formatAxisPrice(analytics.high52)} / ${formatAxisPrice(analytics.low52)} <small>${formatPercent(fromHigh)}</small>`),
+    row('REALIZED VOL (20D)', `${(analytics.realizedVol20 ?? 0).toFixed(0)}% ann.`),
+    row('VOLUME 5D VS 60D', `${(analytics.volumeRatio ?? 1).toFixed(2)}×`),
+    row('VS JAN-2021 PRINT', `<small>${formatPercent(fromTop)} from ${formatPrice(analytics.highs.high)}</small>`)
+  ].join('');
+
+  if (ruler) {
+    ruler.textContent = `${radarList().length} cult-number prints on the tape (as traded) · ${taState.lore ? 'lore levels on' : 'lore levels off'}`;
+  }
+  if (hypeBox) {
+    hypeBox.innerHTML = `
+      <div class="hype-head"><span>HYPE INDEX</span><b>${hype.score.toFixed(1)} / 10 · ${hype.label}</b></div>
+      <div class="hype-bar"><span style="width:${(hype.score * 10).toFixed(0)}%"></span></div>
+      <ul class="hype-parts">${hype.parts.map((part) => `<li><span>${part.name}</span><b>${part.readout}</b></li>`).join('')}</ul>
+      <p class="hype-note">Mood ring, not a forecast: realised volatility percentile, volume vs. its 60-day average, share of the last 20 sessions that moved ≥4%, and how close the close sits to the 52-week high.</p>`;
+  }
+  updateHypeChip();
+}
+
+function updateHypeChip() {
+  const chip = document.querySelector('#hype-chip');
+  if (!chip) return;
+  const hype = hypeIndex();
+  chip.textContent = `HYPE ${hype.score.toFixed(1)} · ${hype.label}`;
+  chip.dataset.level = hype.label.toLowerCase();
 }
 
 /* ------------------------------------------------------------- support --- */
@@ -2391,7 +3955,9 @@ function paintStoryChart({ force = false } = {}) {
     chartState.activeIndex,
     width,
     height,
-    document.body.classList.contains('ta-active') ? 'ta' : '-'
+    taActive() ? `ta-${taState.lore ? 'lore' : 'plain'}` : '-',
+    `numbers-${layerState.numbers}`,
+    priceMode.mode
   ].join('|');
   if (!force && storyKey === storyPaintKey) return;
   storyPaintKey = storyKey;
@@ -2419,7 +3985,10 @@ function paintStoryChart({ force = false } = {}) {
     events,
     activeIndex: chartState.activeIndex,
     splits: marketMeta.splits.map((split) => ({ date: split.date, ratio: split.ratio ?? 4 })),
-    ta: document.body.classList.contains('ta-active'),
+    ta: taActive() ? taModel() : null,
+    numbers: layerState.numbers
+      ? radarList().map((hit, index) => ({ ...hit, index, barIndex: layerIndices('number', chartState.resolution)[index] }))
+      : [],
     axisInCanvas: true,
     interactive: true,
     gradientId: 'chart-area-gradient-story',
@@ -2552,7 +4121,7 @@ function bindChartTerminal() {
   // Marker-Aktivierung über Delegation: egal, ob der Klick sein Ziel noch
   // kennt (normale Klicks) oder umgeleitet wurde (nach Drag-Capture) —
   // wir finden den Marker unter dem Zeiger und öffnen seine Karte.
-  const MARKER_SELECTOR = '.chart-point-hit, .chart-point, .chart-point-halo, .chart-meme-hit, .chart-corp-hit, .chart-tweet-hit';
+  const MARKER_SELECTOR = '.chart-point-hit, .chart-point, .chart-point-halo, .chart-meme-hit, .chart-corp-hit, .chart-tweet-hit, .chart-number-hit';
 
   const markerFromEvent = (event) => {
     const direct = event.target.closest?.(MARKER_SELECTOR);
@@ -2579,6 +4148,11 @@ function bindChartTerminal() {
     if (marker.classList.contains('chart-tweet-hit')) {
       const index = Number(marker.dataset.tweetIndex);
       if (!Number.isNaN(index)) openLayerItem('tweet', index);
+      return true;
+    }
+    if (marker.classList.contains('chart-number-hit')) {
+      const index = Number(marker.dataset.numberIndex);
+      if (!Number.isNaN(index)) openLayerItem('number', index);
       return true;
     }
     const index = Number(marker.dataset.index);
@@ -2711,18 +4285,9 @@ function bindChartTerminal() {
     }
   });
 
-  const analysisToggle = document.querySelector('#ta-toggle');
-  analysisToggle?.addEventListener('click', () => {
-    const enabled = document.body.classList.toggle('ta-active');
-    analysisToggle.setAttribute('aria-pressed', String(enabled));
-    const label = analysisToggle.querySelector('b');
-    if (label) label.textContent = enabled ? 'ON' : 'OFF';
-    document.querySelector('#analysis-panel')?.setAttribute('aria-hidden', String(!enabled));
-    terminalPaintKey = '';
-    storyPaintKey = '';
-    paintTerminal();
-    paintStoryChart();
-  });
+  // TA-Desk: derselbe Knopf, jetzt mit gerechneten Kennzahlen und Quellen.
+  document.querySelector('#ta-toggle')?.addEventListener('click', () => setTaDesk(!taActive()));
+  document.querySelector('#hype-chip')?.addEventListener('click', () => setTaDesk(!taActive()));
 
   // ANZEIGE-Schublade: alle sekundären Anzeige-Schalter sitzen hinter einem
   // Knopf, damit die Topbar ruhig bleibt.
@@ -3049,13 +4614,13 @@ function buildMemeWall() {
     const gifSource = moment.media.find((entry) => entry.kind === 'gif');
     const videoSource = moment.media.find((entry) => entry.kind === 'video');
     const media = gifSource ?? videoSource;
-    const kind = gifSource ? 'GIF' : 'VIDEO';
+    const kind = gifSource ? 'GIF' : videoSource ? 'VIDEO' : 'TEXT';
     const date = formatShortDay(moment.iso);
     return `
-      <article class="wall-tile" data-meme-index="${index}">
+      <article class="wall-tile${media ? '' : ' is-textual'}" data-meme-index="${index}">
         <button class="wall-tile-hit" type="button" aria-label="${moment.label} Open in chart — ${moment.frames[0].quote}">
           <span class="wall-tile-frame">
-            <img class="wall-tile-image" data-src="${gifSource?.src ?? ''}" alt="${moment.label} — ${gifSource?.title ?? moment.frames[0].quote}" loading="lazy" decoding="async" />
+            ${media ? `<img class="wall-tile-image" data-src="${gifSource?.src ?? ''}" alt="${moment.label} — ${gifSource?.title ?? moment.frames[0].quote}" loading="lazy" decoding="async" />` : '<span class="wall-tile-text">NO MEDIA / TEXT CARD</span>'}
             <span class="wall-tile-kind">${kind}</span>
           </span>
           <span class="wall-tile-meta">
@@ -3065,7 +4630,7 @@ function buildMemeWall() {
           </span>
           <span class="wall-tile-quote">${moment.frames[0].quote}</span>
         </button>
-        <a class="wall-tile-source" href="${media?.page ?? '#'}" target="_blank" rel="noreferrer">${media?.credit ?? 'source'} ↗</a>
+        <a class="wall-tile-source" href="${media?.page ?? 'app.js'}" target="_blank" rel="noreferrer">${media?.credit ?? 'text card · no embed'} ↗</a>
         ${videoSource ? `<button class="wall-tile-video" type="button" data-embed="${videoSource.embed}" aria-label="Play video: ${videoSource.title}">▶ VIDEO</button>` : ''}
       </article>
     `;
@@ -3263,9 +4828,40 @@ function stampProvenance() {
     const years = (Date.parse(`${marketMeta.end}T00:00:00Z`) - Date.parse('2019-12-02T00:00:00Z')) / (365.25 * 86400000);
     heroNumbers[0].textContent = String(Math.round(years)).padStart(2, '0');
   }
+  // Anker-Momente und Hype-Index sind gerechnet, nicht getippt.
+  if (heroNumbers[1]) heroNumbers[1].textContent = String(storyEvents.length).padStart(2, '0');
+  if (heroNumbers[2]) {
+    const hype = hypeIndex();
+    heroNumbers[2].textContent = hype.score.toFixed(1);
+    heroNumbers[2].title = `Hype index: ${hype.label} — ${hype.parts.map((part) => `${part.name} ${part.readout}`).join(' · ')}`;
+  }
 }
 
 /* ------------------------------------------------------------- boot up --- */
+
+// Tendieman-Vollbild: ESC schließt, Leertaste pausiert, Klick auf eine Zeile springt.
+function bindTendieman() {
+  document.querySelector('#tendieman-close')?.addEventListener('click', () => closeTendieman());
+  document.querySelector('#tendieman-play')?.addEventListener('click', () => toggleTendiemanPause());
+  document.querySelector('#tendieman')?.addEventListener('click', (event) => {
+    if (event.target.id === 'tendieman') closeTendieman();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (!lyricState.active) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeTendieman();
+      return;
+    }
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      toggleTendiemanPause();
+    }
+  });
+  document.querySelectorAll('[data-open-tendieman]').forEach((button) => {
+    button.addEventListener('click', () => openTendieman());
+  });
+}
 
 function initialise() {
   stampProvenance();
@@ -3279,6 +4875,13 @@ function initialise() {
   paintStoryChart();
   bindChartTerminal();
   bindChartLayers();
+  bindCodes();
+  bindFlowsInteraction();
+  bindTendieman();
+  renderTendieman();
+  renderFlowsStats();
+  paintFlows({ force: true });
+  updateHypeChip();
   initSupport();
   bindTimeline();
   bindMobileNav();
