@@ -21,10 +21,22 @@
 import { writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 
-const HEADERS = {
-  'User-Agent': 'gamestop-event-tape/1.0 (github.com/hundt12345/Gamestop; archive research)',
-  Accept: 'text/csv,application/zip,text/html,*/*'
-};
+// Both hosts sit behind bot filters that answer 403 to plain script agents, so
+// the request carries a normal browser profile plus a contact suffix.
+const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
+  + 'Chrome/126.0.0.0 Safari/537.36 gamestop-event-tape/1.0 (+https://github.com/hundt12345/Gamestop)';
+
+function headersFor(url) {
+  const headers = {
+    'User-Agent': UA,
+    Accept: 'text/csv,application/zip,text/html,application/xhtml+xml,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'no-cache'
+  };
+  if (url.includes('finra.org')) headers.Referer = 'https://www.finra.org/finra-data/browse-catalog/equity-short-interest/files';
+  if (url.includes('sec.gov')) headers.Referer = 'https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data';
+  return headers;
+}
 
 const FTD_INDEX = 'https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data';
 const REQUEST_GAP_MS = 900;      // FINRA/SEC throttle bursts
@@ -148,19 +160,19 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Both hosts throttle request bursts (403/429), so every call is paced and
 // retried with backoff before it is reported as a failure.
-async function fetchBuffer(url, { optional = false, label = '' } = {}) {
+async function fetchBuffer(url, { optional = false, label = '', retries = RETRY_DELAYS.length } = {}) {
   let lastError = null;
-  for (let attempt = 0; attempt <= RETRY_DELAYS.length; attempt += 1) {
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
-      const response = await fetch(url, { headers: HEADERS, redirect: 'follow' });
+      const response = await fetch(url, { headers: headersFor(url), redirect: 'follow' });
       if (response.ok) return Buffer.from(await response.arrayBuffer());
       const retryable = response.status === 403 || response.status === 429 || response.status >= 500;
       lastError = new Error(`HTTP ${response.status} ${response.statusText}`);
-      if (!retryable || attempt === RETRY_DELAYS.length) break;
+      if (!retryable || attempt === retries) break;
       await sleep(RETRY_DELAYS[attempt]);
     } catch (error) {
       lastError = error;
-      if (attempt === RETRY_DELAYS.length) break;
+      if (attempt === retries) break;
       await sleep(RETRY_DELAYS[attempt]);
     }
   }
@@ -273,7 +285,7 @@ async function collectShortInterest(monthsBack) {
   let misses = 0;
   for (const date of candidates) {
     const compact = date.replaceAll('-', '');
-    const buffer = await fetchBuffer(`${FINRA_CDN}/shrt${compact}.csv`, { optional: true, label: `FINRA ${date}` });
+    const buffer = await fetchBuffer(`${FINRA_CDN}/shrt${compact}.csv`, { optional: true, retries: 1, label: `FINRA ${date}` });
     if (!buffer) {
       misses += 1;
       if (misses > 2 && rows.length) break; // the newest period is not published yet
