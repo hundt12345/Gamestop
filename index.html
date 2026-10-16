@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#090b09" />
-    <meta name="description" content="The GameStop Event Tape — eine scrollbare, verlinkte Chronik der Ereignisse ab 2020." />
+    <meta name="description" content="The GameStop Event Tape — a scrollable, source-linked chronicle of events since 2020." />
     <title>GameStop / Event Tape</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="terminal.css" />
@@ -12,25 +12,25 @@
     <link rel="stylesheet" href="detail.css" />
   </head>
   <body id="top">
-    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-fill"></span></div>
 
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="#top" aria-label="GameStop Event Tape, Startseite">
+        <a class="brand" href="#top" aria-label="GameStop Event Tape, Home">
           <span class="brand-mark">GS</span>
           <span class="brand-name">EVENT TAPE <small>/ 01</small></span>
         </a>
-        <nav class="primary-nav" aria-label="Hauptnavigation">
+        <nav class="primary-nav" aria-label="Main navigation">
           <a href="#chart-explorer">Chart</a>
           <a href="#meme-tape">Meme tape</a>
           <a href="#source-room">Sources</a>
           <a href="#support">Support</a>
         </nav>
-        <a class="support-button" data-support-link href="#support" title="Dieses Archiv unterstützen — oder den Button selbst einrichten">
-          <span aria-hidden="true">♥</span> <span data-support-label>Support einrichten</span>
+        <a class="support-button" data-support-link href="#support" title="Support this archive or configure the support link">
+          <span aria-hidden="true">♥</span> <span data-support-label>Set up support</span>
         </a>
-        <button class="menu-toggle" type="button" aria-label="Navigation öffnen" aria-expanded="false">
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
           <span></span><span></span>
         </button>
       </div>
@@ -48,7 +48,7 @@
           <div class="hero-copy">
             <p class="eyebrow"><span class="eyebrow-index">00</span> A public record / price, posts, pressure</p>
             <h1 id="hero-title">The GameStop<br /><em>event tape.</em></h1>
-            <p class="hero-intro">Ein Chart, der sich wie ein Trading-Interface lesen lässt: rechts der jüngste Punkt, links die Vorgeschichte. Hover, drag oder scrubbing — die Quellen hängen direkt am Ereignis.</p>
+            <p class="hero-intro">A chart that reads like a trading interface: the latest point on the right, the backstory on the left. Hover, drag or scrub — sources are linked to each event.</p>
             <div class="hero-actions">
               <a class="button button-primary" href="#chart-explorer" data-terminal-jump="0">Start at 2020 <span aria-hidden="true">↘</span></a>
               <a class="text-link" href="#method">How to read <span aria-hidden="true">↗</span></a>
@@ -56,8 +56,8 @@
           </div>
             <div class="hero-side-note">
             <div class="side-note-label"><span class="state-dot"></span> NEWEST → RIGHT / OLDEST → LEFT</div>
-            <p>Die Standardansicht startet am rechten Rand. Ziehe die Zeitachse zurück, scrolle mit dem Rad oder zoome mit <b>STRG + Rad</b> — bis hinunter auf wenige Handelstage. <b>Klick an eine beliebige Stelle</b> zeigt den Kurs dieses Tages, jedes Ereignis klappt direkt am Kurs auf, und die <b>Memes spielen direkt im Chart</b>.</p>
-            <div class="hero-numbers" aria-label="Archivdaten">
+            <p>The view starts at the right edge. Drag back through time, scroll, or zoom with <b>CTRL + wheel</b> down to individual trading days. <b>Click anywhere</b> to inspect prices; events and <b>memes open in the dock below the chart</b>.</p>
+            <div class="hero-numbers" aria-label="Archive statistics">
               <div><strong>07</strong><span>years in frame</span></div>
               <div><strong>11</strong><span>anchor moments</span></div>
               <div><strong>∞</strong><span>open tabs</span></div>
@@ -69,23 +69,23 @@
           <div class="terminal-topbar">
             <div class="terminal-identity"><span class="terminal-logo">GME</span><span>EVENT TAPE</span></div>
             <div class="terminal-controls">
-              <div class="step-controls" role="group" aria-label="Zwischen Ereignissen springen">
-                <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Zum älteren Ereignis" title="Zum älteren Ereignis">←</button>
-                <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Zum neueren Ereignis" title="Zum neueren Ereignis">→</button>
+              <div class="step-controls" role="group" aria-label="Jump between events">
+                <button type="button" class="terminal-step" id="terminal-prev" data-terminal-step="-1" aria-label="Previous event" title="Previous event">←</button>
+                <button type="button" class="terminal-step" id="terminal-next" data-terminal-step="1" aria-label="Next event" title="Next event">→</button>
               </div>
-              <div class="zoom-controls" role="group" aria-label="Chart-Zoom">
+              <div class="zoom-controls" role="group" aria-label="Chart zoom">
                 <span>ZOOM</span>
-                <button type="button" class="zoom-button" id="zoom-out" aria-label="Herauszoomen">−</button>
-                <button type="button" class="zoom-button" id="zoom-in" aria-label="Hineinzoomen">+</button>
-                <button type="button" class="zoom-button zoom-fit" id="zoom-fit" aria-label="Gesamte Historie anzeigen">FIT</button>
+                <button type="button" class="zoom-button" id="zoom-out" aria-label="Zoom out">−</button>
+                <button type="button" class="zoom-button" id="zoom-in" aria-label="Zoom in">+</button>
+                <button type="button" class="zoom-button zoom-fit" id="zoom-fit" aria-label="Show full history">FIT</button>
               </div>
-              <div class="resolution-switch" role="group" aria-label="Chartauflösung">
+              <div class="resolution-switch" role="group" aria-label="Chart resolution">
                 <button type="button" class="resolution-button is-active" data-resolution="day">1D</button>
                 <button type="button" class="resolution-button" data-resolution="week">1W</button>
                 <button type="button" class="resolution-button" data-resolution="month">1M</button>
               </div>
-              <button type="button" class="controls-toggle" id="controls-toggle" aria-expanded="false" aria-controls="view-controls" title="Weitere Anzeige-Optionen ein-/ausklappen">
-                <span class="controls-toggle-signal" aria-hidden="true">▾</span> ANZEIGE
+              <button type="button" class="controls-toggle" id="controls-toggle" aria-expanded="false" aria-controls="view-controls" title="Toggle display options">
+                <span class="controls-toggle-signal" aria-hidden="true">▾</span> DISPLAY
               </button>
             </div>
           </div>
@@ -93,19 +93,19 @@
           <!-- Zweite, ruhige Ebene: alle Anzeige-Schalter sind hier
                zusammengefasst und standardmäßig eingeklappt. -->
           <div class="view-controls" id="view-controls" hidden>
-            <button type="button" class="mode-toggle price-mode-toggle" id="price-mode-toggle" aria-pressed="true" title="Split-bereinigte Kurse anzeigen — der 4:1-Split vom Juli 2022 wird herausgerechnet">
+            <button type="button" class="mode-toggle price-mode-toggle" id="price-mode-toggle" aria-pressed="true" title="Show prices adjusted for the July 2022 4:1 split">
               <span class="price-mode-signal">÷4</span>
               <span class="mode-word" id="price-mode-word">SPLIT-ADJ</span>
               <b id="price-mode-hint">↔ AS TRADED</b>
             </button>
-            <button type="button" class="mode-toggle meme-toggle" id="meme-toggle" aria-pressed="true" title="Meme-Marker im Chart anzeigen und direkt abspielen">
+            <button type="button" class="mode-toggle meme-toggle" id="meme-toggle" aria-pressed="true" title="Show and play meme markers on the chart">
               <span class="meme-signal">▶</span>
               <span class="mode-word">MEMES</span>
               <b id="meme-toggle-state">ON</b>
             </button>
             <button type="button" class="mode-toggle" id="chart-mode-toggle" aria-pressed="false"><span class="mode-signal"></span><span class="mode-word">LINE</span><b>↔ CANDLES</b></button>
             <button type="button" class="analysis-toggle" id="ta-toggle" aria-pressed="false"><span class="ta-signal"></span> TECHNICAL ANALYSIS <b>OFF</b></button>
-            <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="GIFs und Videos von Giphy und YouTube laden — aus schaltet die Einbettungen ab, der Player bleibt textlich">
+            <button type="button" class="subbar-toggle" id="media-toggle" aria-pressed="true" title="Load GIFs and videos; turning this off keeps the player text-only">
               <span class="media-toggle-signal" aria-hidden="true">◉</span> MEDIA <b id="media-toggle-state">ON</b>
             </button>
           </div>
@@ -121,36 +121,36 @@
                der Chart selbst bleibt frei. -->
           <div class="chart-layers" id="chart-layers">
             <div class="layers-head">
-              <button type="button" class="layers-toggle" id="layers-toggle" aria-expanded="true" aria-controls="layer-panel" title="Layer-Panel ein-/ausklappen">
+              <button type="button" class="layers-toggle" id="layers-toggle" aria-expanded="true" aria-controls="layer-panel" title="Toggle chart layers">
                 <span id="layers-toggle-signal" aria-hidden="true">▾</span> CHART LAYERS
               </button>
               <span class="layers-count" id="layer-count">— EVENTS</span>
             </div>
             <div class="layer-panel" id="layer-panel">
-              <div class="layer-controls" role="group" aria-label="Chart-Layer filtern">
+              <div class="layer-controls" role="group" aria-label="Filter chart layers">
                 <button type="button" class="layer-toggle is-on" id="corp-toggle" aria-pressed="true">◆ EVENTS <b id="corp-toggle-state">ON</b></button>
-                <div class="layer-filters" role="group" aria-label="Ereignistyp">
-                  <button type="button" class="layer-filter is-active" data-corp-filter="all">ALLE</button>
+                <div class="layer-filters" role="group" aria-label="Event type">
+                  <button type="button" class="layer-filter is-active" data-corp-filter="all">ALL</button>
                   <button type="button" class="layer-filter" data-corp-filter="earnings">EARNINGS</button>
                   <button type="button" class="layer-filter" data-corp-filter="offering">OFFERINGS</button>
-                  <button type="button" class="layer-filter" data-corp-filter="other">SONSTIGE</button>
+                  <button type="button" class="layer-filter" data-corp-filter="other">OTHER</button>
                 </div>
                 <button type="button" class="layer-toggle is-on" id="tweet-toggle" aria-pressed="true">𝕏 RC TWEETS <b id="tweet-toggle-state">ON</b></button>
-                <div class="layers-shortcuts" role="group" aria-label="Memes direkt abspielen">
+                <div class="layers-shortcuts" role="group" aria-label="Play memes directly">
                   <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ TENDIEMAN</button>
-                  <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 KATZENMEMES</button>
+                  <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 CAT MEMES</button>
                   <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 NOT A CAT</button>
                 </div>
               </div>
-              <div class="layer-list" id="layer-list" aria-label="Ereignisse und RC-Tweets in chronologischer Reihenfolge"></div>
+              <div class="layer-list" id="layer-list" aria-label="Events and RC tweets in chronological order"></div>
               <div class="layer-detail" id="layer-detail" aria-live="polite"></div>
             </div>
           </div>
 
           <div class="terminal-chart-area">
-            <div class="terminal-viewport" id="terminal-viewport" tabindex="0" role="region" aria-label="Horizontaler GameStop-Zeitachsen-Chart mit Tageskerzen seit 2019. Neueste Ereignisse stehen rechts. Klicke an eine Stelle im Chart, um den Kurs dieses Tages zu sehen.">
+            <div class="terminal-viewport" id="terminal-viewport" tabindex="0" role="region" aria-label="Horizontal GameStop chart with daily candles since 2019. Latest events are on the right. Click to inspect a trading day.">
               <div class="terminal-track" id="terminal-track">
-                <svg id="chart-canvas" class="market-chart" role="img" aria-label="GameStop-Tageskurse von 2019 bis heute, mit den Ereignissen der Chronik"></svg>
+                <svg id="chart-canvas" class="market-chart" role="img" aria-label="GameStop daily prices since 2019 with timeline events"></svg>
                 <div class="terminal-edge-label terminal-edge-left">2019<br /><span>BASELINE</span></div>
                 <div class="terminal-edge-label terminal-edge-right">2026 →<br /><span>NOW / OPEN</span></div>
               </div>
@@ -170,19 +170,19 @@
             </div>
             <div class="dock-head">
               <span class="dock-title">DOCK</span>
-              <button type="button" class="dock-toggle" id="dock-toggle" aria-expanded="true" aria-controls="terminal-dock" title="Dock einklappen — der Chart wächst über die volle Höhe">
+              <button type="button" class="dock-toggle" id="dock-toggle" aria-expanded="true" aria-controls="terminal-dock" title="Collapse dock to expand the chart">
                 <span class="dock-toggle-signal" aria-hidden="true">▾</span><span id="dock-toggle-label">HIDE DOCK</span>
               </button>
             </div>
             <div class="dock-slots">
 
-              <section class="dock-slot dock-slot-event" aria-label="Ereignis-Karte">
+              <section class="dock-slot dock-slot-event" aria-label="Event card">
                 <p class="dock-slot-label"><span>01</span> EVENT / AKTIVES EREIGNIS</p>
                 <div class="event-callout" id="event-callout" aria-live="polite">
                   <div class="callout-head">
                     <span class="callout-index" id="callout-index">11 / 11</span>
-                    <time id="callout-date">13 OKT 2026</time>
-                    <button type="button" class="callout-close" id="callout-close" aria-label="Ereignis-Karte schließen">×</button>
+                    <time id="callout-date">13 OCT 2026</time>
+                    <button type="button" class="callout-close" id="callout-close" aria-label="Close event card">×</button>
                   </div>
                   <h3 class="callout-title" id="callout-title">Warrants, filings, the long tail</h3>
                   <div class="callout-readout">
@@ -195,23 +195,23 @@
                 </div>
               </section>
 
-              <section class="dock-slot dock-slot-meme" aria-label="Meme-Player">
+              <section class="dock-slot dock-slot-meme" aria-label="Meme player">
                 <p class="dock-slot-label"><span>02</span> MEME / MEDIA</p>
-                <div class="chart-meme-player" id="chart-meme-player" role="region" aria-label="Meme-Player im Chart" hidden>
+                <div class="chart-meme-player" id="chart-meme-player" role="region" aria-label="Chart meme player" hidden>
                   <div class="chart-meme-head">
                     <span class="chart-meme-kicker" id="chart-meme-label">MEME / 01</span>
                     <time id="chart-meme-date">—</time>
                     <strong id="chart-meme-price">—</strong>
-                    <button type="button" class="chart-meme-close" id="chart-meme-close" aria-label="Meme im Chart schließen">×</button>
+                    <button type="button" class="chart-meme-close" id="chart-meme-close" aria-label="Close chart meme">×</button>
                   </div>
                   <div class="chart-meme-stage">
                     <div class="meme-media" id="chart-meme-media" data-state="empty">
                       <img class="meme-media-gif" id="chart-meme-gif" alt="" decoding="async" hidden />
-                      <iframe class="meme-media-frame" id="chart-meme-video" title="Meme-Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
+                      <iframe class="meme-media-frame" id="chart-meme-video" title="Meme video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
                       <button type="button" class="meme-media-play" id="chart-meme-video-play" hidden>
                         <span class="play-icon" aria-hidden="true">▶</span><span id="chart-meme-video-label">PLAY VIDEO</span>
                       </button>
-                      <p class="meme-media-broken" id="chart-meme-media-broken" hidden>Media nicht geladen — <a id="chart-meme-media-link" href="#" target="_blank" rel="noreferrer">Original öffnen ↗</a></p>
+                      <p class="meme-media-broken" id="chart-meme-media-broken" hidden>Media could not be loaded — <a id="chart-meme-media-link" href="#" target="_blank" rel="noreferrer">Open original ↗</a></p>
                     </div>
                     <div class="chart-meme-text">
                       <p class="chart-meme-quote" id="chart-meme-quote">I LIKE THE STOCK.</p>
@@ -219,7 +219,7 @@
                     </div>
                   </div>
                   <div class="chart-meme-controls">
-                    <button class="chart-meme-play" id="chart-meme-play" type="button" aria-pressed="true" aria-label="Meme im Chart abspielen oder pausieren">
+                    <button class="chart-meme-play" id="chart-meme-play" type="button" aria-pressed="true" aria-label="Play or pause chart meme">
                       <span class="play-icon" aria-hidden="true">▶</span><span class="pause-icon" aria-hidden="true">Ⅱ</span><span id="chart-meme-play-label">PAUSE</span>
                     </button>
                     <div class="chart-meme-progress" aria-hidden="true"><span id="chart-meme-progress-fill"></span></div>
@@ -227,16 +227,16 @@
                   </div>
                   <p class="meme-credit" id="chart-meme-credit">GIF · GIPHY ↗</p>
                 </div>
-                <p class="dock-hint" id="chart-meme-hint">Klick auf einen <b>MEME</b>-Marker im Chart oder eine Nummer im Meme-Tape — Bild und Video erscheinen hier, nie über dem Kurs.</p>
+                <p class="dock-hint" id="chart-meme-hint">Click a <b>MEME</b> marker or a number in the meme tape. Images and videos appear here, never over the price chart.</p>
               </section>
 
-              <section class="dock-slot dock-slot-inspect" aria-label="Kursor-Anzeige">
+              <section class="dock-slot dock-slot-inspect" aria-label="Price inspector">
                 <p class="dock-slot-label"><span>03</span> CURSOR / OHLC</p>
                 <div class="chart-inspect" id="chart-inspect" aria-live="polite" hidden>
                   <div class="inspect-head">
                     <time id="inspect-date">—</time>
                     <span class="inspect-cursor" id="inspect-cursor">—</span>
-                    <button type="button" class="inspect-close" id="inspect-close" aria-label="Kurs-Anzeige schließen (Esc)">×</button>
+                    <button type="button" class="inspect-close" id="inspect-close" aria-label="Close price inspector (Esc)">×</button>
                   </div>
                   <div class="inspect-ohlc">
                     <span>O <b id="inspect-open">—</b></span>
@@ -250,7 +250,7 @@
                     <span class="inspect-hint">ESC = CLOSE</span>
                   </div>
                 </div>
-                <p class="dock-hint" id="inspect-hint">Klick irgendwo in den Chart — Datum, Open/High/Low/Close, Volumen und Tagesänderung landen hier. <b>Esc</b> schließt.</p>
+                <p class="dock-hint" id="inspect-hint">Click anywhere on the chart to inspect the date, OHLC, volume and daily change. <b>Esc</b> closes the inspector.</p>
               </section>
 
             </div>
@@ -258,13 +258,13 @@
 
           <div class="terminal-range-row">
             <span>← PAST</span>
-            <input id="terminal-range" type="range" min="0" max="10" step="1" value="10" aria-label="Ereignis auf der Zeitachse auswählen" />
+            <input id="terminal-range" type="range" min="0" max="10" step="1" value="10" aria-label="Select timeline event" />
             <span>FUTURE →</span>
           </div>
 
           <div class="analysis-panel" id="analysis-panel" aria-hidden="true">
             <div><span class="chart-label">COMMUNITY TECHNICAL LAYER</span><h3>Triangles, trendlines<br /><em>&amp; pressure zones.</em></h3></div>
-            <p>Ein-/ausblendbare Annotationen für die technische Lesart: Trendkanäle, Support/Resistance und die bekannten Triangle-Patterns aus der Community. Die Markierungen sind redaktionelle Orientierung — keine verifizierte Trading-Empfehlung.</p>
+            <p>Toggle community-inspired technical annotations: trend channels, support, resistance and triangle patterns. These are editorial guides, not verified trading recommendations.</p>
             <div class="analysis-tags"><span>triangle / illustrative</span><span>support + resistance</span><span>volume / source-led</span><a href="https://www.reddit.com/r/Superstonk/wiki/index/" target="_blank" rel="noreferrer">open Superstonk DD ↗</a></div>
           </div>
 
@@ -276,9 +276,9 @@
         </div>
       </section>
 
-      <section class="method-strip section-shell" id="method" aria-label="Methodik">
+      <section class="method-strip section-shell" id="method" aria-label="Methodology">
         <div class="strip-label">READING THE TAPE</div>
-        <p>Keine Anlageberatung. Der Chart zeigt die echten GME-Tageskerzen seit Dezember 2019 — standardmäßig <b>split-bereinigt</b>: der 4:1-Split vom Juli 2022 ist rückwirkend herausgerechnet, die Kurve ist durchgehend vergleichbar. Per Knopf oben rechts schaltest du auf <b>as traded</b> um, also auf die Kurse, wie sie damals im Tape standen. Jede Karte führt zu Primärquellen, Archiven oder Original-Posts.</p>
+        <p>Not financial advice. The chart shows actual GME daily candles since December 2019, <b>split-adjusted</b> by default for the July 2022 4:1 split. Switch to <b>as traded</b> to see historical quoted prices. Each card links to primary sources, archives or original posts.</p>
         <a href="#source-room">Sources first <span aria-hidden="true">↗</span></a>
       </section>
 
@@ -290,7 +290,7 @@
           </div>
           <div class="section-heading-copy">
             <p>Bewege dich durch die Ereignisse. Der Chart bleibt stehen, die Geschichte kommt auf dich zu.</p>
-            <div class="timeline-jump" aria-label="Zeitsprünge">
+            <div class="timeline-jump" aria-label="Jump to date">
               <button type="button" data-jump-index="0">2020</button>
               <button type="button" data-jump-index="3">JAN 21</button>
               <button type="button" data-jump-index="6">2022</button>
@@ -300,7 +300,7 @@
         </div>
 
         <div class="timeline-layout">
-          <aside class="chart-rail" aria-label="Interaktiver Zeitachsen-Chart">
+          <aside class="chart-rail" aria-label="Interactive timeline chart">
             <div class="sticky-chart">
               <div class="sticky-chart-header">
                 <div>
@@ -316,10 +316,10 @@
                 <span class="sticky-readout-note">close / as traded</span>
               </div>
               <div class="sticky-chart-canvas">
-                <svg id="story-chart" class="market-chart" viewBox="0 0 1000 470" role="img" aria-label="Interaktiver Zeitachsen-Chart"></svg>
+                <svg id="story-chart" class="market-chart" viewBox="0 0 1000 470" role="img" aria-label="Interactive timeline chart"></svg>
               </div>
               <div class="chart-caption"><span>click anywhere for the price</span><span>or keep scrolling <b>↓</b></span></div>
-              <div class="chart-index" aria-label="Chartpunkte">
+              <div class="chart-index" aria-label="Chart points">
                 <button class="chart-index-dot is-active" type="button" data-index="0" aria-label="September 2020, The activist entry"><span>01</span></button>
                 <button class="chart-index-dot" type="button" data-index="1" aria-label="November 2020, A letter not a whisper"><span>02</span></button>
                 <button class="chart-index-dot" type="button" data-index="2" aria-label="January 2021, DFV keeps showing the receipts"><span>03</span></button>
@@ -441,7 +441,7 @@
             <article class="event-card js-event-card" id="event-tail" data-index="10">
               <div class="event-rail"><span>11</span><i></i></div>
               <div class="event-content">
-                <div class="event-meta"><time datetime="2026-10">OKT 2026</time><span>FILINGS / LONG TAIL</span></div>
+                <div class="event-meta"><time datetime="2026-10">OCT 2026</time><span>FILINGS / LONG TAIL</span></div>
                 <h3>Warrants, filings, the long tail.</h3>
                 <p>After the spectacle comes the slow feed: warrants, capital allocation, earnings and business reports. Keep the links live; let the primary documents do the talking.</p>
                 <div class="event-footer"><span class="event-tag">archive still updating</span><div class="event-links"><a href="https://investor.gamestop.com/financial-information/sec-filings" target="_blank" rel="noreferrer">SEC filings <span>↗</span></a><a href="https://investor.gamestop.com/financial-information/quarterly-results" target="_blank" rel="noreferrer">earnings <span>↗</span></a></div></div>
@@ -455,12 +455,15 @@
         <div class="meme-copy">
           <p class="eyebrow"><span class="eyebrow-index">02</span> Culture / compressed</p>
           <h2 id="meme-title">The meme tape<br /><em>is not decoration.</em></h2>
-          <p>Ein paar Sätze, Screenshots und Reaktionsbilder haben die Timeline zusammengehalten. Die Memes hängen jetzt direkt am Chart: Klick im Chart auf einen <b>MEME</b>-Marker (oder hier auf eine Nummer) spielt die Karte am Kurs dieses Tages ab — mit echtem GIF oder Video, ohne Autoplay-Audio. Die Einblendung landet im <b>Dock unter dem Chart</b>, damit die Kursfläche nie verdeckt wird.</p>
+          <p>Quotes, screenshots and reaction images held the timeline together. Click a <b>MEME</b> marker or choose a moment here to open its GIF or video in the <b>dock below the chart</b>. Videos start on click, without autoplay audio.</p>
           <div class="meme-note"><span class="state-dot"></span><span>real GIF + video / plays in the dock / sound off</span></div>
           <div class="meme-shortcuts">
-            <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ Tendieman abspielen</button>
-            <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 Katzenmemes</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-tendieman">♪ Play Tendieman</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-cats">🐱 Cat memes</button>
             <button type="button" class="layer-shortcut" data-open-meme="meme-cat">🐱 I am not a cat</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-welike">♫ We like the stock</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-peoplebuy">♫ GameStonks anthem</button>
+            <button type="button" class="layer-shortcut" data-open-meme="meme-spartans">▶ 300 GameStonks</button>
             <button type="button" class="layer-shortcut" data-open-meme="meme-return">🐱 The cat returns</button>
           </div>
         </div>
@@ -470,11 +473,11 @@
             <div class="player-scanlines" aria-hidden="true"></div>
             <div class="player-media" id="meme-media" data-state="empty">
               <img class="meme-media-gif" id="meme-gif" alt="" decoding="async" hidden />
-              <iframe class="meme-media-frame" id="meme-video" title="Meme-Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
+              <iframe class="meme-media-frame" id="meme-video" title="Meme video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
               <button type="button" class="meme-media-play" id="meme-video-play" hidden>
                 <span class="play-icon" aria-hidden="true">▶</span><span id="meme-video-label">PLAY VIDEO</span>
               </button>
-              <p class="meme-media-broken" id="meme-media-broken" hidden>Media nicht geladen — <a id="meme-media-link" href="#" target="_blank" rel="noreferrer">Original öffnen ↗</a></p>
+              <p class="meme-media-broken" id="meme-media-broken" hidden>Media could not be loaded — <a id="meme-media-link" href="#" target="_blank" rel="noreferrer">Open original ↗</a></p>
             </div>
             <div class="meme-card" id="meme-card">
               <div class="meme-card-meta"><span id="meme-label">WSB / 2021</span><span id="meme-mark">●</span></div>
@@ -484,9 +487,9 @@
           </div>
           <p class="meme-credit" id="meme-credit">GIF · GIPHY ↗</p>
           <div class="player-controls">
-            <button class="play-button" id="meme-play" type="button" aria-label="Meme tape abspielen" aria-pressed="false"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span><span id="meme-play-label">PLAY TAPE</span></button>
+            <button class="play-button" id="meme-play" type="button" aria-label="Play meme tape" aria-pressed="false"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span><span id="meme-play-label">PLAY TAPE</span></button>
             <div class="meme-progress" aria-hidden="true"><span id="meme-progress-fill"></span></div>
-            <div class="meme-selectors" aria-label="Meme auswählen">
+            <div class="meme-selectors" aria-label="Choose meme">
               <button class="meme-selector is-active" type="button" data-meme-index="0">01</button>
               <button class="meme-selector" type="button" data-meme-index="1">02</button>
               <button class="meme-selector" type="button" data-meme-index="2">03</button>
@@ -495,18 +498,18 @@
           <div class="player-footer"><span>NO AUDIO / NO FINANCIAL ADVICE</span><a id="meme-source-link" href="https://giphy.com/explore/gamestop" target="_blank" rel="noreferrer">open source post ↗</a></div>
         </div>
 
-        <div class="meme-wall" id="meme-wall" aria-label="Meme-Wand — alle verankerten Memes mit echtem Bildmaterial">
+        <div class="meme-wall" id="meme-wall" aria-label="Meme wall — all moments with images and videos">
           <div class="wall-head">
             <p class="eyebrow"><span class="eyebrow-index">02b</span> The wall</p>
-            <p>Jedes Kästchen hängt an einem echten Handelstag. GIFs laufen direkt von Giphy, Videos über den YouTube-Player — geklickt wird nie über den Chart, sondern hier unten. <b>MEDIA OFF</b> im Chart lädt überhaupt nichts.</p>
+            <p>Each tile is anchored to a trading day. GIFs come from Giphy and videos use YouTube. <b>MEDIA OFF</b> disables external media loading.</p>
           </div>
           <div class="wall-grid" id="wall-grid"></div>
         </div>
 
-        <div class="clip-rail" id="clip-rail" aria-label="Video-Einbettungen">
+        <div class="clip-rail" id="clip-rail" aria-label="Video embeds">
           <div class="wall-head">
             <p class="eyebrow"><span class="eyebrow-index">02c</span> The clips</p>
-            <p>Die Originalaufnahmen, die im Meme-Tape nur zitiert werden: der Tendieman-Shanty, die Anhörung im Kongress, Roaring Kittys „Cheers Everyone!“ und sein Livestream 2024. Posterbild laden, Player startet erst auf Klick.</p>
+            <p>Original recordings and squeeze-era community videos: Tendieman, WSB remixes, the congressional hearing and Roaring Kitty’s streams. Players load only after a click. External originals remain available if embedding is blocked.</p>
           </div>
           <div class="clip-grid" id="clip-grid"></div>
         </div>
@@ -518,9 +521,9 @@
             <p class="eyebrow"><span class="eyebrow-index">03</span> The source room</p>
             <h2 id="source-title">Open tabs,<br /><em>not hot takes.</em></h2>
           </div>
-          <p>Der Entwurf setzt auf eine Quellen-Ebene, die weiterleben kann: offizielle Dokumente für Fakten, Community-Archive für Kontext, Original-Posts für den Ton der Zeit.</p>
+          <p>An archive built to last: official documents for facts, community archives for context, original posts for the voice of the time.</p>
         </div>
-        <div class="source-filters" role="group" aria-label="Quellen filtern">
+        <div class="source-filters" role="group" aria-label="Filter sources">
           <button class="source-filter is-active" type="button" data-filter="all">All sources</button>
           <button class="source-filter" type="button" data-filter="primary">Primary</button>
           <button class="source-filter" type="button" data-filter="community">Community</button>
@@ -542,7 +545,7 @@
           <a class="source-card" data-source-type="community" href="https://www.reddit.com/r/Superstonk/wiki/index/" target="_blank" rel="noreferrer">
             <span class="source-card-top"><span>COMMUNITY / DD</span><span>↗</span></span>
             <strong>Superstonk DD index</strong>
-            <span>Ein Einstieg in die Due Diligence, Begriffe und Gegenargumente.</span>
+            <span>An introduction to due diligence, terminology and counterarguments.</span>
             <small>reddit.com / r / Superstonk</small>
           </a>
           <a class="source-card" data-source-type="community" href="https://www.gmedd.com/" target="_blank" rel="noreferrer">
@@ -560,7 +563,7 @@
           <a class="source-card" data-source-type="culture" href="https://financialservices.house.gov/calendar/eventsingle.aspx?EventID=4071076" target="_blank" rel="noreferrer">
             <span class="source-card-top"><span>CULTURE / HEARING</span><span>↗</span></span>
             <strong>House hearing archive</strong>
-            <span>Die Anhörung vom Februar 2021 als Video und institutioneller Kontext.</span>
+            <span>The February 2021 hearing: video and institutional context.</span>
             <small>financialservices.house.gov</small>
           </a>
         </div>
@@ -571,19 +574,19 @@
         <div class="support-copy">
           <p class="eyebrow"><span class="eyebrow-index">04</span> Support / keep the archive open</p>
           <h2 id="support-title">Support the<br /><em>event tape.</em></h2>
-          <p>Das Archiv ist ein Freizeitprojekt ohne Werbung und ohne Paywall. Wer die Kuratierung — Chart-Layer, Meme-Quellen, Earnings- und Tweet-Recherche — unterstützen will, kann das über einen Support-Button tun. Aktuell ist <b>Ko-fi</b> dafür die pragmatischste Wahl: kostenlos starten, 0&nbsp;% Plattformgebühr auf Tips, Auszahlung über PayPal/Stripe. <b>Patreon</b> lohnt sich erst, wenn du Mitgliedschafts-Stufen (Tiers) mit exklusiven Inhalten anbieten willst; <b>Buy Me a Coffee</b> ist die simpelste Tip-Jar-Alternative.</p>
-          <a class="button button-primary support-cta" data-support-link href="#support"><span aria-hidden="true">♥</span> <span data-support-label>Support einrichten</span> <span aria-hidden="true">↗</span></a>
-          <p class="support-note" id="support-setup-note">Noch nicht eingerichtet — Anleitung rechts, Code-Stelle: <code>SUPPORT.url</code> in <code>app.js</code>.</p>
+          <p>This archive is a spare-time project without ads or a paywall. Support helps with research, sources and hosting. The support link is not configured yet. Ko-fi, Patreon or Buy Me a Coffee can be connected by the site owner.</p>
+          <a class="button button-primary support-cta" data-support-link href="#support"><span aria-hidden="true">♥</span> <span data-support-label>Set up support</span> <span aria-hidden="true">↗</span></a>
+          <p class="support-note" id="support-setup-note">Not configured yet — see the setup guide and edit <code>SUPPORT.url</code> in <code>app.js</code>.</p>
         </div>
         <ol class="support-steps">
-          <li><b>1 · Konto anlegen</b><span>Auf <a href="https://ko-fi.com" target="_blank" rel="noreferrer">ko-fi.com</a> (oder <a href="https://www.patreon.com" target="_blank" rel="noreferrer">patreon.com</a>) kostenlos registrieren, Seitenname wählen — z.&nbsp;B. <code>ko-fi.com/DEINNAME</code> — und PayPal oder Stripe für Auszahlungen verbinden.</span></li>
-          <li><b>2 · Seite füllen</b><span>Kurzer Text, was das Archiv ist, optional ein Ziel („Serverkosten / Recherchezeit“). Bei Ko-fi reicht die Tip-Funktion; bei Patreon legst du 1–3 Membership-Tiers an.</span></li>
-          <li><b>3 · URL eintragen</b><span>In <code>app.js</code> ganz oben bei <code>SUPPORT</code> die fertige Adresse eintragen: <code>url: 'https://ko-fi.com/DEINNAME'</code>. Speichern, deployen — fertig.</span></li>
-          <li><b>4 · Fertig</b><span>Header-, Support- und Footer-Button verlinken ab dann automatisch extern auf deine Seite. Solange die URL leer ist, führt der Button nur zu dieser Erklärung — es geht also nie ein Link ins Leere.</span></li>
+          <li><b>1 · Create an account</b><span>Register with Ko-fi or Patreon and connect your preferred payout method.</span></li>
+          <li><b>2 · Describe the project</b><span>Add a short introduction and an optional hosting or research goal.</span></li>
+          <li><b>3 · Connect the link</b><span>Set <code>SUPPORT.url</code> in <code>app.js</code> to your public support page.</span></li>
+          <li><b>4 · Publish</b><span>All support buttons will use that address. Until then, they link to this setup guide.</span></li>
         </ol>
       </section>
 
-      <section class="closing-section section-shell" aria-label="Abschluss">
+      <section class="closing-section section-shell" aria-label="Closing statement">
         <div class="closing-mark">GME<span>↗</span></div>
         <p>THE RECORD<br /><em>IS STILL OPEN.</em></p>
         <a class="button button-primary" href="#top">Back to top <span aria-hidden="true">↑</span></a>
@@ -592,7 +595,7 @@
 
     <footer class="site-footer section-shell">
       <div><span class="footer-logo">GS / EVENT TAPE</span><span>draft 01 / source-linked prototype</span></div>
-      <div><span>built for the long view</span><a href="#method">methodology ↗</a><a data-support-link href="#support">♥ <span data-support-label>Support einrichten</span> ↗</a></div>
+      <div><span>built for the long view</span><a href="#method">methodology ↗</a><a data-support-link href="#support">♥ <span data-support-label>Set up support</span> ↗</a></div>
     </footer>
 
     <script src="market-data.js" defer></script>

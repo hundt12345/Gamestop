@@ -70,3 +70,11 @@ Der Server bindet auf `0.0.0.0` und verwendet automatisch `process.env.PORT`, da
 - durchgehend größere Beschriftung (Grundschrift 17 px, UI-Labels um zwei Stufen gewachsen, Chart-Achsen und MEME-Marker mitgezogen), responsive Layout, mobile Navigation, Keyboard-Fokus und `prefers-reduced-motion`
 
 Die Kursdaten sind echte Tagesbars (EOD, logarithmische Skala), aber weiterhin keine Anlageberatung und keine tickgenaue Aufzeichnung — Abweichungen durch Datenquellen, Splits oder Handelsunterbrechungen sind möglich. Die Detailtexte und Links sind als redaktioneller Ausgangspunkt gedacht und sollten vor einem öffentlichen Launch noch einmal gegen Primärquellen geprüft werden.
+
+## English UI and squeeze-era clips
+
+The public interface, tooltips, accessibility labels and dynamic event details are in English. Meme shortcuts reveal a collapsed dock and update the selected card synchronously. Three additional January 2021 videos have publication-date anchors and original / archive-context links: placeboing’s *WE LIKE THE STOCK*, Chris Voiceman’s *DO YOU HEAR THE PEOPLE BUY*, and Flashgitz’s *300 GameStop GameStonks* (mature humor). Weekend publication dates map to the nearest available trading session; these editorial anchors do not imply a market impact.
+
+Embedded playback depends on the original uploader and regional/provider restrictions. Use the Original or Archive / context link if an embed is unavailable. MEDIA OFF also stops clip-rail players and prevents restarting them until media is enabled.
+
+Run `npm install` and `npm test` for the DOM regression test covering all meme shortcuts, dock visibility, selected labels and clip media-off behavior. This does not validate external video availability or browser layout.

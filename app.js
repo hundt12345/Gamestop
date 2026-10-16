@@ -527,6 +527,21 @@ const memeMoments = [
       gif('ntNdFG8QkRTZxFaHME', 'news-keith-gill-house-gamestop-hearing-ntNdFG8QkRTZxFaHME', 'GIPHY News', 'Roaring Kitty')
     ]
   }
+  ,{
+    id: 'meme-welike', iso: '2021-01-28', label: 'WE LIKE THE STOCK / REMIX',
+    frames: [{ quote: 'WE LIKE THE STOCK', caption: 'placeboing turns a television sound bite into a squeeze-era remix.' }],
+    media: [{ ...video('71JOIJKbse0', 'placeboing', 'WE LIKE THE STOCK — Celebration Remix'), archive: 'https://knowyourmeme.com/videos/260546-wallstreetbets-gamestop-short-squeeze' }]
+  },
+  {
+    id: 'meme-peoplebuy', iso: '2021-01-29', label: 'GAMESTONKS ANTHEM',
+    frames: [{ quote: 'DO YOU HEAR THE PEOPLE BUY', caption: 'Chris Voiceman’s musical parody from the January 2021 squeeze.' }],
+    media: [{ ...video('dYHa6bpa3V4', 'Chris Voiceman', 'DO YOU HEAR THE PEOPLE BUY — GAMESTONKS ANTHEM'), archive: 'https://knowyourmeme.com/videos/262750-wallstreetbets-gamestop-short-squeeze' }]
+  },
+  {
+    id: 'meme-spartans', iso: '2021-01-31', label: '300 / GAMESTONKS',
+    frames: [{ quote: '300 GAMESTOP GAMESTONKS', caption: 'Flashgitz’s animated 300 parody. Published January 31; anchored to the nearest trading session. Mature humor.' }],
+    media: [{ ...video('cJd3LO6u1vY', 'Flashgitz', '300 GameStop GameStonks (mature humor)'), archive: 'https://knowyourmeme.com/videos/261203-wallstreetbets-gamestop-short-squeeze' }]
+  }
 ];
 
 /* ------------------------------------------- corporate events + RC tweets - */
@@ -536,28 +551,28 @@ const memeMoments = [
 // Kuratierte Auswahl, keine vollständige Filing-Liste — jede Karte verlinkt
 // auf die Primärquelle (GameStop IR / SEC EDGAR).
 const corporateEvents = [
-  { iso: '2020-12-09', type: 'earnings', title: 'Q3 2020 Earnings', detail: 'Quartalszahlen mitten im Umbau: Ab hier wird die RC-These an echten Zahlen gemessen — Umsatz, Marge, E-Commerce.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2021-03-23', type: 'earnings', title: 'Q4 2020 Earnings', detail: 'Die ersten Zahlen nach dem Squeeze-Januar. Der Kurs fällt nachbörslich — die Story wird vom Meme zurück zum Geschäftsbericht.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2021-04-26', type: 'offering', title: 'ATM-Offering abgeschlossen', detail: 'GameStop schließt sein At-the-Market-Programm: neue Aktien wurden direkt in die Stärke des Kurses hinein verkauft — Kapital statt Schulden.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
-  { iso: '2021-06-09', type: 'earnings', title: 'Q1 2021 Earnings + HV', detail: 'Quartalszahlen und Hauptversammlung am selben Tag: Ryan Cohen wird Chairman — und ein weiteres Aktienprogramm wird angekündigt.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2021-06-22', type: 'offering', title: 'ATM abgeschlossen: 5 Mio. Aktien', detail: 'Das zweite große At-the-Market-Programm ist durch. Die Community liest jede Zeile: Verwässerung gegen eine prall gefüllte Kriegskasse.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
-  { iso: '2022-03-17', type: 'earnings', title: 'Q4 2021 Earnings', detail: 'Verlust höher als erwartet, der Kurs sackt ab — am selben Tag macht eine AMC-Beteiligung im Filing die Runde (siehe Meme M16).', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2022-03-31', type: 'other', title: 'Split-Dividende angekündigt', detail: 'Der Vorstand kündigt einen Aktiensplit in Form einer Stock-Dividende an — beantragt wird die Genehmigung bei der Hauptversammlung.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
-  { iso: '2022-07-22', type: 'other', title: '4:1-Split wirksam', detail: 'Aus einer Aktie werden vier. Im Chart oben schaltet der Knopf SPLIT-ADJ ↔ AS TRADED zwischen beiden Sichtweisen um.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
-  { iso: '2023-03-21', type: 'earnings', title: 'Q4 2022: erster Gewinn seit 2 Jahren', detail: 'GameStop meldet $48.2M Nettogewinn (Q4, Vorjahr: −$147.5M) — Kostendisziplin statt Meme. Der Kurs springt am Folgetag (Meme „First Profit“).', url: 'https://investor.gamestop.com/news-releases/news-details/2023/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2022-Results-03-21-2023/default.aspx', source: 'GameStop IR / News release 21.03.2023' },
-  { iso: '2023-09-28', type: 'other', title: 'Ryan Cohen wird CEO', detail: 'Der Chairman übernimmt auch den CEO-Posten — ohne Gehalt, ohne Boni, bezahlt nur über den Aktienkurs. „Extremely intense“ inklusive.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
-  { iso: '2024-03-26', type: 'earnings', title: 'Q4 2023 Earnings', detail: 'Volljahr 2023 wieder profitabel, $1.199B Cash & Wertpapiere zum Stichtag — die Bilanz ist bereit für die volatile Phase ab Mai.', url: 'https://investor.gamestop.com/news-releases/news-details/2024/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2023-Results-03-26-2024/default.aspx', source: 'GameStop IR / News release 26.03.2024' },
-  { iso: '2024-05-24', type: 'offering', title: 'ATM abgeschlossen: $933.4M', detail: '45 Mio. neue Aktien, mitten in der Roaring-Kitty-Rückkehr verkauft. Bruttoerlös: rund $933.4M für „general corporate purposes“.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / GameStop IR, 24.05.2024' },
-  { iso: '2024-06-07', type: 'earnings', title: 'Q1 2024 Earnings + neues ATM', detail: 'Quartalszahlen vorbörslich — plus Filing für bis zu 75 Mio. weitere Aktien. Am selben Tag: Roaring Kittys Livestream (Meme M22).', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2024-06-11', type: 'offering', title: 'ATM abgeschlossen: $2.137B', detail: 'Alle 75 Mio. Aktien verkauft, Bruttoerlös ca. $2.137 Milliarden. Die Kriegskasse wächst schneller als jede Story im Feed.', url: 'https://gamestop.gcs-web.com/news-releases/news-release-details/gamestop-completes-market-equity-offering-program-2', source: 'GameStop IR / News release 11.06.2024' },
-  { iso: '2024-09-10', type: 'earnings', title: 'Q2 2024 Earnings', detail: 'Unerwarteter Quartalsgewinn — und gleichzeitig ein neues ATM-Programm über 20 Mio. Aktien. Der Kurs mag die Verwässerung weniger als die Zahlen.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2024-12-10', type: 'earnings', title: 'Q3 2024 Earnings', detail: 'Wieder Gewinn im Quartal, Cash-Berg wächst weiter. Die Frage im Feed verschiebt sich: Was macht GameStop mit dem Geld?', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2025-03-25', type: 'earnings', title: 'Q4 2024 Earnings', detail: 'Jahreszahlen mit deutlich besserem Ergebnis je Aktie als erwartet — direkt danach folgt die Krypto-Treasury-Debatte.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
-  { iso: '2025-03-27', type: 'offering', title: 'Wandelanleihen für BTC-Treasury', detail: 'GameStop kündigt Convertible Notes an, deren Erlös u. a. für Bitcoin-Käufe vorgesehen ist — das Offering wird zum Strategiestatement.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' }
+  { iso: '2020-12-09', type: 'earnings', title: 'Q3 2020 Earnings', detail: 'Quarterly results during the turnaround: revenue, margins and e-commerce put the RC thesis to the test.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-03-23', type: 'earnings', title: 'Q4 2020 Earnings', detail: 'The first results after the January squeeze. Attention shifts from memes back to business performance.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-04-26', type: 'offering', title: 'ATM offering completed', detail: 'GameStop completes its at-the-market offering, raising equity capital through share sales.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
+  { iso: '2021-06-09', type: 'earnings', title: 'Q1 2021 earnings + annual meeting', detail: 'Quarterly results and the annual meeting: Ryan Cohen becomes chairman and another share offering is announced.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2021-06-22', type: 'offering', title: 'ATM completed: 5M shares', detail: 'The second major ATM offering is complete: five million shares sold to strengthen the balance sheet.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' },
+  { iso: '2022-03-17', type: 'earnings', title: 'Q4 2021 Earnings', detail: 'A larger-than-expected loss puts pressure on the price. See the linked results for the company’s holdings and disclosures.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2022-03-31', type: 'other', title: 'Stock split dividend announced', detail: 'The board proposes a stock split in the form of a stock dividend, subject to shareholder approval.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2022-07-22', type: 'other', title: '4:1 split takes effect', detail: 'One share becomes four. Use SPLIT-ADJ or AS TRADED to switch between adjusted and historical quoted prices.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2023-03-21', type: 'earnings', title: 'Q4 2022: first profit in two years', detail: 'GameStop reports $48.2M in quarterly net income, compared with a $147.5M loss a year earlier. Shares jump the following day.', url: 'https://investor.gamestop.com/news-releases/news-details/2023/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2022-Results-03-21-2023/default.aspx', source: 'GameStop IR / News release 21.03.2023' },
+  { iso: '2023-09-28', type: 'other', title: 'Ryan Cohen becomes CEO', detail: 'Chairman Ryan Cohen also becomes CEO, without salary or cash bonuses.', url: 'https://investor.gamestop.com/', source: 'GameStop IR' },
+  { iso: '2024-03-26', type: 'earnings', title: 'Q4 2023 Earnings', detail: 'GameStop returns to full-year profitability, reporting $1.199B in cash and marketable securities at year end.', url: 'https://investor.gamestop.com/news-releases/news-details/2024/GameStop-Reports-Fourth-Quarter-and-Fiscal-Year-2023-Results-03-26-2024/default.aspx', source: 'GameStop IR / News release 26.03.2024' },
+  { iso: '2024-05-24', type: 'offering', title: 'ATM completed: $933.4M', detail: '45 million shares sold during Roaring Kitty’s return, raising approximately $933.4M in gross proceeds.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / GameStop IR, 24.05.2024' },
+  { iso: '2024-06-07', type: 'earnings', title: 'Q1 2024 earnings + new ATM', detail: 'Quarterly results arrive before the market opens, alongside an offering for up to 75 million shares. Roaring Kitty streams the same day.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2024-06-11', type: 'offering', title: 'ATM completed: $2.137B', detail: 'All 75 million shares sold, raising approximately $2.137B in gross proceeds.', url: 'https://gamestop.gcs-web.com/news-releases/news-release-details/gamestop-completes-market-equity-offering-program-2', source: 'GameStop IR / News release 11.06.2024' },
+  { iso: '2024-09-10', type: 'earnings', title: 'Q2 2024 Earnings', detail: 'An unexpected quarterly profit arrives alongside a new ATM program for up to 20 million shares.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2024-12-10', type: 'earnings', title: 'Q3 2024 Earnings', detail: 'Another profitable quarter and a growing cash balance prompt questions about capital allocation.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-03-25', type: 'earnings', title: 'Q4 2024 Earnings', detail: 'Annual results beat earnings-per-share expectations, followed by debate about a cryptocurrency treasury strategy.', url: 'https://investor.gamestop.com/financial-information/quarterly-results', source: 'GameStop IR / Quarterly results' },
+  { iso: '2025-03-27', type: 'offering', title: 'Convertible notes for BTC treasury', detail: 'GameStop announces convertible notes, with proceeds intended in part for Bitcoin purchases.', url: 'https://www.sec.gov/edgar/browse/?CIK=1326380&owner=exclude', source: 'SEC EDGAR / CIK 1326380' }
 ];
 
 const CORP_TYPE = {
-  earnings: { label: 'EARNINGS', glyph: 'E', word: 'Quartalszahlen' },
+  earnings: { label: 'EARNINGS', glyph: 'E', word: 'Quarterly results' },
   offering: { label: 'OFFERING', glyph: '$', word: 'Share offering / ATM' },
   other: { label: 'CORPORATE', glyph: '!', word: 'Corporate event' }
 };
@@ -566,15 +581,15 @@ const CORP_TYPE = {
 // blockiert, deshalb steht der Wortlaut hier als Text — mit Link aufs
 // Original (@ryancohen) und auf eine dokumentierte Timeline als Beleg.
 const rcTweets = [
-  { iso: '2021-01-06', text: '💩', note: 'Foto einer Blockbuster-Filiale dazu — die Antwort auf Jim Cramer Vergleich „GameStop wird das neue Blockbuster“.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
-  { iso: '2021-02-24', text: '🐸', note: 'Foto eines McDonald’s-Softeis dazu. GME verdoppelt sich noch am selben Tag auf $91.71 Close — der berühmteste Ein-Emoji-Tweet der Saga.', url: 'https://kotaku.com/gamestop-stock-explodes-again-following-board-members-m-1846348996', source: 'Kotaku, 24.02.2021' },
-  { iso: '2021-03-05', text: '📸 Pets.com-Puppe (Screenshot)', note: 'Screenshot mit der Pets.com-Werbefigur, dem Dotcom-Symbol schlechthin. Reuters datiert den nachmittäglichen Kursanstieg auf diesen Tweet.', url: 'https://www.reuters.com/business/retail-consumer/gamestop-spikes-investors-eye-cryptic-tweet-by-shareholder-2021-03-05/', source: 'Reuters, 05.03.2021' },
-  { iso: '2021-04-16', text: '🤜🤛', note: 'Fist-Bump-Emoji — gepostet, während Roaring Kitty seine Position weiter aufstockt. Der Feed liest es als: Wir sitzen im selben Boot.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
-  { iso: '2021-07-04', text: 'Power to the Players 🇺🇸', note: 'Zum Independence Day: der GameStop-Slogan als Gruß — halb Firmenmotto, halb Schlachtruf der Community.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
-  { iso: '2021-07-19', text: 'PG-13', note: 'Foto mit zwei Essstäbchen in der Nase. Superstonk deutet „PG-13“ als Seite 13 des Prospekts (Warrants/Units) — Beleg dafür, wie der Feed jeden Post seziert.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
-  { iso: '2021-09-26', text: 'Talk is cheap, it takes money to buy whiskey.', note: 'Ein Satz von 1891 als Führungscredo: weniger reden, mehr liefern. GMEDD widmet dem Tweet eine eigene Einordnung.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
-  { iso: '2021-10-31', text: 'MGGA', note: '„Make GameStop Great Again“ — vier Buchstaben, der Feed explodiert pünktlich zu Halloween.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' },
-  { iso: '2021-11-08', text: 'Deciding between two options for my GME shares: HOLD or HODL…', note: 'Verkaufen ist keine Option — der Chairman parodiert Elon Musk Verkaufs-Poll und bekennt sich öffentlich zum Halten.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' }
+  { iso: '2021-01-06', text: '💩', note: 'A Blockbuster store photo accompanies the post, responding to comparisons between GameStop and Blockbuster.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
+  { iso: '2021-02-24', text: '🐸', note: 'A McDonald’s ice cream photo accompanies the frog emoji. GME closes at $91.71 that day, more than double its previous close.', url: 'https://kotaku.com/gamestop-stock-explodes-again-following-board-members-m-1846348996', source: 'Kotaku, 24.02.2021' },
+  { iso: '2021-03-05', text: '📸 Pets.com puppet (screenshot)', note: 'A screenshot of the Pets.com mascot. Reuters links the afternoon price rise to this post.', url: 'https://www.reuters.com/business/retail-consumer/gamestop-spikes-investors-eye-cryptic-tweet-by-shareholder-2021-03-05/', source: 'Reuters, 05.03.2021' },
+  { iso: '2021-04-16', text: '🤜🤛', note: 'A fist bump posted as Roaring Kitty increases his position; the community reads it as a sign of solidarity.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-07-04', text: 'Power to the Players 🇺🇸', note: 'The GameStop slogan as an Independence Day greeting — part company motto, part community rallying cry.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-07-19', text: 'PG-13', note: 'A photo with chopsticks in his nose. Some community members interpret PG-13 as page 13 of the prospectus; this is speculation, not confirmation.', url: 'https://www.reddit.com/r/Superstonk/comments/p7mvxf/a_timeline_of_ryan_cohens_tweets_and_gme/', source: 'Superstonk / RC-Tweet-Timeline' },
+  { iso: '2021-09-26', text: 'Talk is cheap, it takes money to buy whiskey.', note: 'A quotation used as a leadership motto: less talk, more delivery. GMEDD provides additional context.', url: 'https://www.gmedd.com/tw/', source: 'GMEDD / Twitter Chatter' },
+  { iso: '2021-10-31', text: 'MGGA', note: 'Make GameStop Great Again — four letters posted for Halloween.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' },
+  { iso: '2021-11-08', text: 'Deciding between two options for my GME shares: HOLD or HODL…', note: 'The chairman parodies Elon Musk’s share-sale poll and publicly signals that he is holding.', url: 'https://markets.businessinsider.com/news/stocks/gamestop-stock-ryan-cohen-twitter-tesla-elon-musk-retail-traders-2021-11', source: 'Business Insider, Nov. 2021' }
 ];
 
 const RC_X_URL = 'https://x.com/ryancohen';
@@ -1153,7 +1168,7 @@ function drawSeries(svg, options) {
           'data-meme-index': meme.index,
           tabindex: 0,
           role: 'button',
-          'aria-label': `Meme ${meme.index + 1} von ${memes.length} abspielen: ${meme.label}`
+          'aria-label': `Meme ${meme.index + 1} of ${memes.length}, play: ${meme.label}`
         }));
       }
       memeGroup.append(chip);
@@ -1754,8 +1769,8 @@ function updatePriceModeUI() {
   if (toggle) {
     toggle.setAttribute('aria-pressed', String(adjusted));
     toggle.title = adjusted
-      ? 'Aktuell split-bereinigt — Klick zeigt die Kurse so, wie sie damals gehandelt wurden'
-      : 'Aktuell as traded — Klick rechnet den 4:1-Split (Juli 2022) rückwirkend heraus';
+      ? 'Currently split-adjusted — click to show historical quoted prices'
+      : 'Currently as traded — click to adjust for the July 2022 4:1 split';
   }
   const word = document.querySelector('#price-mode-word');
   if (word) word.textContent = adjusted ? 'SPLIT-ADJ' : 'AS TRADED';
@@ -1948,7 +1963,7 @@ function renderMediaCredit(container, sources, label) {
   }
   container.innerHTML = sources.map((source) => {
     const labelText = source.kind === 'video' ? `▶ ${source.title}` : `${source.credit} · ${source.title}`;
-    return `<a href="${source.page}" target="_blank" rel="noreferrer">${labelText} ↗</a>`;
+    return `<a href="${source.page}" target="_blank" rel="noreferrer">${labelText} ↗</a>${source.archive ? ` · <a href="${source.archive}" target="_blank" rel="noreferrer">Archive / context ↗</a>` : ''}`;
   }).join(' · ');
 }
 
@@ -2028,6 +2043,7 @@ function scrollMemeIntoView(barIndex) {
 
 function openChartMeme(index, { autoplay = true, reveal = true } = {}) {
   if (!memeMoments[index]) return;
+  if (document.body.classList.contains('dock-collapsed')) document.querySelector('#dock-toggle')?.click();
   memePlayerState.index = index;
   memePlayerState.frame = 0;
   const { player, hint } = chartMemeElements();
@@ -2143,6 +2159,14 @@ function setMediaEnabled(enabled) {
   renderMemeMedia();
   loadWallMedia();
   loadClipPosters();
+  if (!enabled) {
+    document.querySelectorAll('.clip-card').forEach((card) => {
+      card.querySelector('iframe')?.remove();
+      const button = card.querySelector('.clip-hit');
+      if (button) button.hidden = false;
+      card.classList.remove('is-playing');
+    });
+  }
 }
 
 // Clip-Poster kommen nach, sobald die Rail sichtbar wird oder MEDIA wieder
@@ -2168,7 +2192,7 @@ function renderLayerDetail() {
   if (!box) return;
   const active = layerState.active;
   if (!active) {
-    box.innerHTML = '<p class="layer-detail-hint">Klick auf eine <b>◆ Raute</b> (Earnings / Offerings), einen <b>𝕏-Chip</b> (RC-Tweet) im Chart — oder auf einen Eintrag in der Liste. Kurs, Tagesänderung und Quelle erscheinen hier.</p>';
+    box.innerHTML = '<p class="layer-detail-hint">Click a <b>◆ diamond</b> (earnings / offerings), a <b>𝕏 chip</b> (RC tweet), or a list entry. Price, daily change and source appear here.</p>';
     return;
   }
   const { series, barIndex, bar } = layerBar(active.kind, active.index);
@@ -2226,7 +2250,7 @@ function buildLayerList() {
       <span class="layer-item-kind">RC 𝕏</span>
       <span class="layer-item-title">${escapeHtml(entry.item.text)}</span>
     </button>`;
-  }).join('') || '<p class="layer-detail-hint">Keine Einträge — Layer oben wieder einschalten.</p>';
+  }).join('') || '<p class="layer-detail-hint">No entries — enable a layer above.</p>';
 
   list.querySelectorAll('.layer-item').forEach((button) => {
     button.addEventListener('click', () => openLayerItem(button.dataset.layerKind, Number(button.dataset.layerIndex)));
@@ -2311,7 +2335,7 @@ function bindChartLayers() {
     });
   });
 
-  // Direktsprünge: Tendieman + Katzenmemes im Chart abspielen
+  // Direct jumps: play Tendieman / cat memes / viral clips in the chart dock
   document.querySelectorAll('[data-open-meme]').forEach((button) => {
     button.addEventListener('click', () => {
       const index = memeMoments.findIndex((moment) => moment.id === button.dataset.openMeme);
@@ -2319,7 +2343,7 @@ function bindChartLayers() {
       document.querySelector('#chart-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       followPageScrollUntil = Date.now() + 1200;
       memeIndex = index;
-      renderMeme(index);
+      renderMeme(index, false);
       openChartMeme(index);
     });
   });
@@ -2344,13 +2368,13 @@ function initSupport() {
       link.removeAttribute('target');
     }
     const label = link.querySelector('[data-support-label]');
-    if (label) label.textContent = configured ? `Support auf ${SUPPORT.provider}` : 'Support einrichten';
+    if (label) label.textContent = configured ? `Support on ${SUPPORT.provider}` : 'Set up support';
   });
   const note = document.querySelector('#support-setup-note');
   if (note) {
     note.textContent = configured
-      ? `Live: Dieser Button verlinkt auf ${SUPPORT.url} (${SUPPORT.provider}). Ändern: SUPPORT.url in app.js anpassen.`
-      : 'Noch nicht eingerichtet: Trage in app.js bei SUPPORT.url deine Ko-fi- oder Patreon-Adresse ein — der Button wird dann automatisch zum echten Spendenlink (Anleitung unten).';
+      ? `Live: this button links to ${SUPPORT.url} (${SUPPORT.provider}). To change it, edit SUPPORT.url in app.js.`
+      : 'Not configured yet: set SUPPORT.url in app.js to your public Ko-fi or Patreon page to activate support links.';
   }
 }
 
@@ -2951,7 +2975,7 @@ function setMemePlaying(playing) {
   if (playButton) {
     playButton.classList.toggle('is-playing', playing);
     playButton.setAttribute('aria-pressed', String(playing));
-    playButton.setAttribute('aria-label', playing ? 'Meme tape pausieren' : 'Meme tape abspielen');
+    playButton.setAttribute('aria-label', playing ? 'Pause meme tape' : 'Play meme tape');
   }
   if (playLabel) playLabel.textContent = playing ? 'PAUSE TAPE' : 'PLAY TAPE';
   if (playing) {
@@ -2972,7 +2996,7 @@ function bindMemePlayer() {
   const selectorRow = document.querySelector('.meme-selectors');
   if (selectorRow) {
     selectorRow.innerHTML = memeMoments.map((_, index) =>
-      `<button class="meme-selector" type="button" data-meme-index="${index}" aria-label="Meme ${index + 1} im Chart abspielen">${String(index + 1).padStart(2, '0')}</button>`
+      `<button class="meme-selector" type="button" data-meme-index="${index}" aria-label="Meme ${index + 1} Play in chart">${String(index + 1).padStart(2, '0')}</button>`
     ).join('');
   }
 
@@ -2980,7 +3004,7 @@ function bindMemePlayer() {
     memeIndex = index;
     renderMeme(memeIndex);
     if (memePlaying) memeStartedAt = Date.now();
-    // direkt im Chart abspielen: hingehen, verankern, loslassen
+    // direkt Play in chart: hingehen, verankern, loslassen
     const explorer = document.querySelector('#chart-explorer');
     if (explorer && typeof explorer.scrollIntoView === 'function') {
       explorer.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -3029,7 +3053,7 @@ function buildMemeWall() {
     const date = formatShortDay(moment.iso);
     return `
       <article class="wall-tile" data-meme-index="${index}">
-        <button class="wall-tile-hit" type="button" aria-label="${moment.label} im Chart öffnen — ${moment.frames[0].quote}">
+        <button class="wall-tile-hit" type="button" aria-label="${moment.label} Open in chart — ${moment.frames[0].quote}">
           <span class="wall-tile-frame">
             <img class="wall-tile-image" data-src="${gifSource?.src ?? ''}" alt="${moment.label} — ${gifSource?.title ?? moment.frames[0].quote}" loading="lazy" decoding="async" />
             <span class="wall-tile-kind">${kind}</span>
@@ -3042,7 +3066,7 @@ function buildMemeWall() {
           <span class="wall-tile-quote">${moment.frames[0].quote}</span>
         </button>
         <a class="wall-tile-source" href="${media?.page ?? '#'}" target="_blank" rel="noreferrer">${media?.credit ?? 'source'} ↗</a>
-        ${videoSource ? `<button class="wall-tile-video" type="button" data-embed="${videoSource.embed}" aria-label="Video abspielen: ${videoSource.title}">▶ VIDEO</button>` : ''}
+        ${videoSource ? `<button class="wall-tile-video" type="button" data-embed="${videoSource.embed}" aria-label="Play video: ${videoSource.title}">▶ VIDEO</button>` : ''}
       </article>
     `;
   }).join('');
@@ -3113,7 +3137,7 @@ function buildClipRail() {
   });
   grid.innerHTML = clips.map((clip, index) => `
     <article class="clip-card" data-embed-index="${index}">
-      <button class="clip-hit" type="button" aria-label="Video abspielen: ${clip.title} — ${clip.credit}">
+      <button class="clip-hit" type="button" aria-label="Play video: ${clip.title} — ${clip.credit}">
         <img class="clip-poster" data-src="${clip.poster}" alt="${clip.title}" loading="lazy" decoding="async" />
         <span class="clip-play" aria-hidden="true">▶</span>
         <span class="clip-meta">
@@ -3124,6 +3148,7 @@ function buildClipRail() {
       <div class="clip-foot">
         <span>${clip.credit}</span>
         <a href="${clip.page}" target="_blank" rel="noreferrer">Original ↗</a>
+        ${clip.archive ? `<a href="${clip.archive}" target="_blank" rel="noreferrer">Archive / context ↗</a>` : ''}
       </div>
     </article>
   `).join('');
@@ -3131,7 +3156,7 @@ function buildClipRail() {
   grid.querySelectorAll('.clip-hit').forEach((button) => {
     button.addEventListener('click', () => {
       const clip = clips[Number(button.closest('.clip-card')?.dataset.embedIndex ?? 0)];
-      if (!clip) return;
+      if (!clip || !mediaEnabled) return;
       let frame = button.parentElement.querySelector('iframe');
       if (!frame) {
         frame = document.createElement('iframe');
@@ -3173,7 +3198,7 @@ function bindMobileNav() {
     const open = toggle.classList.toggle('is-open');
     nav.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Navigation schließen' : 'Navigation öffnen');
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
     nav.setAttribute('aria-hidden', String(!open));
   });
 
@@ -3181,7 +3206,7 @@ function bindMobileNav() {
     toggle.classList.remove('is-open');
     nav.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', 'Navigation öffnen');
+    toggle.setAttribute('aria-label', 'Open navigation');
     nav.setAttribute('aria-hidden', 'true');
   }));
 }
@@ -3216,13 +3241,13 @@ function stampProvenance() {
       : 'AS TRADED';
     note.textContent = `${origin} · ${modeLabel} · LAST BAR ${formatShortDay(marketMeta.end).toUpperCase()}`;
     note.title = usingFallback
-      ? 'market-data.js fehlt — der Chart zeigt eine Ersatzlinie aus den dokumentierten Schlusskursen.'
-      : `${asTradedBars.length} echte Tagesbars seit ${formatDay(asTradedBars[0].date)}, zuletzt aktualisiert am ${marketMeta.updated}. ` +
+      ? 'market-data.js is missing — the chart uses a fallback line from documented closing prices.'
+      : `${asTradedBars.length} actual daily bars since ${formatDay(asTradedBars[0].date)}, last updated ${marketMeta.updated}. ` +
         (priceMode.available
           ? (priceMode.mode === 'adjusted'
-            ? 'Split-bereinigt: alle Kurse vor dem 4:1-Split (22. Juli 2022) sind durch 4 geteilt.'
-            : 'As traded: die Kurse stehen so im Chart, wie sie damals gehandelt wurden.')
-          : 'As traded: keine Split-Informationen verfügbar.');
+            ? 'Split-adjusted: prices before the July 22, 2022 4:1 split are divided by four.'
+            : 'As traded: prices are shown as originally quoted.')
+          : 'As traded: no split information available.');
   }
   const latestEvent = storyEvents[storyEvents.length - 1];
   const card = document.getElementById(latestEvent.id);
@@ -3247,7 +3272,7 @@ function initialise() {
   updatePriceModeUI();
   if (!priceMode.available) {
     document.querySelector('#price-mode-toggle')?.setAttribute('disabled', '');
-    document.querySelector('#price-mode-toggle')?.setAttribute('title', 'Keine Split-Daten verfügbar — Kurse bleiben as traded');
+    document.querySelector('#price-mode-toggle')?.setAttribute('title', 'No split data available — prices remain as traded');
   }
   applyActive(storyEvents.length - 1);
   paintTerminal();
