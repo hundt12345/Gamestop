@@ -19,6 +19,7 @@
  */
 
 import { writeFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 
 const HEADERS = {
   'User-Agent': 'gamestop-event-tape/1.0 (github.com/hundt12345/Gamestop; archive research)',
@@ -26,6 +27,8 @@ const HEADERS = {
 };
 
 const FTD_INDEX = 'https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data';
+const REQUEST_GAP_MS = 900;      // FINRA/SEC throttle bursts
+const RETRY_DELAYS = [1500, 6000, 15000];
 const FINRA_CDN = 'https://cdn.finra.org/equity/otcmarket/biweekly';
 const SYMBOL = 'GME';
 const CUSIP = '36467W109';
@@ -141,20 +144,29 @@ function settlementCandidates(monthsBack) {
 
 const diagnostics = [];
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Both hosts throttle request bursts (403/429), so every call is paced and
+// retried with backoff before it is reported as a failure.
 async function fetchBuffer(url, { optional = false, label = '' } = {}) {
-  try {
-    const response = await fetch(url, { headers: HEADERS, redirect: 'follow' });
-    if (!response.ok) {
-      diagnostics.push(`${label || url}: HTTP ${response.status} ${response.statusText}`);
-      if (optional) return null;
-      throw new Error(`HTTP ${response.status} ${response.statusText} for ${url}`);
+  let lastError = null;
+  for (let attempt = 0; attempt <= RETRY_DELAYS.length; attempt += 1) {
+    try {
+      const response = await fetch(url, { headers: HEADERS, redirect: 'follow' });
+      if (response.ok) return Buffer.from(await response.arrayBuffer());
+      const retryable = response.status === 403 || response.status === 429 || response.status >= 500;
+      lastError = new Error(`HTTP ${response.status} ${response.statusText}`);
+      if (!retryable || attempt === RETRY_DELAYS.length) break;
+      await sleep(RETRY_DELAYS[attempt]);
+    } catch (error) {
+      lastError = error;
+      if (attempt === RETRY_DELAYS.length) break;
+      await sleep(RETRY_DELAYS[attempt]);
     }
-    return Buffer.from(await response.arrayBuffer());
-  } catch (error) {
-    diagnostics.push(`${label || url}: ${error.message}`);
-    if (optional) return null;
-    throw error;
   }
+  diagnostics.push(`${label || url}: ${lastError.message}`);
+  if (optional) return null;
+  throw new Error(`${lastError.message} for ${url}`);
 }
 
 function annotate(message, level = 'warning') {
@@ -264,13 +276,13 @@ async function collectShortInterest(monthsBack) {
     const buffer = await fetchBuffer(`${FINRA_CDN}/shrt${compact}.csv`, { optional: true, label: `FINRA ${date}` });
     if (!buffer) {
       misses += 1;
-      if (misses > 6 && rows.length) break; // older periods are simply not published yet
+      if (misses > 2 && rows.length) break; // the newest period is not published yet
       continue;
     }
     misses = 0;
     const parsed = parseFinraRow(buffer.toString('utf8'), date);
     if (parsed) rows.push(parsed);
-    await new Promise((resolve) => setTimeout(resolve, 120));
+    await sleep(REQUEST_GAP_MS);
   }
   return rows.sort((a, b) => a.date.localeCompare(b.date));
 }
@@ -329,11 +341,67 @@ async function collectFtd(periodsToFetch) {
     }
     const parsed = parseFtdFile(text);
     if (parsed.length) rows.push(...parsed);
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await sleep(REQUEST_GAP_MS);
   }
   // One row per settlement date (a ticker can appear once per file, but guard anyway).
   const byDate = new Map();
-  rows.forEach((row) => byDate.set(row.date, row));
+  rows.forEach((row) => byDate.set(normaliseDate(row.date), row));
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function normaliseDate(value) {
+  const digits = String(value).replaceAll('-', '');
+  if (!/^\d{8}$/.test(digits)) return value;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`;
+}
+
+/* ------------------------------------------------------------- merge in --- */
+
+// Nothing is ever lost: rows already in flow-data.js (including curated history
+// that predates the live sources) stay in the file, new official rows win per
+// settlement date.
+function readExisting(path) {
+  let text = '';
+  try {
+    text = readFileSync(path, 'utf8');
+  } catch {
+    return { shortInterest: [], ftd: [] };
+  }
+  const block = (name) => {
+    const match = new RegExp(`${name}:\\s*\\{[^]*?rows:\\s*\`([^\`]*)\``).exec(text);
+    return match ? match[1] : '';
+  };
+  const shortInterest = [];
+  block('shortInterest').trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, short, previous, averageVolume, daysToCover] = parts;
+    const value = Number(short);
+    if (!Number.isFinite(value)) return;
+    shortInterest.push({
+      date: normaliseDate(date),
+      short: value,
+      previous: Number(previous) || null,
+      averageVolume: Number(averageVolume) || null,
+      daysToCover: Number(daysToCover) || null
+    });
+  });
+  const ftd = [];
+  block('ftd').trim().split('\n').forEach((line) => {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 2) return;
+    const [date, shares, price] = parts;
+    const value = Number(shares);
+    if (!Number.isFinite(value)) return;
+    ftd.push({ date: normaliseDate(date), shares: value, price: Number(price) || null });
+  });
+  return { shortInterest, ftd };
+}
+
+function mergeRows(existing, incoming) {
+  const byDate = new Map();
+  existing.forEach((row) => byDate.set(row.date, row));
+  incoming.forEach((row) => byDate.set(row.date, row));
   return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
 }
 
@@ -380,6 +448,12 @@ async function main() {
     report('SEC fails-to-deliver failed', error);
   }
 
+  const existing = readExisting(options.out);
+  shortInterest = mergeRows(existing.shortInterest, shortInterest);
+  ftd = mergeRows(existing.ftd, ftd);
+  console.log(`  → ${shortInterest.length} short interest rows, ${ftd.length} fails-to-deliver rows after merge with ${options.out}`);
+  if (diagnostics.length) console.log(`  (${diagnostics.length} request(s) failed and were retried)`);
+
   if (!shortInterest.length && !ftd.length) {
     annotate(`nothing fetched — refusing to overwrite flow-data.js | ${diagnostics.slice(-6).join(' | ')}`, 'error');
     throw new Error('nothing fetched — refusing to overwrite flow-data.js');
@@ -397,6 +471,12 @@ window.GME_FLOWS = {
     shortInterest: 'FINRA equity short interest files (cdn.finra.org/equity/otcmarket/biweekly)',
     ftd: 'SEC fails-to-deliver data (sec.gov/data-research/sec-markets-data/fails-deliver-data)'
   },
+  notes: [
+    'short interest — one row per FINRA settlement date (15th and last business day)',
+    'fails to deliver — SEC CNS aggregate balance per settlement date: cumulative, not daily new fails.',
+    'SEC states fails to deliver are not evidence of naked short selling; a missing date is below the reporting threshold.',
+    'rows dated before the first live fetch were seeded once from the same official series as republished by public mirrors (2021 and 2025/26 clusters)'
+  ],
   shortInterest: ${renderShortInterest(shortInterest)},
   ftd: ${renderFtd(ftd)}
 };
@@ -407,6 +487,8 @@ window.GME_FLOWS = {
 }
 
 export {
+  readExisting,
+  mergeRows,
   settlementCandidates,
   previousBusinessDay,
   lastBusinessDayOfMonth,
