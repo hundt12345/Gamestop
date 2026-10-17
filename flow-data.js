@@ -5,7 +5,7 @@
 // Refresh with: node scripts/fetch-market-structure.mjs
 window.GME_FLOWS = {
   symbol: 'GME',
-  updated: '2026-10-16',
+  updated: '2026-10-17',
   sources: {
     shortInterest: 'FINRA equity short interest files (cdn.finra.org/equity/otcmarket/biweekly)',
     ftd: 'SEC fails-to-deliver data (sec.gov/data-research/sec-markets-data/fails-deliver-data)'
