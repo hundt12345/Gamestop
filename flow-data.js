@@ -5,7 +5,7 @@
 // Refresh with: node scripts/fetch-market-structure.mjs
 window.GME_FLOWS = {
   symbol: 'GME',
-  updated: '2026-11-02',
+  updated: '2026-11-17',
   sources: {
     shortInterest: 'FINRA equity short interest files (cdn.finra.org/equity/otcmarket/biweekly)',
     ftd: 'SEC fails-to-deliver data (sec.gov/data-research/sec-markets-data/fails-deliver-data)'
@@ -54,6 +54,8 @@ window.GME_FLOWS = {
 2026-08-31 56990026 - - 9.72
 2026-09-15 39069126 56990026 9105968 4.29
 2026-09-30 42673721 39069126 10727887 3.98
+2026-10-15 48031618 42673721 12003577 4.00
+2026-10-30 42393750 48031618 8081326 5.25
 `
   },
   ftd: {
